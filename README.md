@@ -1,4 +1,4 @@
-# webapp
+# webapp | E-budgeting
 
 ![Example](example.png)
 
