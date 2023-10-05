@@ -1,52 +1,46 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-4 col-md-4 col-12 p-0">
-        <div class="block-design"></div>
-      </div>
-      <div class="col-lg-8 col-md-8 col-12" style="margin-top: 3%">
-        <div class="block-login">
-          <div class="row new-row" style="height: 47%">
-            <div class="col-lg-3 col-md-3 col-12"></div>
-            <div
-              class="col-lg-6 col-md-6 col-12 d-flex justify-content-center new-col"
-            >
-              <div class="iconStyle"></div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-12"></div>
-          </div>
-          <div class="row">
-            <div class="form-login col-lg-3 col-md-0 col-12"></div>
-            <div class="form-login col-lg-6 col-md-12 col-12">
-              <div class="row">
-                <div class="col-12">
-                  <label class="form-label">Username</label>
-                  <InputText
-                    class="form-control"
-                    type="text"
-                    v-model="user.nippos"
-                    style="border-radius: 16px; height: 48px"
-                  />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <label class="form-label">Password</label>
-                  <Password
-                    v-model="user.password"
-                    :feedback="false"
-                    toggleMask
-                    style="width: 100%"
-                  />
-                </div>
-              </div>
+  <div
+    class="container-fluid centered"
+    style="
+      height: 100vh;
+      background-image: linear-gradient(to right, #ff6600, #006699);
+    "
+  >
+    <div class="card card-custom">
+      <div class="card-body" style="height: 60vh">
+        <div class="row">
+          <div
+            class="form-login col-lg-12 col-md-12 col-12 d-flex justify-content-center"
+          >
+            <div class="blockCstm">
+              <p class="text-info-style">Selamat datang !</p>
+              <p class="text-info-style">Masukkan Username dan password anda</p>
+              <label class="form-label">Username</label>
+              <InputText
+                class="form-control"
+                type="text"
+                v-model="user.nippos"
+                style="border-radius: 16px; height: 48px; text-align: center"
+              />
+              <label class="form-label mt-2">Password</label>
+              <Password
+                v-model="user.password"
+                :feedback="false"
+                toggleMask
+                style="width: 100%"
+              />
               <div class="mt-3 d-flex justify-content-center">
                 <button type="submit" class="button-style" @click="login">
                   Login
                 </button>
               </div>
             </div>
-            <div class="form-login col-lg-3 col-md-0 col-12"></div>
+          </div>
+          <div
+            class="col-12 d-flex justify-content-center"
+            style="margin-top: 15%"
+          >
+            <img src="../../../assets/bnilogo.png" class="img-style" />
           </div>
         </div>
       </div>
@@ -58,6 +52,7 @@
 import serviceAuth from "../../../services/Auth.service";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
+var md5 = require('md5');
 
 // import modelSession from "../../../model/modelSession";
 
@@ -90,7 +85,7 @@ export default {
         nippos: nippos,
         password: password,
       };
-
+      console.log(md5(nippos));
       // 985397299
       try {
         let respon = await serviceAuth.getToken(data);
@@ -133,22 +128,43 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&family=Roboto:ital,wght@0,100;0,300;0,400;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&family=Roboto:ital,wght@0,100;0,300;0,400;1,400&display=swap");
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text-info-style {
+  color: #1e1e1e;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-align: center;
+}
+.img-style {
+  width: 35%;
+}
+.blockCstm {
+  width: 100%;
+  margin-top: 10%;
+}
 .button-style {
   width: 50%;
-  background-color: #003b2e;
+  background-color: #006699;
   color: #ffff;
   border-radius: 16px;
-  border: 2px solid #003b2e;
+  border: 2px solid #006699;
   height: 48px;
 }
 .button-style:hover {
   background-color: #ffff;
-  color: #003b2e;
+  color: #006699;
 }
 .block-login {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: #fff;
 }
 
@@ -177,14 +193,27 @@ export default {
 .iconStyle {
   background-image: url("../../../assets/logo.svg");
   width: 70%;
-  height: 55%;
+  height: 100%;
   margin-top: 15%;
   /* margin-left: auto; */
   margin-right: 5%;
   background-repeat: no-repeat;
   background-size: 100%;
 }
+.card-custom {
+  width: 30%;
+  border-radius: 16px !important;
+}
 @media only screen and (max-width: 720px) {
+  .card-custom {
+    width: 100%;
+  }
+  .blockCstm {
+    width: 100%;
+  }
+  .img-style {
+    width: 40%;
+  }
   .block-design {
     display: none;
   }
@@ -202,6 +231,10 @@ export default {
   .new-col {
     height: 50vh !important;
   }
+}
+.p-password input {
+  text-align: center;
+  padding-right: 12px !important;
 }
 .p-password svg {
   margin-right: 10%;

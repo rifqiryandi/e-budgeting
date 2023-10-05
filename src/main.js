@@ -4,7 +4,6 @@ import { createPinia } from 'pinia'
 const pinia = createPinia()
 
 window.$ = window.jQuery = require("jquery");
-
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {dom, library} from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons'

@@ -5,7 +5,7 @@
         class="btn d-flex"
         style="
           border-radius: 16px;
-          background: #003b2e;
+          background: #006699;
           color: #ffff;
           height: 48px;
           padding-top: 11px;
@@ -119,7 +119,7 @@
       <div class="modal-content">
         <div
           class="modal-header"
-          style="background-color: #003b2e; color: #ffff"
+          style="background-color: #ff6600; color: #ffff"
         >
           <h5 class="modal-title" id="exampleModalLabel">Tambah User</h5>
           <button
@@ -231,7 +231,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            style="background-color: #003b2e; border: 0"
+            style="background-color: #006699; border: 0"
             data-bs-dismiss="modal"
             @click="inputData()"
           >
@@ -253,7 +253,7 @@
       <div class="modal-content">
         <div
           class="modal-header"
-          style="background-color: #003b2e; color: #ffff"
+          style="background-color: #ff6600; color: #ffff"
         >
           <h5 class="modal-title" id="exampleModalLabel">Data User</h5>
           <button

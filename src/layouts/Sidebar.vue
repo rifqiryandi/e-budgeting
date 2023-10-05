@@ -1,10 +1,16 @@
 <template>
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar elevation-4" style="background-color: #003b2e">
+  <aside class="main-sidebar elevation-4" style="background-color: #fff">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-      <img src="../assets/logo.svg" style="opacity: 0.8" />
-      <span class="brand-text font-weight-light white-all" style="color: #ffff"
+      <img
+        src="../assets/img/avatar.png"
+        style="opacity: 0.8"
+        class="brand-image img-circle elevation-3"
+      />
+      <span
+        class="brand-text white-all"
+        style="color: #1e1e1e; margin-left: 3.5%"
         >E-BUDGETING</span
       >
     </a>
@@ -18,9 +24,9 @@
         </div>
         <div class="info">
           <label class="d-block white-all">{{ userSession.nama }}</label>
-          <small style="color: #ffff">{{ namaAkses }}</small>
+          <small style="color: #1e1e1e">{{ namaAkses }}</small>
           <br />
-          <small style="color: #ffff">{{ userSession.namakantor }}</small>
+          <small style="color: #1e1e1e">{{ userSession.namakantor }}</small>
         </div>
       </div>
 
@@ -39,8 +45,13 @@
               to="/dashboard"
               :class="NamePage == 'Dashboard' ? Active : notActive"
             >
-              <span class="material-symbols-outlined nav-icon" style="color: #ffff"> dashboard </span>
-              <p style="color: #ffff">Dashboard</p>
+              <span
+                class="material-symbols-outlined nav-icon"
+                style="color: #1e1e1e"
+              >
+                dashboard
+              </span>
+              <p style="color: #1e1e1e">Dashboard</p>
             </router-link>
           </li>
           <li class="nav-item" v-show="namaAkses == 'Pusat'">
@@ -58,11 +69,53 @@
                 >
                   <span
                     class="material-symbols-outlined nav-icon"
-                    style="color: #ffff"
+                    style="color: #1e1e1e"
                   >
                     manage_accounts
                   </span>
-                  <p style="color: #ffff">User</p>
+                  <p style="color: #1e1e1e">Pengguna</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link
+                  to="/entitas"
+                  :class="NamePage == 'Daftar Entitas' ? Active : notActive"
+                >
+                  <span
+                    class="material-symbols-outlined nav-icon"
+                    style="color: #1e1e1e"
+                  >
+                    remember_me
+                  </span>
+                  <p style="color: #1e1e1e">Entitas</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link
+                  to="/departemen"
+                  :class="NamePage == 'Daftar Departemen' ? Active : notActive"
+                >
+                  <span
+                    class="material-symbols-outlined nav-icon"
+                    style="color: #1e1e1e"
+                  >
+                    groups
+                  </span>
+                  <p style="color: #1e1e1e">Departemen</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link
+                  to="/kelompokMataAnggaran"
+                  :class="NamePage == 'Kelompok Mata Anggaran' ? Active : notActive"
+                >
+                  <span
+                    class="material-symbols-outlined nav-icon"
+                    style="color: #1e1e1e"
+                  >
+                    inventory_2
+                  </span>
+                  <p style="color: #1e1e1e">Kelompok Mata Anggaran</p>
                 </router-link>
               </li>
             </ul>
@@ -93,15 +146,15 @@ export default {
 
 <style>
 .white-all {
-  color: #ffff;
+  color: #1e1e1e;
 }
 .active {
-  background-color: #ffff !important;
+  background-color: #ff6600 !important;
 }
 .active p {
-  color: black !important;
+  color: #fff !important;
 }
 .active .nav-icon {
-  color: black !important;
+  color: #fff !important;
 }
 </style>
