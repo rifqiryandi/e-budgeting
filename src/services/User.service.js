@@ -1,13 +1,13 @@
 import http from "../conf-http";
 
 class UserService {
-  getDataUser(data, token) {
+  getDataUser(token) {
     var config = {
       headers: {
         "x-access-token": token
       }
     }
-    return http.post("users/listuser", data, config);
+    return http.post("users/listuser", {}, config);
   }
 
   tambahDataUser(data, token) {
@@ -19,25 +19,6 @@ class UserService {
     return http.post("users/insusers", data, config);
   }
 
-  findNippos(data, token) {
-    var config = {
-      headers: {
-        "x-access-token": token
-      }
-    }
-    return http.post("users/getuser", data, config);
-  }
-
-  getHakakses(token) {
-    var config = {
-      headers: {
-        "x-access-token": token
-      }
-    }
-    return http.get("referensi/gethakakses", config);
-
-  }
-
   updateUser(data, token) {
     var config = {
       headers: {
@@ -46,6 +27,16 @@ class UserService {
     }
     return http.post("users/edituser", data, config);
   }
+
+  deleteUser(data, token) {
+    var config = {
+      headers: {
+        "x-access-token": token
+      }
+    }
+    return http.post("users/deluser", data, config);
+  }
+
 }
 
 export default new UserService();

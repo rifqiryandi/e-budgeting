@@ -5,8 +5,8 @@
     </div>
     <div v-else>
       <div class="wrapper">
-        <Navbar></Navbar>
         <Sidebar :NamePage="$route.name"></Sidebar>
+        <Navbar></Navbar>
         <div class="content-wrapper">
           <ContentHeader :NamePage="$route.name"></ContentHeader>
           <section class="content">
@@ -68,10 +68,7 @@ export default {
     },
   },
   mounted() {
-    this.cekLogin(sessionStorage.getItem("isLogin"));
-    
-
-
+    this.cekLogin(sessionStorage.getItem("isLogin"));    
   },
 };
 </script>

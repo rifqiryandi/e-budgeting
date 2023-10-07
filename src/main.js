@@ -4,7 +4,6 @@ import { createPinia } from 'pinia'
 const pinia = createPinia()
 
 window.$ = window.jQuery = require("jquery");
-
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {dom, library} from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -20,6 +19,8 @@ import PrimeVue from 'primevue/config';
 import "primevue/resources/themes/lara-light-blue/theme.css";
 import "primevue/resources/primevue.min.css"; /* Deprecated */
 import vSelect from "vue-select";
+
+import './index.css'
 
 // Util
 import router from './router'

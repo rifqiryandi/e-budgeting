@@ -22,6 +22,24 @@ const routes = [{
     name: "Daftar User",
     component: () => import("./components/page/admin/ListUser.vue"),
   },
+  {
+    path: "/entitas",
+    alias: "/entitas",
+    name: "Daftar Entitas",
+    component: () => import("./components/page/admin/entitas/ListEntitas.vue"),
+  },
+  {
+    path: "/departemen",
+    alias: "/departemen",
+    name: "Daftar Departemen",
+    component: () => import("./components/page/admin/departemen/ListDepartemen.vue"),
+  },
+  {
+    path: "/kelompokMataAnggaran",
+    alias: "/kelompokMataAnggaran",
+    name: "Kelompok Mata Anggaran",
+    component: () => import("./components/page/admin/mataAnggaran/KelompokMataAnggaran.vue"),
+  },
   
 ];
 

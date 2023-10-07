@@ -36,15 +36,22 @@
 </template>
 
 <script>
+import serviceAuth from "../services/Auth.service";
+
 export default {
   data() {
     return {
       countDown: 10,
       textTime: "",
+      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
   methods: {
-    ProsesLogout() {
+    async ProsesLogout() {
+      let payload = {
+        username: this.userSession.username,
+      };
+      await serviceAuth.clearLogin(payload);
       sessionStorage.clear();
       this.$router.push("/");
     },
@@ -73,7 +80,11 @@ export default {
               icon: "info",
               title: "Pemberitahuan",
               text: "Session Telah Habis, Silahkan Login Kembali",
-            }).then(() => {
+            }).then(async () => {
+              let payload = {
+                username: this.userSession.username,
+              };
+              await serviceAuth.clearLogin(payload);
               sessionStorage.clear();
               this.$router.push("/login");
             });
@@ -90,4 +101,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.main-header {
+  z-index: 20 !important;
+}
+</style>
