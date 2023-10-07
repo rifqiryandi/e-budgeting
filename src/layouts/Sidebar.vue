@@ -3,14 +3,20 @@
   <aside class="main-sidebar elevation-4" style="background-color: #fff">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-      <img
-        src="../assets/img/avatar.png"
-        style="opacity: 0.8"
-        class="brand-image img-circle elevation-3"
-      />
+      <img src="../assets/bnilogo.png" class="brand-image elevation-3" style="width: 40px; margin-top: 2%;"  alt="">
       <span
         class="brand-text white-all"
-        style="color: #1e1e1e; margin-left: 3.5%"
+        style="
+          text-transform: uppercase;
+          background: linear-gradient(to right, #ff6600 10%, #006699 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font: {
+            size: 20vw;
+            family: $font;
+          }
+          margin-left: 3.5%;
+        "
         >E-BUDGETING</span
       >
     </a>
@@ -26,7 +32,7 @@
           <label class="d-block white-all">{{ userSession.nama }}</label>
           <small style="color: #1e1e1e">{{ namaAkses }}</small>
           <br />
-          <small style="color: #1e1e1e">{{ userSession.namakantor }}</small>
+          <small style="color: #1e1e1e">{{ userSession.departemen }}</small>
         </div>
       </div>
 
@@ -54,10 +60,10 @@
               <p style="color: #1e1e1e">Dashboard</p>
             </router-link>
           </li>
-          <li class="nav-item" v-show="namaAkses == 'Pusat'">
+          <li class="nav-item" v-show="namaAkses == 'Admin Sistem'">
             <a href="#" class="nav-link">
               <p class="white-all">
-                REFRENSI
+                ADMINISTRASI
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -107,7 +113,9 @@
               <li class="nav-item">
                 <router-link
                   to="/kelompokMataAnggaran"
-                  :class="NamePage == 'Kelompok Mata Anggaran' ? Active : notActive"
+                  :class="
+                    NamePage == 'Kelompok Mata Anggaran' ? Active : notActive
+                  "
                 >
                   <span
                     class="material-symbols-outlined nav-icon"
@@ -156,5 +164,8 @@ export default {
 }
 .active .nav-icon {
   color: #fff !important;
+}
+.main-sidebar{
+  z-index: 21 !important;
 }
 </style>

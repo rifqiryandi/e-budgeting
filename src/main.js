@@ -20,6 +20,8 @@ import "primevue/resources/themes/lara-light-blue/theme.css";
 import "primevue/resources/primevue.min.css"; /* Deprecated */
 import vSelect from "vue-select";
 
+import './index.css'
+
 // Util
 import router from './router'
 

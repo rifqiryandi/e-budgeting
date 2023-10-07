@@ -19,7 +19,7 @@
               <InputText
                 class="form-control"
                 type="text"
-                v-model="user.nippos"
+                v-model="user.username"
                 style="border-radius: 16px; height: 48px; text-align: center"
               />
               <label class="form-label mt-2">Password</label>
@@ -29,7 +29,7 @@
                 toggleMask
                 style="width: 100%"
               />
-              <div class="mt-3 d-flex justify-content-center">
+              <div class="d-flex justify-content-center" style="margin-top: 6%">
                 <button type="submit" class="button-style" @click="login">
                   Login
                 </button>
@@ -52,7 +52,7 @@
 import serviceAuth from "../../../services/Auth.service";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
-var md5 = require('md5');
+var md5 = require("md5");
 
 // import modelSession from "../../../model/modelSession";
 
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       user: {
-        nippos: null,
+        username: null,
         nama: "",
       },
       loginIs: false,
@@ -79,36 +79,38 @@ export default {
       location.reload();
     },
     async login() {
-      let nippos = this.user.nippos;
+      let username = this.user.username;
       let password = this.user.password;
       let data = {
-        nippos: nippos,
+        username: username,
         password: password,
       };
-      console.log(md5(nippos));
-      // 985397299
+      console.log(md5(username));
       try {
         let respon = await serviceAuth.getToken(data);
         if (respon.data.responCode == 200) {
           let token = respon.data.accessToken;
           sessionStorage.setItem("isLogin", true);
           sessionStorage.setItem("token", token);
-          if (respon.data.data.kodeakses == 10) {
-            sessionStorage.setItem("namaAkes", "Pusat");
-          } else if (respon.data.data.kodeakses == 20) {
-            sessionStorage.setItem("namaAkes", "Regional");
-          } else if (respon.data.data.kodeakses == 30) {
-            sessionStorage.setItem("namaAkes", "KCU");
-          } else if (respon.data.data.kodeakses == 40) {
-            sessionStorage.setItem("namaAkes", "KC");
+          if (respon.data.data.leveluser == 1) {
+            sessionStorage.setItem("namaAkes", "Super Admin");
+          } else if (respon.data.data.leveluser == 2) {
+            sessionStorage.setItem("namaAkes", "Officer");
+          } else if (respon.data.data.leveluser == 3) {
+            sessionStorage.setItem("namaAkes", "Departemen Head");
+          } else if (respon.data.data.leveluser == 4) {
+            sessionStorage.setItem("namaAkes", "Keuangan/Treasury");
+          } else if (respon.data.data.leveluser == 5) {
+            sessionStorage.setItem("namaAkes", "General Manager");
+          } else if (respon.data.data.leveluser == 6) {
+            sessionStorage.setItem("namaAkes", "Admin Sistem");
           }
           sessionStorage.setItem("expTime", respon.data.expiresIn);
           sessionStorage.setItem(
             "dataUser",
             btoa(JSON.stringify(respon.data.data))
           );
-          window.location.href = "/";
-          // this.$router.push("/user");
+          window.location.href = "/dashboard";
         }
       } catch (error) {
         this.$swal({
@@ -135,13 +137,14 @@ export default {
   align-items: center;
 }
 .text-info-style {
-  color: #1e1e1e;
+  color: #006699;
   font-family: Roboto;
-  font-size: 16px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
   text-align: center;
+  margin-bottom: 10px;
 }
 .img-style {
   width: 35%;
