@@ -13,7 +13,17 @@
         "
         @click="showInput()"
       >
-        <span class="material-symbols-outlined"> add </span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 -960 960 960"
+          width="24"
+          style="fill: #fff"
+        >
+          <path
+            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
+          />
+        </svg>
         Tambah User
       </button>
     </div>
@@ -56,7 +66,16 @@
                     @click="detailData(data)"
                     title="Detail"
                   >
-                    <span class="material-symbols-outlined"> visibility </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <path
+                        d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
+                      />
+                    </svg>
                   </button>
                 </div>
               </template>
@@ -75,7 +94,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="Jabatan">
+            <Column field="jabatan" header="Jabatan">
               <template #body="{ data }">
                 <div>
                   {{ data.jabatan }}
@@ -90,33 +109,53 @@
                 <div v-else-if="data.leveluser == 4">Keuangan/Treasury</div>
                 <div v-else-if="data.leveluser == 5">General Manager</div>
                 <div v-else-if="data.leveluser == 6">Admin Sistem</div>
-
               </template>
             </Column>
             <Column field="" header="Status">
               <template #body="{ data }">
-                <div :class="Style.labelAktif" v-if="data.statususer == 1">
-                  Aktif
-                </div>
-                <div :class="Style.labelNonAktif" v-else>Non-Aktif</div>
+                <ToogleBtn
+                  :nilaiStatus="data.statususer"
+                  :apihit="apiHit"
+                  :keyid="data.id"
+                  :disabled="data.username == userSession.username"
+                />
               </template>
             </Column>
             <Column header="Aksi">
               <template #body="{ data }">
                 <button
                   class="bg-transparent mr-2"
-                  title="DETAIL"
+                  title="EDIT"
                   @click="editUser(data)"
                   v-if="data.username != userSession.username"
                 >
-                  <span class="material-symbols-outlined"> edit </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                  >
+                    <path
+                      d="M206.154-200h49.461l370.387-370.386-49.461-49.462-370.387 370.387V-200Zm548.152-413.77L619.309-747.537l52.154-52.153q17.615-17.615 42.845-17.615t42.845 17.615l48.692 48.691q17.615 17.615 18.23 42.23.615 24.615-17 42.23l-52.769 52.769Zm-43.383 43.999-429.77 429.77H146.156v-134.998l429.769-429.77 134.998 134.998Zm-109.844-25.538-24.538-24.539 49.461 49.462-24.923-24.923Z"
+                    />
+                  </svg>
                 </button>
                 <button
                   class="bg-transparent"
+                  title="HAPUS"
                   @click="deleteUser(data)"
                   v-if="data.username != userSession.username"
                 >
-                  <span class="material-symbols-outlined"> delete </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                  >
+                    <path
+                      d="M292.309-140.001q-29.923 0-51.115-21.193-21.193-21.192-21.193-51.115V-720h-40v-59.999H360v-35.384h240v35.384h179.999V-720h-40v507.691q0 30.308-21 51.308t-51.308 21H292.309ZM680-720H280v507.691q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h375.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463V-720ZM376.155-280h59.999v-360h-59.999v360Zm147.691 0h59.999v-360h-59.999v360ZM280-720v520-520Z"
+                    />
+                  </svg>
                 </button>
               </template>
             </Column>
@@ -190,12 +229,12 @@
             >
               Password <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
+            <Password
               v-model="Form.password"
+              :feedback="false"
+              toggleMask
               placeholder="Masukkan Password"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              style="width: 100%"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -745,7 +784,7 @@
               Level user tidak boleh kosong!
             </p>
           </div>
-          <div class="">
+          <div class="hidden">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -859,6 +898,7 @@
 </template>
 <script>
 import { FilterMatchMode } from "primevue/api";
+import Password from "primevue/password";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
@@ -866,6 +906,7 @@ import { initFlowbite } from "flowbite";
 import { Modal } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import ToogleBtn from "../../utils/ToggleBtn.vue";
 
 import serviceUser from "../../../services/User.service";
 import serviceDepartemen from "../../../services/Departemen.service";
@@ -901,6 +942,7 @@ export default {
       },
       idKey: "",
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
+      apiHit: "User",
     };
   },
   validations() {
@@ -923,10 +965,11 @@ export default {
     DataTable,
     Column,
     InputText,
+    ToogleBtn,
+    Password,
   },
   computed: {
     getAllData() {
-      console.log(this.ListUser);
       return this.ListUser;
     },
     getDepartemen() {
@@ -943,8 +986,9 @@ export default {
     },
     async getAllDepartemen() {
       let token = sessionStorage.getItem("token");
+      let payload = {};
       try {
-        let respon = await serviceDepartemen.getDataDepartemen(token);
+        let respon = await serviceDepartemen.getDataDepartemen(payload, token);
         this.rowDepartemen = respon.data.data;
       } catch (error) {
         this.$swal({
@@ -956,7 +1000,6 @@ export default {
       }
     },
     // Utils Method
-
     showInput() {
       this.Form = {
         username: "",
@@ -975,14 +1018,15 @@ export default {
       this.modal.show();
     },
     async getData() {
+      this.loading = true;
       let token = sessionStorage.getItem("token");
-      console.log(token);
       try {
         let respon = await serviceUser.getDataUser(token);
         this.ListUser = respon.data.data;
         this.loading = false;
       } catch (error) {
-        console.log(error);
+        this.loading = false;
+        this.ListUser = null;
         this.$swal({
           icon: "error",
           title: "GAGAL",
@@ -1001,7 +1045,6 @@ export default {
           break;
       }
       this.detailUser = data;
-      console.log(this.detailUser);
     },
     editUser(data) {
       const $targetEl = document.getElementById("update-modal");
@@ -1064,7 +1107,7 @@ export default {
         let md5Password = md5(Forminput.password);
         delete Forminput.password;
         Forminput.password = md5Password;
-        Forminput.id = this.idKey
+        Forminput.id = this.idKey;
         try {
           let respon = await serviceUser.updateUser(Forminput, token);
           this.modal.hide();
@@ -1129,7 +1172,8 @@ export default {
   border: none !important;
 }
 .p-datatable-thead tr th {
-  background-color: #ffff !important;
+  background-color: #006699 !important;
+  color: #fff !important;
 }
 .label-aktif {
   width: 136px;
@@ -1150,6 +1194,26 @@ export default {
   text-align: center;
   border-left: #f66512 5px solid;
 }
-
+.p-password input {
+  /* padding-right: 12px !important; */
+  padding: 10px !important;
+  width: 100%;
+  border-radius: 0.3rem !important;
+  border: 1px solid #dee2e6 !important;
+  font-size: 0.875rem !important;
+  text-align: start;
+  --tw-bg-opacity: 1;
+  background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
+}
+.p-password input:focus {
+  border-color: #006699 !important;
+}
+.p-inputtext:enabled:focus {
+  box-shadow: none !important;
+}
+.p-password svg {
+  margin-right: 2px !important;
+  box-shadow: none !important;
+}
 @import "../../../../node_modules/vue-select/dist/vue-select.css";
 </style>

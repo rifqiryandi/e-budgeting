@@ -1,13 +1,13 @@
 import http from "../conf-http";
 
 class MataAnggaranService {
-    getDataMataAnggaran(token) {
+    getDataMataAnggaran(data, token) {
         var config = {
             headers: {
                 "x-access-token": token
             }
         }
-        return http.get("referensi/getmatanggaran", config);
+        return http.post("referensi/getmatanggaran", data, config);
     }
     tambahDataMataAnggaran(data, token) {
         var config = {

@@ -53,7 +53,9 @@ export default {
       };
       await serviceAuth.clearLogin(payload);
       sessionStorage.clear();
-      this.$router.push("/");
+      // this.$router.push("/");
+      window.location.href = "/";
+
     },
     countDownTimer() {
       if (sessionStorage.getItem("expTime") != undefined) {
@@ -86,7 +88,8 @@ export default {
               };
               await serviceAuth.clearLogin(payload);
               sessionStorage.clear();
-              this.$router.push("/login");
+              // this.$router.push("/login");
+              window.location.href = "/login";
             });
           } else {
             this.countDownTimer();

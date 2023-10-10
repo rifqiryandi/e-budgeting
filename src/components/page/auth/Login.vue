@@ -20,16 +20,30 @@
                 class="form-control"
                 type="text"
                 v-model="user.username"
+                placeholder="Masukkan Username ..."
                 style="border-radius: 16px; height: 48px; text-align: center"
               />
+              <p
+                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0 text-center"
+                v-if="this.v$.user.username.$error"
+              >
+                Username tidak boleh kosong!
+              </p>
               <label class="form-label mt-2">Password</label>
               <Password
                 v-model="user.password"
                 :feedback="false"
                 toggleMask
                 style="width: 100%"
+                placeholder="Masukkan Password ..."
               />
-              <div class="d-flex justify-content-center" style="margin-top: 6%">
+              <p
+                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0 text-center"
+                v-if="this.v$.user.password.$error"
+              >
+                Password tidak boleh kosong!
+              </p>
+              <div class="d-flex justify-content-center" style="margin-top: 4%">
                 <button type="submit" class="button-style" @click="login">
                   Login
                 </button>
@@ -37,8 +51,7 @@
             </div>
           </div>
           <div
-            class="col-12 d-flex justify-content-center"
-            style="margin-top: 15%"
+            class="col-12 d-flex justify-content-center fixed cstm-logo-position"
           >
             <img src="../../../assets/bnilogo.png" class="img-style" />
           </div>
@@ -53,20 +66,29 @@ import serviceAuth from "../../../services/Auth.service";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 var md5 = require("md5");
-
-// import modelSession from "../../../model/modelSession";
+import useValidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 export default {
   name: "loginView",
   data() {
     return {
+      v$: useValidate(),
       user: {
         username: null,
-        nama: "",
+        password: "",
       },
       loginIs: false,
       msg: "",
       DataUser: "",
+    };
+  },
+  validations() {
+    return {
+      user: {
+        username: { required },
+        password: { required },
+      },
     };
   },
   components: {
@@ -79,46 +101,48 @@ export default {
       location.reload();
     },
     async login() {
-      let username = this.user.username;
-      let password = this.user.password;
-      let data = {
-        username: username,
-        password: password,
-      };
-      console.log(md5(username));
-      try {
-        let respon = await serviceAuth.getToken(data);
-        if (respon.data.responCode == 200) {
-          let token = respon.data.accessToken;
-          sessionStorage.setItem("isLogin", true);
-          sessionStorage.setItem("token", token);
-          if (respon.data.data.leveluser == 1) {
-            sessionStorage.setItem("namaAkes", "Super Admin");
-          } else if (respon.data.data.leveluser == 2) {
-            sessionStorage.setItem("namaAkes", "Officer");
-          } else if (respon.data.data.leveluser == 3) {
-            sessionStorage.setItem("namaAkes", "Departemen Head");
-          } else if (respon.data.data.leveluser == 4) {
-            sessionStorage.setItem("namaAkes", "Keuangan/Treasury");
-          } else if (respon.data.data.leveluser == 5) {
-            sessionStorage.setItem("namaAkes", "General Manager");
-          } else if (respon.data.data.leveluser == 6) {
-            sessionStorage.setItem("namaAkes", "Admin Sistem");
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.$error) {
+        let username = this.user.username;
+        let password = this.user.password;
+        let data = {
+          username: username,
+          password: md5(password),
+        };
+        try {
+          let respon = await serviceAuth.getToken(data);
+          if (respon.data.responCode == 200) {
+            let token = respon.data.accessToken;
+            sessionStorage.setItem("isLogin", true);
+            sessionStorage.setItem("token", token);
+            if (respon.data.data.leveluser == 1) {
+              sessionStorage.setItem("namaAkes", "Super Admin");
+            } else if (respon.data.data.leveluser == 2) {
+              sessionStorage.setItem("namaAkes", "Officer");
+            } else if (respon.data.data.leveluser == 3) {
+              sessionStorage.setItem("namaAkes", "Departemen Head");
+            } else if (respon.data.data.leveluser == 4) {
+              sessionStorage.setItem("namaAkes", "Keuangan/Treasury");
+            } else if (respon.data.data.leveluser == 5) {
+              sessionStorage.setItem("namaAkes", "General Manager");
+            } else if (respon.data.data.leveluser == 6) {
+              sessionStorage.setItem("namaAkes", "Admin Sistem");
+            }
+            sessionStorage.setItem("expTime", respon.data.expiresIn);
+            sessionStorage.setItem(
+              "dataUser",
+              btoa(JSON.stringify(respon.data.data))
+            );
+            window.location.href = "/dashboard";
           }
-          sessionStorage.setItem("expTime", respon.data.expiresIn);
-          sessionStorage.setItem(
-            "dataUser",
-            btoa(JSON.stringify(respon.data.data))
-          );
-          window.location.href = "/dashboard";
+        } catch (error) {
+          this.$swal({
+            icon: "error",
+            title: "GAGAL",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
         }
-      } catch (error) {
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
       }
     },
   },
@@ -131,6 +155,10 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&family=Roboto:ital,wght@0,100;0,300;0,400;1,400&display=swap");
+.cstm-logo-position {
+  height: 130px;
+  padding-top: 16%;
+}
 .centered {
   display: flex;
   justify-content: center;
@@ -148,6 +176,7 @@ export default {
 }
 .img-style {
   width: 35%;
+  height: 60px;
 }
 .blockCstm {
   width: 100%;
@@ -208,6 +237,9 @@ export default {
   border-radius: 16px !important;
 }
 @media only screen and (max-width: 720px) {
+  .cstm-logo-position {
+    padding-top: 7%;
+  }
   .card-custom {
     width: 100%;
   }
