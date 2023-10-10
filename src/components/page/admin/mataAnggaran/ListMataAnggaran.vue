@@ -1,132 +1,205 @@
 <template>
   <div class="row">
-    <div class="col-12 d-flex justify-content-end">
-      <button
-        class="btn d-flex"
-        style="
-          border-radius: 16px;
-          background: #006699;
-          color: #ffff;
-          height: 48px;
-          padding-top: 11px;
-          padding-bottom: 11px;
-        "
-        @click="showInput"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24"
-          viewBox="0 -960 960 960"
-          width="24"
-          style="fill: #fff"
-        >
-          <path
-            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
-          />
-        </svg>
-        Tambah Data
-      </button>
-    </div>
-  </div>
-  <div class="row mt-3">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <DataTable
-            :value="getAllKMataAnggaran"
-            paginator
-            :rows="5"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
-            paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-            currentPageReportTemplate="{first} to {last} of {totalRecords}"
-            tableStyle="min-width: 50rem"
-            v-model:filters="filters"
-            :loading="loading"
-          >
-            <template #header>
-              <div class="d-flex justify-content-end">
-                <span class="p-input-icon-left">
-                  <i class="fa fa-search" aria-hidden="true"></i>
-                  <InputText
-                    placeholder="Search"
-                    v-model="filters['global'].value"
-                  />
-                </span>
-              </div>
-            </template>
-            <template #empty> No Data found. </template>
-            <template #loading> Loading data. Please wait. </template>
-            <Column
-              field="kode_kelompok_mata_anggaran"
-              header="Kode Kelompok Mata Anggaran"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.kode_kelompok_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-            <Column
-              field="nama_kelompok_mata_anggaran"
-              header="Nama Kelompok Mata Anggaran"
-              style="width: 25%"
-            >
-              <template #body="{ data }">
-                <div>
-                  {{ data.nama_kelompok_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-            <Column field="status_aktif" header="Status" style="width: 10%">
-              <template #body="{ data }">
-                <ToogleBtn
-                  :nilaiStatus="data.status_aktif"
-                  :apihit="this.apiHit"
-                />
-              </template>
-            </Column>
-            <Column field="" header="Aksi" style="width: 10%">
-              <template #body="{ data }">
-                <button
-                  class="bg-transparent mr-2"
-                  title="EDIT"
-                  @click="editKMataAnggaran(data)"
+          <div class="space-y-6">
+            <div class="w-full">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Kelompok Mata Anggaran
+              </label>
+              <select
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                v-model="filters.KMataAnggaran"
+              >
+                <option value="">--Pilih kelompok Mata Anggaran--</option>
+                <option
+                  v-for="(item, index) in getKelompokMataAnggaran"
+                  :key="index"
+                  :value="item.kode_kelompok_mata_anggaran"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    viewBox="0 -960 960 960"
-                    width="24"
-                  >
-                    <path
-                      d="M206.154-200h49.461l370.387-370.386-49.461-49.462-370.387 370.387V-200Zm548.152-413.77L619.309-747.537l52.154-52.153q17.615-17.615 42.845-17.615t42.845 17.615l48.692 48.691q17.615 17.615 18.23 42.23.615 24.615-17 42.23l-52.769 52.769Zm-43.383 43.999-429.77 429.77H146.156v-134.998l429.769-429.77 134.998 134.998Zm-109.844-25.538-24.538-24.539 49.461 49.462-24.923-24.923Z"
-                    />
-                  </svg>
-                </button>
-                <button
-                  class="bg-transparent"
-                  title="HAPUS"
-                  @click="deleteKMataAnggaran(data)"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    viewBox="0 -960 960 960"
-                    width="24"
-                  >
-                    <path
-                      d="M292.309-140.001q-29.923 0-51.115-21.193-21.193-21.192-21.193-51.115V-720h-40v-59.999H360v-35.384h240v35.384h179.999V-720h-40v507.691q0 30.308-21 51.308t-51.308 21H292.309ZM680-720H280v507.691q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h375.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463V-720ZM376.155-280h59.999v-360h-59.999v360Zm147.691 0h59.999v-360h-59.999v360ZM280-720v520-520Z"
-                    />
-                  </svg>
-                </button>
-              </template>
-            </Column>
-          </DataTable>
+                  {{ item.nama_kelompok_mata_anggaran }}
+                </option>
+              </select>
+            </div>
+            <div>
+              <button
+                class="w-full"
+                style="
+                  border-radius: 16px;
+                  background: #006699;
+                  color: #ffff;
+                  height: 48px;
+                  padding-top: 11px;
+                  padding-bottom: 11px;
+                "
+                @click="getData"
+
+              >
+                Tampilkan
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- Mata Anggaran -->
+  <div id="main-content">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end">
+        <button
+          class="btn d-flex"
+          style="
+            border-radius: 16px;
+            background: #006699;
+            color: #ffff;
+            height: 48px;
+            padding-top: 11px;
+            padding-bottom: 11px;
+          "
+          @click="showInput"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+            style="fill: #fff"
+          >
+            <path
+              d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
+            />
+          </svg>
+          Tambah Data
+        </button>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <DataTable
+              :value="getAllMataAnggaran"
+              paginator
+              :rows="5"
+              :rowsPerPageOptions="[5, 10, 20, 50]"
+              paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+              currentPageReportTemplate="{first} to {last} of {totalRecords}"
+              tableStyle="min-width: 50rem"
+              v-model:filters="filters"
+              :loading="loading"
+            >
+              <template #header>
+                <div class="flex justify-end">
+                  <span class="p-input-icon-left">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <InputText
+                      placeholder="Search"
+                      v-model="filters['global'].value"
+                    />
+                  </span>
+                </div>
+              </template>
+              <template #empty> No Data found. </template>
+              <template #loading> Loading data. Please wait. </template>
+              <Column
+                field="kode_kelompok_mata_anggaran"
+                header="Kode Kelompok Mata Anggaran"
+                style="width: 15%"
+              >
+                <template #body="{ data }">
+                  <div style="font-weight: 600">
+                    {{ data.kode_kelompok_mata_anggaran }}
+                  </div>
+                </template>
+              </Column>
+              <Column
+                field="nama_kelompok_mata_anggaran"
+                header="Nama Kelompok Mata Anggaran"
+                style="width: 20%"
+              >
+                <template #body="{ data }">
+                  <div>
+                    {{ data.nama_kelompok_mata_anggaran }}
+                  </div>
+                </template>
+              </Column>
+              <Column
+                field="kode_mata_anggaran"
+                header="Kode Mata Anggaran"
+                style="width: 15%"
+              >
+                <template #body="{ data }">
+                  <div>
+                    {{ data.kode_mata_anggaran }}
+                  </div>
+                </template>
+              </Column>
+              <Column
+                field="nama_mata_anggaran"
+                header="Nama Mata Anggaran"
+                style="width: 20%"
+              >
+                <template #body="{ data }">
+                  <div>
+                    {{ data.nama_mata_anggaran }}
+                  </div>
+                </template>
+              </Column>
+              <Column field="status_aktif" header="Status" style="width: 10%">
+                <template #body="{ data }">
+                  <ToogleBtn
+                    :nilaiStatus="data.status_aktif"
+                    :apihit="this.apiHit"
+                  />
+                </template>
+              </Column>
+              <Column field="" header="Aksi" style="width: 10%">
+                <template #body="{ data }">
+                  <button
+                    class="bg-transparent mr-2"
+                    title="EDIT"
+                    @click="editMataAnggaran(data)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <path
+                        d="M206.154-200h49.461l370.387-370.386-49.461-49.462-370.387 370.387V-200Zm548.152-413.77L619.309-747.537l52.154-52.153q17.615-17.615 42.845-17.615t42.845 17.615l48.692 48.691q17.615 17.615 18.23 42.23.615 24.615-17 42.23l-52.769 52.769Zm-43.383 43.999-429.77 429.77H146.156v-134.998l429.769-429.77 134.998 134.998Zm-109.844-25.538-24.538-24.539 49.461 49.462-24.923-24.923Z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    class="bg-transparent"
+                    title="HAPUS"
+                    @click="deleteMataAnggaran(data)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <path
+                        d="M292.309-140.001q-29.923 0-51.115-21.193-21.193-21.192-21.193-51.115V-720h-40v-59.999H360v-35.384h240v35.384h179.999V-720h-40v507.691q0 30.308-21 51.308t-51.308 21H292.309ZM680-720H280v507.691q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h375.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463V-720ZM376.155-280h59.999v-360h-59.999v360Zm147.691 0h59.999v-360h-59.999v360ZM280-720v520-520Z"
+                      />
+                    </svg>
+                  </button>
+                </template>
+              </Column>
+            </DataTable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Insert -->
   <div
     id="input-modal"
@@ -141,7 +214,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Tambah Data
+            Tambah Mata Anggaran
           </h3>
           <button
             type="button"
@@ -174,13 +247,19 @@
             >
               Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
+            <select
               v-model="Form.kdkelmatanggaran"
-              placeholder="Masukkan Kode Kelompok mata anggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+              <option
+                v-for="(item, index) in getKelompokMataAnggaran"
+                :key="index"
+                :value="item.kode_kelompok_mata_anggaran"
+              >
+                {{ item.nama_kelompok_mata_anggaran }}
+              </option>
+            </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdkelmatanggaran.$error"
@@ -192,20 +271,40 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Nama Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              Kode Mata Anggaran <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="base-input"
-              v-model="Form.nama_kelmatanggaran"
-              placeholder="Masukkan Nama Kelompok mata anggaran"
+              v-model="Form.kdmatanggaran"
+              placeholder="Masukkan Kode mata anggaran"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nama_kelmatanggaran.$error"
+              v-if="this.v$.Form.kdmatanggaran.$error"
             >
-              Nama Kelompok mata anggaran tidak boleh kosong!
+              Kode mata anggaran tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nama Mata Anggaran <span class="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="base-input"
+              v-model="Form.nmmatanggaran"
+              placeholder="Masukkan Nama mata anggaran"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nmmatanggaran.$error"
+            >
+              Nama mata anggaran tidak boleh kosong!
             </p>
           </div>
         </div>
@@ -244,9 +343,7 @@
         <div
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
-          <h3 class="text-xl font-medium" style="color: #fff">
-            Edit Data
-          </h3>
+          <h3 class="text-xl font-medium" style="color: #fff">Tambah Data</h3>
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -278,13 +375,19 @@
             >
               Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
+            <select
               v-model="Form.kdkelmatanggaran"
-              placeholder="Masukkan Kode Kelompok mata anggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+              <option
+                v-for="(item, index) in getKelompokMataAnggaran"
+                :key="index"
+                :value="item.kode_kelompok_mata_anggaran"
+              >
+                {{ item.nama_kelompok_mata_anggaran }}
+              </option>
+            </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdkelmatanggaran.$error"
@@ -296,20 +399,40 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Nama Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              Kode Mata Anggaran <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="base-input"
-              v-model="Form.nama_kelmatanggaran"
+              v-model="Form.kdmatanggaran"
               placeholder="Masukkan Nama Kelompok mata anggaran"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nama_kelmatanggaran.$error"
+              v-if="this.v$.Form.kdmatanggaran.$error"
             >
-              Nama Kelompok mata anggaran tidak boleh kosong!
+              Kode mata anggaran tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nama Mata Anggaran <span class="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="base-input"
+              v-model="Form.nmmatanggaran"
+              placeholder="Masukkan Nama Kelompok mata anggaran"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nmmatanggaran.$error"
+            >
+              Nama mata anggaran tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -428,35 +551,40 @@ import { required } from "@vuelidate/validators";
 import { Modal } from "flowbite";
 import ToogleBtn from "../../../utils/ToggleBtn.vue";
 
+import serviceMataAnggaran from "../../../../services/MataAnggaran.service";
 import serviceKMataAnggaran from "../../../../services/KelompokMataAnggaran.service";
 export default {
-  name: "Kelompok Mata Anggaran",
+  name: "Mata Anggaran",
   data() {
     return {
       v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      ListKMataAnggaran: null,
+      ListMataAnggaran: null,
+      rowKelompokMataA: null,
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        KMataAnggaran: "",
       },
       Form: {
         kdkelmatanggaran: "",
-        nama_kelmatanggaran: "",
+        kdmatanggaran: "",
+        nmmatanggaran: "",
         userid: "",
         status: "",
       },
       idKey: "",
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-      apiHit:"tes"
+      apiHit: "tes",
     };
   },
   validations() {
     return {
       Form: {
         kdkelmatanggaran: { required },
-        nama_kelmatanggaran: { required },
+        kdmatanggaran: { required },
+        nmmatanggaran: { required },
       },
     };
   },
@@ -464,18 +592,35 @@ export default {
     DataTable,
     Column,
     InputText,
-    ToogleBtn
+    ToogleBtn,
   },
   computed: {
-    getAllKMataAnggaran() {
-      return this.ListKMataAnggaran;
+    getAllMataAnggaran() {
+      return this.ListMataAnggaran;
+    },
+    getKelompokMataAnggaran() {
+      return this.rowKelompokMataA;
     },
   },
   methods: {
+    async getKMataAnggaran() {
+      try {
+        let res = await serviceKMataAnggaran.getDataKMataAnggaran(this.token);
+        this.rowKelompokMataA = res.data.data;
+      } catch (error) {
+        this.$swal({
+          icon: "error",
+          title: "GAGAL",
+          text: error.response.data.Msg,
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
     showInput() {
       this.Form = {
         kdkelmatanggaran: "",
-        nama_kelmatanggaran: "",
+        kdmatanggaran: "",
+        nmmatanggaran: "",
         userid: "",
         status: "",
       };
@@ -485,35 +630,38 @@ export default {
     },
     async getData() {
       this.loading = true;
-
+      let payload = {
+        kdkelmatanggaran: this.filters.KMataAnggaran,
+      };
       try {
-        let respon = await serviceKMataAnggaran.getDataKMataAnggaran(
+        let respon = await serviceMataAnggaran.getDataMataAnggaran(
+          payload,
           this.token
         );
-        this.ListKMataAnggaran = respon.data.data;
+        this.ListMataAnggaran = respon.data.data;
         this.loading = false;
-        console.log(this.ListKMataAnggaran);
       } catch (error) {
         this.loading = false;
-        this.ListKMataAnggaran = null;
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
+        this.ListMataAnggaran = null;
+        // this.$swal({
+        //   icon: "error",
+        //   title: "GAGAL",
+        //   text: error.response.data.Msg,
+        //   confirmButtonColor: "#e77817",
+        // });
       }
     },
-    editKMataAnggaran(data) {
+    editMataAnggaran(data) {
       const $targetEl = document.getElementById("update-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
       this.Form.kdkelmatanggaran = data.kode_kelompok_mata_anggaran;
-      this.Form.nama_kelmatanggaran = data.nama_kelompok_mata_anggaran;
+      this.Form.kdmatanggaran = data.kode_mata_anggaran;
+      this.Form.nmmatanggaran = data.nama_mata_anggaran;
       this.Form.status = data.status_aktif;
       this.idKey = data.id;
     },
-    deleteKMataAnggaran(data) {
+    deleteMataAnggaran(data) {
       const $targetEl = document.getElementById("delete-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
@@ -523,9 +671,9 @@ export default {
       let Forminput = this.Form;
       Forminput.userid = this.userSession.username;
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
+      if (!this.v$.Form.$error) {
         try {
-          let respon = await serviceKMataAnggaran.tambahDataKMataAnggaran(
+          let respon = await serviceMataAnggaran.tambahDataMataAnggaran(
             Forminput,
             this.token
           );
@@ -538,7 +686,8 @@ export default {
           });
           this.Form = {
             kdkelmatanggaran: "",
-            nama_kelmatanggaran: "",
+            kdmatanggaran: "",
+            nmmatanggaran: "",
             userid: "",
             status: "",
           };
@@ -558,7 +707,7 @@ export default {
         id: this.idKey,
       };
       try {
-        let respon = await serviceKMataAnggaran.deleteKMataAnggaran(
+        let respon = await serviceMataAnggaran.deleteMataAnggaran(
           payload,
           this.token
         );
@@ -582,11 +731,11 @@ export default {
     async prosesEdit() {
       let Forminput = this.Form;
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
+      if (!this.v$.Form.$error) {
         Forminput.id = this.idKey;
         Forminput.userid = this.userSession.username;
         try {
-          let respon = await serviceKMataAnggaran.updateKMataAnggaran(
+          let respon = await serviceMataAnggaran.updateMataAnggaran(
             Forminput,
             this.token
           );
@@ -625,6 +774,7 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
+    this.getKMataAnggaran();
   },
 };
 </script>
@@ -632,28 +782,10 @@ export default {
 .p-datatable-header {
   background-color: #ffff !important;
   border: none !important;
+  padding: 16px 6px 16px 6px !important;
 }
 .p-datatable-thead tr th {
   background-color: #006699 !important;
   color: #fff !important;
-}
-.label-aktif {
-  width: 136px;
-  padding: 5px 10px 5px 10px;
-  border-radius: 5px;
-  background: #dcffeb;
-  color: #5bb07f;
-  text-align: center;
-  border-left: #5bb07f 5px solid;
-}
-
-.label-nonaktif {
-  width: 136px;
-  padding: 5px 10px 5px 10px;
-  border-radius: 5px;
-  background: #ffe3c2;
-  color: #f66512;
-  text-align: center;
-  border-left: #f66512 5px solid;
 }
 </style>

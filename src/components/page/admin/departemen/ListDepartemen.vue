@@ -11,10 +11,19 @@
           padding-top: 11px;
           padding-bottom: 11px;
         "
-        data-modal-target="update-modal"
-        data-modal-toggle="update-modal"
+        @click="showInput"
       >
-        <span class="material-symbols-outlined"> add </span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 -960 960 960"
+          width="24"
+          style="fill: #fff"
+        >
+          <path
+            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
+          />
+        </svg>
         Tambah Departemen
       </button>
     </div>
@@ -24,7 +33,7 @@
       <div class="card">
         <div class="card-body">
           <DataTable
-            :value="getDataUser"
+            :value="getAllDepartemen"
             paginator
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -38,42 +47,83 @@
               <div class="d-flex justify-content-end">
                 <span class="p-input-icon-left">
                   <i class="fa fa-search" aria-hidden="true"></i>
-                  <InputText placeholder="Search" />
+                  <InputText
+                    placeholder="Search"
+                    v-model="filters['global'].value"
+                  />
                 </span>
               </div>
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="Kode Departemen" style="width: 20%">
+            <Column
+              field="kode_departement"
+              header="Kode Departemen"
+              style="width: 20%"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama }}
+                  {{ data.kode_departement }}
                 </div>
               </template>
             </Column>
             <Column
-              field="Nama Departemen"
-              header="Total Aktif"
+              field="nama_departement"
+              header="Nama Departemen"
               style="width: 20%"
             >
               <template #body="{ data }">
-                <div class="label-aktif" @click="getDataSpesifik(data, 1)">
-                  {{ data.jumlahtotalaktif }}
+                <div>
+                  {{ data.nama_departement }}
                 </div>
               </template>
             </Column>
-            <Column field="" header="Entitas" style="width: 20%">
+            <Column field="nama_entitas" header="Entitas" style="width: 20%">
               <template #body="{ data }">
-                <div class="label-nonaktif" @click="getDataSpesifik(data, 0)">
-                  {{ data.jumlahtotalnonakatif }}
+                <div>
+                  {{ data.nama_entitas }}
                 </div>
               </template>
             </Column>
-            <Column field="" header="Aksi" style="width: 20%">
+            <Column field="status" header="Status" style="width: 20%">
               <template #body="{ data }">
-                <div class="label-nonaktif" @click="getDataSpesifik(data, 0)">
-                  {{ data.jumlahtotalnonakatif }}
-                </div>
+                <ToogleBtn :nilaiStatus="data.status" :apihit="this.apiHit" />
+              </template>
+            </Column>
+            <Column field="" header="Aksi" style="width: 10%">
+              <template #body="{ data }">
+                <button
+                  class="bg-transparent mr-2"
+                  title="EDIT"
+                  @click="editDepartemen(data)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                  >
+                    <path
+                      d="M206.154-200h49.461l370.387-370.386-49.461-49.462-370.387 370.387V-200Zm548.152-413.77L619.309-747.537l52.154-52.153q17.615-17.615 42.845-17.615t42.845 17.615l48.692 48.691q17.615 17.615 18.23 42.23.615 24.615-17 42.23l-52.769 52.769Zm-43.383 43.999-429.77 429.77H146.156v-134.998l429.769-429.77 134.998 134.998Zm-109.844-25.538-24.538-24.539 49.461 49.462-24.923-24.923Z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  class="bg-transparent"
+                  title="HAPUS"
+                  @click="deleteDepartemen(data)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                  >
+                    <path
+                      d="M292.309-140.001q-29.923 0-51.115-21.193-21.193-21.192-21.193-51.115V-720h-40v-59.999H360v-35.384h240v35.384h179.999V-720h-40v507.691q0 30.308-21 51.308t-51.308 21H292.309ZM680-720H280v507.691q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h375.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463V-720ZM376.155-280h59.999v-360h-59.999v360Zm147.691 0h59.999v-360h-59.999v360ZM280-720v520-520Z"
+                    />
+                  </svg>
+                </button>
               </template>
             </Column>
           </DataTable>
@@ -100,7 +150,7 @@
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-hide="input-modal"
+            @click="hideModal"
           >
             <svg
               class="w-3 h-3"
@@ -126,40 +176,67 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Entitas
+              Entitas <span class="text-red-600">*</span>
             </label>
             <select
-              id="countries"
+              v-model="Form.entitas"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>-- Pilih Entitas --</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option value="">-- Pilih Entitas --</option>
+              <option
+                v-for="(item, index) in getEntitas"
+                :key="index"
+                :value="item.kode_entitas"
+              >
+                {{ item.nama_entitas }}
+              </option>
             </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.entitas.$error"
+            >
+              Entitas tidak boleh kosong!
+            </p>
           </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Departemen
+              Kode Departemen <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="base-input"
+              v-model="Form.kddepart"
+              placeholder="Masukkan Kode Departemen"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.kddepart.$error"
+            >
+              Kode Departemen tidak boleh kosong!
+            </p>
           </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Nama Departemen
+              Nama Departemen <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="base-input"
+              v-model="Form.nama_depart"
+              placeholder="Masukkan Nama Departemen"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nama_depart.$error"
+            >
+              Nama Departemen tidak boleh kosong!
+            </p>
           </div>
         </div>
         <!-- Modal footer -->
@@ -168,12 +245,13 @@
         >
           <button
             type="button"
+            @click="prosesInput"
             class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
             SIMPAN
           </button>
           <button
-            data-modal-hide="input-modal"
+            @click="hideModal"
             type="button"
             class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
@@ -202,7 +280,7 @@
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-hide="update-modal"
+            @click="hideModal"
           >
             <svg
               class="w-3 h-3"
@@ -228,40 +306,67 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Entitas
+              Entitas <span class="text-red-600">*</span>
             </label>
             <select
-              id="countries"
+              v-model="Form.entitas"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>-- Pilih Entitas --</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option value="">-- Pilih Entitas --</option>
+              <option
+                v-for="(item, index) in getEntitas"
+                :key="index"
+                :value="item.kode_entitas"
+              >
+                {{ item.nama_entitas }}
+              </option>
             </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.entitas.$error"
+            >
+              Entitas tidak boleh kosong!
+            </p>
           </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Departemen
+              Kode Departemen <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="base-input"
+              v-model="Form.kddepart"
+              placeholder="Masukkan Kode Departemen"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.kddepart.$error"
+            >
+              Kode Departemen tidak boleh kosong!
+            </p>
           </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Nama Departemen
+              Nama Departemen <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="base-input"
+              v-model="Form.nama_depart"
+              placeholder="Masukkan Nama Departemen"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nama_depart.$error"
+            >
+              Nama Departemen tidak boleh kosong!
+            </p>
           </div>
           <div class="">
             <label
@@ -270,12 +375,11 @@
               Status
             </label>
             <select
-              id="countries"
+              v-model="Form.status"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option selected>-- Pilih Status --</option>
-              <option value="FR">France</option>
-              <option value="DE">Germany</option>
+              <option value="1">Aktif</option>
+              <option value="0">Non-Aktif</option>
             </select>
           </div>
         </div>
@@ -285,12 +389,13 @@
         >
           <button
             type="button"
+            @click="prosesEdit"
             class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
             SIMPAN
           </button>
           <button
-            data-modal-hide="update-modal"
+            @click="hideModal"
             type="button"
             class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
@@ -311,7 +416,7 @@
         <button
           type="button"
           class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-hide="delete-modal"
+          @click="hideModal"
         >
           <svg
             class="w-3 h-3"
@@ -351,12 +456,13 @@
           </h3>
           <button
             type="button"
+            @click="prosesDelete"
             class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
           >
             Hapus
           </button>
           <button
-            data-modal-hide="delete-modal"
+            @click="hideModal"
             type="button"
             class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
@@ -368,21 +474,251 @@
   </div>
 </template>
 <script>
+import { FilterMatchMode } from "primevue/api";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
+import useValidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import { Modal } from "flowbite";
+import ToogleBtn from "../../../utils/ToggleBtn.vue";
+
+import serviceDepartemen from "../../../../services/Departemen.service";
+import serviceEntitas from "../../../../services/Entitas.service.js";
 
 export default {
   name: "Departemen",
-  data() {},
+  data() {
+    return {
+      v$: useValidate(),
+      token: sessionStorage.getItem("token"),
+      modal: null,
+      ListDepartemen: null,
+      rowEntitas: null,
+      filters: {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      },
+      Form: {
+        entitas: "",
+        nama_depart: "",
+        kddepart: "",
+        userid: "",
+        status: "",
+      },
+      idKey: "",
+      loading: true,
+      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
+      apiHit: "tes",
+    };
+  },
+  validations() {
+    return {
+      Form: {
+        entitas: { required },
+        nama_depart: { required },
+        kddepart: { required },
+      },
+    };
+  },
   components: {
     DataTable,
     Column,
     InputText,
+    ToogleBtn,
+  },
+  computed: {
+    getAllDepartemen() {
+      return this.ListDepartemen;
+    },
+    getEntitas() {
+      return this.rowEntitas;
+    },
+  },
+  methods: {
+    async getDataEntitas() {
+      try {
+        let respon = await serviceEntitas.getDataEntitas(this.token);
+        this.rowEntitas = respon.data.data;
+        this.loading = false;
+      } catch (error) {
+        this.$swal({
+          icon: "error",
+          title: "GAGAL",
+          text: error.response.data.Msg,
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
+    showInput() {
+      this.Form = {
+        entitas: "",
+        nama_depart: "",
+        kddepart: "",
+        userid: "",
+        status: "",
+      };
+      const $targetEl = document.getElementById("input-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+    },
+    async getData() {
+      this.loading = true;
+
+      let payload = {
+        entitas: "",
+      };
+      try {
+        let respon = await serviceDepartemen.getDataDepartemen(
+          payload,
+          this.token
+        );
+        this.ListDepartemen = respon.data.data;
+        this.loading = false;
+        console.log(this.ListDepartemen);
+      } catch (error) {
+        this.loading = false;
+        this.ListDepartemen = null;
+        this.$swal({
+          icon: "error",
+          title: "GAGAL",
+          text: error.response.data.Msg,
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
+    editDepartemen(data) {
+      const $targetEl = document.getElementById("update-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+      this.Form.entitas = data.kode_entitas;
+      this.Form.kddepart = data.kode_departement;
+      this.Form.nama_depart = data.nama_departement;
+      this.Form.status = data.status;
+      this.idKey = data.id;
+    },
+    deleteDepartemen(data) {
+      const $targetEl = document.getElementById("delete-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+      this.idKey = data.id;
+    },
+    async prosesInput() {
+      let Forminput = this.Form;
+      Forminput.userid = this.userSession.username;
+      Forminput.status = 1;
+      this.v$.$validate(); // checks all inputs
+
+      if (!this.v$.$error) {
+        console.log(Forminput);
+        console.log(this.v$.$error);
+        try {
+          let respon = await serviceDepartemen.tambahDataDepartemen(
+            Forminput,
+            this.token
+          );
+          console.log('here');
+
+          console.log(respon);
+          this.modal.hide();
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: respon.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+          this.Form = {
+            entitas: "",
+            nama_depart: "",
+            kddepart: "",
+            userid: "",
+            status: "",
+          };
+          this.refreshListTable();
+        } catch (error) {
+          console.log(error);
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+        }
+      }
+    },
+    async prosesDelete() {
+      let payload = {
+        id: this.idKey,
+      };
+      try {
+        let respon = await serviceDepartemen.deleteDepartemen(
+          payload,
+          this.token
+        );
+        this.modal.hide();
+        this.$swal({
+          icon: "success",
+          title: "Berhasil",
+          text: respon.data.Msg,
+          confirmButtonColor: "#e77817",
+        });
+        this.refreshListTable();
+      } catch (error) {
+        this.$swal({
+          icon: "error",
+          title: "Gagal",
+          text: error.response.data.Msg,
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
+    async prosesEdit() {
+      let Forminput = this.Form;
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.$error) {
+        Forminput.id = this.idKey;
+        Forminput.userid = this.userSession.username;
+        try {
+          let respon = await serviceDepartemen.updateDepartemen(
+            Forminput,
+            this.token
+          );
+          this.modal.hide();
+          this.Form = {
+            entitas: "",
+            nama_depart: "",
+            kddepart: "",
+            userid: "",
+            status: "",
+          };
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: respon.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+          this.refreshListTable();
+        } catch (error) {
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+        }
+      }
+    },
+    hideModal() {
+      this.modal.hide();
+    },
+    refreshListTable() {
+      this.getData();
+    },
   },
   mounted() {
     initFlowbite();
+    this.getData();
+    this.getDataEntitas();
   },
 };
 </script>
@@ -392,6 +728,26 @@ export default {
   border: none !important;
 }
 .p-datatable-thead tr th {
-  background-color: #ffff !important;
+  background-color: #006699 !important;
+  color: #fff !important;
+}
+.label-aktif {
+  width: 136px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+  background: #dcffeb;
+  color: #5bb07f;
+  text-align: center;
+  border-left: #5bb07f 5px solid;
+}
+
+.label-nonaktif {
+  width: 136px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+  background: #ffe3c2;
+  color: #f66512;
+  text-align: center;
+  border-left: #f66512 5px solid;
 }
 </style>

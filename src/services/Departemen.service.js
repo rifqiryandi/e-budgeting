@@ -1,13 +1,13 @@
 import http from "../conf-http";
 
 class DepartemenService {
-    getDataDepartemen(token) {
+    getDataDepartemen(data,token) {
         var config = {
             headers: {
                 "x-access-token": token
             }
         }
-        return http.get("referensi/getdepartemen", config);
+        return http.post("referensi/getdepartemen", data,config);
     }
     tambahDataDepartemen(data, token) {
         var config = {

@@ -37,6 +37,15 @@ class UserService {
     return http.post("users/deluser", data, config);
   }
 
+  ubahStatus(data, token) {
+    var config = {
+      headers: {
+        "x-access-token": token
+      }
+    }
+    return http.post("users/updatestatus", data, config);
+  }
+
 }
 
 export default new UserService();

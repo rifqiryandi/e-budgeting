@@ -1,6 +1,55 @@
 <template>
   <div class="row">
-    <div class="col-12 d-flex justify-content-end">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="space-y-6">
+            <div class="grid grid-cols-1 l">
+              <div class="w-full">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Mata Anggaran
+                </label>
+                <select
+                  v-model="filters.kdmatanggaran"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">-- Pilih Mata Anggaran --</option>
+                  <option
+                    v-for="(item, index) in rowAllMataAnggaranFilter"
+                    :key="index"
+                    :value="item.kode_mata_anggaran"
+                  >
+                    {{ item.nama_mata_anggaran }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <button
+                class="w-full"
+                style="
+                  border-radius: 16px;
+                  background: #006699;
+                  color: #ffff;
+                  height: 48px;
+                  padding-top: 11px;
+                  padding-bottom: 11px;
+                "
+                @click="getData"
+              >
+                Tampilkan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Sub Mata Anggaran -->
+  <div class="row mt-3">
+    <div class="col-12 flex justify-end">
       <button
         class="btn d-flex"
         style="
@@ -33,7 +82,7 @@
       <div class="card">
         <div class="card-body">
           <DataTable
-            :value="getAllKMataAnggaran"
+            :value="getAllSMataAnggaran"
             paginator
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -44,7 +93,7 @@
             :loading="loading"
           >
             <template #header>
-              <div class="d-flex justify-content-end">
+              <div class="flex justify-end">
                 <span class="p-input-icon-left">
                   <i class="fa fa-search" aria-hidden="true"></i>
                   <InputText
@@ -57,20 +106,42 @@
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
             <Column
-              field="kode_kelompok_mata_anggaran"
-              header="Kode Kelompok Mata Anggaran"
+              field="kode_sub_mata_anggaran"
+              header="Kode Sub Mata Anggaran"
               style="width: 20%"
             >
               <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.kode_kelompok_mata_anggaran }}
+                <div>
+                  {{ data.kode_sub_mata_anggaran }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="nama_sub_mata_anggaran"
+              header="Nama Sub Mata Anggaran"
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                <div>
+                  {{ data.nama_sub_mata_anggaran }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="nama_mata_anggaran"
+              header="Nama Mata Anggaran"
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                <div>
+                  {{ data.nama_mata_anggaran }}
                 </div>
               </template>
             </Column>
             <Column
               field="nama_kelompok_mata_anggaran"
               header="Nama Kelompok Mata Anggaran"
-              style="width: 25%"
+              style="width: 20%"
             >
               <template #body="{ data }">
                 <div>
@@ -78,7 +149,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="status_aktif" header="Status" style="width: 10%">
+            <Column field="" header="Status" style="width: 10%">
               <template #body="{ data }">
                 <ToogleBtn
                   :nilaiStatus="data.status_aktif"
@@ -91,7 +162,7 @@
                 <button
                   class="bg-transparent mr-2"
                   title="EDIT"
-                  @click="editKMataAnggaran(data)"
+                  @click="editSMataAnggaran(data)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +178,7 @@
                 <button
                   class="bg-transparent"
                   title="HAPUS"
-                  @click="deleteKMataAnggaran(data)"
+                  @click="deleteSMataAnggaran(data)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +212,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Tambah Data
+            Tambah Sub Mata Anggaran
           </h3>
           <button
             type="button"
@@ -174,13 +245,20 @@
             >
               Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
+            <select
               v-model="Form.kdkelmatanggaran"
-              placeholder="Masukkan Kode Kelompok mata anggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+              @change="getMataAnggaran"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+              <option
+                v-for="(item, index) in getKelompokMataAnggaran"
+                :key="index"
+                :value="item.kode_kelompok_mata_anggaran"
+              >
+                {{ item.nama_kelompok_mata_anggaran }}
+              </option>
+            </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdkelmatanggaran.$error"
@@ -192,20 +270,67 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Nama Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              Kode Mata Anggaran <span class="text-red-600">*</span>
+            </label>
+            <select
+              v-model="Form.kdmatanggaran"
+              :disabled="rowAllMataAnggaran == null"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Mata Anggaran --</option>
+              <option
+                v-for="(item, index) in rowAllMataAnggaran"
+                :key="index"
+                :value="item.kode_mata_anggaran"
+              >
+                {{ item.nama_mata_anggaran }}
+              </option>
+            </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.kdmatanggaran.$error"
+            >
+              Kode mata anggaran tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Kode Sub Mata Anggaran <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="base-input"
-              v-model="Form.nama_kelmatanggaran"
-              placeholder="Masukkan Nama Kelompok mata anggaran"
+              v-model="Form.kdsubmatanggaran"
+              placeholder="Masukkan Kode Sub mata anggaran"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nama_kelmatanggaran.$error"
+              v-if="this.v$.Form.kdsubmatanggaran.$error"
             >
-              Nama Kelompok mata anggaran tidak boleh kosong!
+              Kode Sub mata anggaran tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nama Sub Mata Anggaran <span class="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="base-input"
+              v-model="Form.nmsubmatanggaran"
+              placeholder="Masukkan Kode Sub mata anggaran"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nmsubmatanggaran.$error"
+            >
+              Nama Sub mata anggaran tidak boleh kosong!
             </p>
           </div>
         </div>
@@ -244,9 +369,7 @@
         <div
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
-          <h3 class="text-xl font-medium" style="color: #fff">
-            Edit Data
-          </h3>
+          <h3 class="text-xl font-medium" style="color: #fff">Tambah Data</h3>
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -272,59 +395,137 @@
         </div>
         <!-- Modal body -->
         <div class="p-6 space-y-2">
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              id="base-input"
-              v-model="Form.kdkelmatanggaran"
-              placeholder="Masukkan Kode Kelompok mata anggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.kdkelmatanggaran.$error"
-            >
-              Kode Kelompok mata anggaran tidak boleh kosong!
-            </p>
+          <div class="text-center" v-if="loadingDetail">
+            <div role="status">
+              <svg
+                aria-hidden="true"
+                class="inline w-12 h-12 mr-2 text-gray-200 animate-spin dark:text-gray-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style="fill: #006699"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentFill"
+                />
+              </svg>
+              <span class="sr-only">Loading...</span>
+            </div>
           </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nama Kelompok Mata Anggaran <span class="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              id="base-input"
-              v-model="Form.nama_kelmatanggaran"
-              placeholder="Masukkan Nama Kelompok mata anggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nama_kelmatanggaran.$error"
-            >
-              Nama Kelompok mata anggaran tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Status
-            </label>
-            <select
-              v-model="Form.status"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="1">Aktif</option>
-              <option value="0">Non-Aktif</option>
-            </select>
+          <div v-else>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              </label>
+              <select
+                v-model="Form.kdkelmatanggaran"
+                @change="getMataAnggaran"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+                <option
+                  v-for="(item, index) in getKelompokMataAnggaran"
+                  :key="index"
+                  :value="item.kode_kelompok_mata_anggaran"
+                >
+                  {{ item.nama_kelompok_mata_anggaran }}
+                </option>
+              </select>
+              <p
+                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                v-if="this.v$.Form.kdkelmatanggaran.$error"
+              >
+                Kode Kelompok mata anggaran tidak boleh kosong!
+              </p>
+            </div>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Kode Mata Anggaran <span class="text-red-600">*</span>
+              </label>
+              <select
+                v-model="Form.kdmatanggaran"
+                :disabled="rowAllMataAnggaran == null"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Mata Anggaran --</option>
+                <option
+                  v-for="(item, index) in rowAllMataAnggaran"
+                  :key="index"
+                  :value="item.kode_mata_anggaran"
+                >
+                  {{ item.nama_mata_anggaran }}
+                </option>
+              </select>
+              <p
+                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                v-if="this.v$.Form.kdmatanggaran.$error"
+              >
+                Kode mata anggaran tidak boleh kosong!
+              </p>
+            </div>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Kode Sub Mata Anggaran <span class="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                id="base-input"
+                v-model="Form.kdsubmatanggaran"
+                placeholder="Masukkan Kode Sub mata anggaran"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+              <p
+                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                v-if="this.v$.Form.kdsubmatanggaran.$error"
+              >
+                Kode Sub mata anggaran tidak boleh kosong!
+              </p>
+            </div>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Nama Sub Mata Anggaran <span class="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                id="base-input"
+                v-model="Form.nmsubmatanggaran"
+                placeholder="Masukkan Kode Sub mata anggaran"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+              <p
+                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                v-if="this.v$.Form.nmsubmatanggaran.$error"
+              >
+                Nama Sub mata anggaran tidak boleh kosong!
+              </p>
+            </div>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Status
+              </label>
+              <select
+                v-model="Form.status"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="1">Aktif</option>
+                <option value="0">Non-Aktif</option>
+              </select>
+            </div>
           </div>
         </div>
         <!-- Modal footer -->
@@ -428,35 +629,48 @@ import { required } from "@vuelidate/validators";
 import { Modal } from "flowbite";
 import ToogleBtn from "../../../utils/ToggleBtn.vue";
 
+import serviceMataAnggaran from "../../../../services/MataAnggaran.service";
+import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
 import serviceKMataAnggaran from "../../../../services/KelompokMataAnggaran.service";
+
 export default {
-  name: "Kelompok Mata Anggaran",
+  name: "Sub Mata Anggaran",
   data() {
     return {
       v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      ListKMataAnggaran: null,
+      ListSMataAnggaran: null,
+      rowMataAnggaran: null,
+      rowKelompokMataA: null,
+      rowMataAnggaranFilter:null,
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
       },
       Form: {
         kdkelmatanggaran: "",
-        nama_kelmatanggaran: "",
+        kdmatanggaran: "",
+        kdsubmatanggaran: "",
+        nmsubmatanggaran: "",
         userid: "",
         status: "",
       },
       idKey: "",
       loading: true,
+      loadingDetail: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-      apiHit:"tes"
+      apiHit: "tes",
     };
   },
   validations() {
     return {
       Form: {
         kdkelmatanggaran: { required },
-        nama_kelmatanggaran: { required },
+        kdmatanggaran: { required },
+        kdsubmatanggaran: { required },
+        nmsubmatanggaran: { required },
       },
     };
   },
@@ -464,18 +678,72 @@ export default {
     DataTable,
     Column,
     InputText,
-    ToogleBtn
+    ToogleBtn,
   },
   computed: {
-    getAllKMataAnggaran() {
-      return this.ListKMataAnggaran;
+    getAllSMataAnggaran() {
+      return this.ListSMataAnggaran;
+    },
+    rowAllMataAnggaran() {
+      return this.rowMataAnggaran;
+    },
+    rowAllMataAnggaranFilter(){
+      return this.rowMataAnggaranFilter
+    },
+    getKelompokMataAnggaran() {
+      return this.rowKelompokMataA;
     },
   },
   methods: {
+    async getKMataAnggaran() {
+      try {
+        let res = await serviceKMataAnggaran.getDataKMataAnggaran(this.token);
+        this.rowKelompokMataA = res.data.data;
+      } catch (error) {
+        this.$swal({
+          icon: "error",
+          title: "GAGAL",
+          text: error.response.data.Msg,
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
+    async getMataAnggaranFilter() {
+      let payload = {
+        kdkelmatanggaran: "",
+      };
+      try {
+        let respon = await serviceMataAnggaran.getDataMataAnggaran(
+          payload,
+          this.token
+        );
+        this.rowMataAnggaranFilter = respon.data.data;
+      } catch (error) {
+        this.rowMataAnggaranFilter = null;
+        console.log(error);
+      }
+    },
+    async getMataAnggaran() {
+      let payload = {
+        kdkelmatanggaran: this.Form.kdkelmatanggaran,
+      };
+      try {
+        let respon = await serviceMataAnggaran.getDataMataAnggaran(
+          payload,
+          this.token
+        );
+        this.rowMataAnggaran = respon.data.data;
+      } catch (error) {
+        this.rowMataAnggaran = null;
+        console.log(error);
+      }
+    },
     showInput() {
       this.Form = {
         kdkelmatanggaran: "",
-        nama_kelmatanggaran: "",
+        kdmatanggaran: "",
+        kdsubmatanggaran: "",
+        nmsubmatanggaran: "",
         userid: "",
         status: "",
       };
@@ -485,35 +753,37 @@ export default {
     },
     async getData() {
       this.loading = true;
-
+      let payload = {
+        kdkelmatanggaran: this.filters.kdkelmatanggaran,
+        kdmatanggaran: this.filters.kdmatanggaran,
+      };
       try {
-        let respon = await serviceKMataAnggaran.getDataKMataAnggaran(
+        let respon = await serviceSMataAnggaran.getDataSubMataAnggaran(
+          payload,
           this.token
         );
-        this.ListKMataAnggaran = respon.data.data;
+        this.ListSMataAnggaran = respon.data.data;
         this.loading = false;
-        console.log(this.ListKMataAnggaran);
       } catch (error) {
         this.loading = false;
-        this.ListKMataAnggaran = null;
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
+        this.ListSMataAnggaran = null;
       }
     },
-    editKMataAnggaran(data) {
+    async editSMataAnggaran(data) {
+      this.loadingDetail = true;
       const $targetEl = document.getElementById("update-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
       this.Form.kdkelmatanggaran = data.kode_kelompok_mata_anggaran;
-      this.Form.nama_kelmatanggaran = data.nama_kelompok_mata_anggaran;
+      await this.getMataAnggaran();
+      this.Form.kdmatanggaran = data.kode_mata_anggaran;
+      this.Form.kdsubmatanggaran = data.kode_sub_mata_anggaran;
+      this.Form.nmsubmatanggaran = data.nama_sub_mata_anggaran;
       this.Form.status = data.status_aktif;
       this.idKey = data.id;
+      this.loadingDetail = false;
     },
-    deleteKMataAnggaran(data) {
+    deleteSMataAnggaran(data) {
       const $targetEl = document.getElementById("delete-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
@@ -523,9 +793,9 @@ export default {
       let Forminput = this.Form;
       Forminput.userid = this.userSession.username;
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
+      if (!this.v$.Form.$error) {
         try {
-          let respon = await serviceKMataAnggaran.tambahDataKMataAnggaran(
+          let respon = await serviceSMataAnggaran.tambahDataSubMataAnggaran(
             Forminput,
             this.token
           );
@@ -538,7 +808,9 @@ export default {
           });
           this.Form = {
             kdkelmatanggaran: "",
-            nama_kelmatanggaran: "",
+            kdmatanggaran: "",
+            kdsubmatanggaran: "",
+            nmsubmatanggaran: "",
             userid: "",
             status: "",
           };
@@ -558,7 +830,7 @@ export default {
         id: this.idKey,
       };
       try {
-        let respon = await serviceKMataAnggaran.deleteKMataAnggaran(
+        let respon = await serviceSMataAnggaran.deleteSubMataAnggaran(
           payload,
           this.token
         );
@@ -582,19 +854,20 @@ export default {
     async prosesEdit() {
       let Forminput = this.Form;
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
+      if (!this.v$.Form.$error) {
         Forminput.id = this.idKey;
         Forminput.userid = this.userSession.username;
         try {
-          let respon = await serviceKMataAnggaran.updateKMataAnggaran(
+          let respon = await serviceSMataAnggaran.updateSubMataAnggaran(
             Forminput,
             this.token
           );
           this.modal.hide();
           this.Form = {
-            entitas: "",
-            nama_depart: "",
-            kddepart: "",
+            kdkelmatanggaran: "",
+            kdmatanggaran: "",
+            kdsubmatanggaran: "",
+            nmsubmatanggaran: "",
             userid: "",
             status: "",
           };
@@ -625,6 +898,8 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
+    this.getKMataAnggaran();
+    this.getMataAnggaranFilter();
   },
 };
 </script>
@@ -632,28 +907,10 @@ export default {
 .p-datatable-header {
   background-color: #ffff !important;
   border: none !important;
+  padding: 16px 6px 16px 6px !important;
 }
 .p-datatable-thead tr th {
   background-color: #006699 !important;
   color: #fff !important;
-}
-.label-aktif {
-  width: 136px;
-  padding: 5px 10px 5px 10px;
-  border-radius: 5px;
-  background: #dcffeb;
-  color: #5bb07f;
-  text-align: center;
-  border-left: #5bb07f 5px solid;
-}
-
-.label-nonaktif {
-  width: 136px;
-  padding: 5px 10px 5px 10px;
-  border-radius: 5px;
-  background: #ffe3c2;
-  color: #f66512;
-  text-align: center;
-  border-left: #f66512 5px solid;
 }
 </style>

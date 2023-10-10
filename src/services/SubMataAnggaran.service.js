@@ -1,13 +1,13 @@
 import http from "../conf-http";
 
 class SubMataAnggaranService {
-    getDataSubMataAnggaran(token) {
+    getDataSubMataAnggaran(data, token) {
         var config = {
             headers: {
                 "x-access-token": token
             }
         }
-        return http.get("referensi/getsubmatanggaran", config);
+        return http.post("referensi/getsubmatanggaran", data, config);
     }
     tambahDataSubMataAnggaran(data, token) {
         var config = {

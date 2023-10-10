@@ -40,6 +40,18 @@ const routes = [{
     name: "Kelompok Mata Anggaran",
     component: () => import("./components/page/admin/mataAnggaran/KelompokMataAnggaran.vue"),
   },
+  {
+    path: "/mataAnggaran",
+    alias: "/mataAnggaran",
+    name: "Mata Anggaran",
+    component: () => import("./components/page/admin/mataAnggaran/ListMataAnggaran.vue"),
+  },
+  {
+    path: "/submataAnggaran",
+    alias: "/submataAnggaran",
+    name: "Sub Mata Anggaran",
+    component: () => import("./components/page/admin/mataAnggaran/ListSubMataAnggaran.vue"),
+  }
   
 ];
 
