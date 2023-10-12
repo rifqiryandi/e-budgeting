@@ -33,7 +33,7 @@
       <div class="card">
         <div class="card-body">
           <DataTable
-            :value="getAllKMataAnggaran"
+            :value="getAllData"
             paginator
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -47,43 +47,37 @@
               <div class="d-flex justify-content-end">
                 <span class="p-input-icon-left">
                   <i class="fa fa-search" aria-hidden="true"></i>
-                  <InputText
-                    placeholder="Search"
-                    v-model="filters['global'].value"
-                  />
+                  <InputText placeholder="Search" />
                 </span>
               </div>
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
             <Column
-              field="kode_kelompok_mata_anggaran"
-              header="Kode Kelompok Mata Anggaran"
+              field="nama_sub_mata_anggaran"
+              header="Nama Sub Mata Anggaran"
               style="width: 20%"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.kode_kelompok_mata_anggaran }}
+                  {{ data.nama_sub_mata_anggaran }}
                 </div>
               </template>
             </Column>
             <Column
-              field="nama_kelompok_mata_anggaran"
-              header="Nama Kelompok Mata Anggaran"
-              style="width: 25%"
+              field="nama_departement"
+              header="Nama Departemen"
+              style="width: 20%"
             >
               <template #body="{ data }">
                 <div>
-                  {{ data.nama_kelompok_mata_anggaran }}
+                  {{ data.nama_departement }}
                 </div>
               </template>
             </Column>
-            <Column field="status_aktif" header="Status" style="width: 10%">
+            <Column field="tahun" header="Tahun" style="width: 20%">
               <template #body="{ data }">
-                <ToogleBtn
-                  :nilaiStatus="data.status_aktif"
-                  :apihit="this.apiHit"
-                />
+                {{ data.tahun }}
               </template>
             </Column>
             <Column field="" header="Aksi" style="width: 10%">
@@ -91,7 +85,7 @@
                 <button
                   class="bg-transparent mr-2"
                   title="EDIT"
-                  @click="editKMataAnggaran(data)"
+                  @click="editDepartemen(data)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +101,7 @@
                 <button
                   class="bg-transparent"
                   title="HAPUS"
-                  @click="deleteKMataAnggaran(data)"
+                  @click="deleteAnggaran(data)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +135,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Tambah Data
+            Tambah Departemen
           </h3>
           <button
             type="button"
@@ -172,40 +166,86 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              Sub Mata Anggaran <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
-              v-model="Form.kdkelmatanggaran"
-              placeholder="Masukkan Kode Kelompok mata anggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+            <select
+              v-model="Form.kdsubmatanggaran"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Sub Mata Anggaran --</option>
+              <option
+                v-for="(item, index) in getSMataAnggaran"
+                :key="index"
+                :value="item.kode_sub_mata_anggaran"
+              >
+                {{ item.nama_sub_mata_anggaran }}
+              </option>
+            </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.kdkelmatanggaran.$error"
+              v-if="this.v$.Form.kdsubmatanggaran.$error"
             >
-              Kode Kelompok mata anggaran tidak boleh kosong!
+              Sub Mata Anggaran tidak boleh kosong!
             </p>
           </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Nama Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              Kode Departemen <span class="text-red-600">*</span>
+            </label>
+            <select
+              v-model="Form.kddepartemen"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih departemen --</option>
+              <option
+                v-for="(item, index) in getDepartemen"
+                :key="index"
+                :value="item.kode_departement"
+              >
+                {{ item.nama_departement }}
+              </option>
+            </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.kddepartemen.$error"
+            >
+              Kode Departemen tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Tahun <span class="text-red-600">*</span>
+            </label>
+            <VueDatePicker v-model="Form.tahun" auto-apply year-picker />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.tahun.$error"
+            >
+              Tahun tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nominal <span class="text-red-600">*</span>
             </label>
             <input
-              type="text"
+              type="number"
               id="base-input"
-              v-model="Form.nama_kelmatanggaran"
-              placeholder="Masukkan Nama Kelompok mata anggaran"
+              v-model="Form.nominal"
+              placeholder="Masukkan Nominal"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nama_kelmatanggaran.$error"
+              v-if="this.v$.Form.nominal.$error"
             >
-              Nama Kelompok mata anggaran tidak boleh kosong!
+              Nominal tidak boleh kosong!
             </p>
           </div>
         </div>
@@ -216,124 +256,6 @@
           <button
             type="button"
             @click="prosesInput"
-            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
-          >
-            SIMPAN
-          </button>
-          <button
-            @click="hideModal"
-            type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-          >
-            TUTUP
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal Update -->
-  <div
-    id="update-modal"
-    tabindex="-1"
-    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-  >
-    <div class="relative w-full max-w-4xl max-h-full">
-      <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <!-- Modal header -->
-        <div
-          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
-        >
-          <h3 class="text-xl font-medium" style="color: #fff">
-            Edit Data
-          </h3>
-          <button
-            type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            @click="hideModal"
-          >
-            <svg
-              class="w-3 h-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-            <span class="sr-only">Close modal</span>
-          </button>
-        </div>
-        <!-- Modal body -->
-        <div class="p-6 space-y-2">
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              id="base-input"
-              v-model="Form.kdkelmatanggaran"
-              placeholder="Masukkan Kode Kelompok mata anggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.kdkelmatanggaran.$error"
-            >
-              Kode Kelompok mata anggaran tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nama Kelompok Mata Anggaran <span class="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              id="base-input"
-              v-model="Form.nama_kelmatanggaran"
-              placeholder="Masukkan Nama Kelompok mata anggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nama_kelmatanggaran.$error"
-            >
-              Nama Kelompok mata anggaran tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Status
-            </label>
-            <select
-              v-model="Form.status"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="1">Aktif</option>
-              <option value="0">Non-Aktif</option>
-            </select>
-          </div>
-        </div>
-        <!-- Modal footer -->
-        <div
-          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-        >
-          <button
-            type="button"
-            @click="prosesEdit"
             class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
             SIMPAN
@@ -418,45 +340,53 @@
   </div>
 </template>
 <script>
-import { FilterMatchMode } from "primevue/api";
+// import { FilterMatchMode } from "primevue/api";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
-import ToogleBtn from "../../../utils/ToggleBtn.vue";
 
-import serviceKMataAnggaran from "../../../../services/KelompokMataAnggaran.service";
+import serviceAnggaran from "../../../../services/Transaction.service";
+import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
+import serviceDepartemen from "../../../../services/Departemen.service";
+
 export default {
-  name: "Kelompok Mata Anggaran",
+  name: "Anggaran",
   data() {
     return {
       v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      ListKMataAnggaran: null,
+      ListTransaksi: null,
+      rowSMataAnggaran: null,
+      rowDepartemen: null,
       filters: {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        kdsubmatanggaran: "",
+        kddepartemen: "",
       },
       Form: {
-        kdkelmatanggaran: "",
-        nama_kelmatanggaran: "",
+        kdsubmatanggaran: "",
+        kddepartemen: "",
+        tahun: "",
+        nominal: "",
         userid: "",
-        status: "",
       },
-      idKey: "",
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-      apiHit:"tes"
     };
   },
   validations() {
     return {
       Form: {
-        kdkelmatanggaran: { required },
-        nama_kelmatanggaran: { required },
+        kdsubmatanggaran: { required },
+        kddepartemen: { required },
+        tahun: { required },
+        nominal: { required },
       },
     };
   },
@@ -464,38 +394,30 @@ export default {
     DataTable,
     Column,
     InputText,
-    ToogleBtn
+    VueDatePicker,
   },
   computed: {
-    getAllKMataAnggaran() {
-      return this.ListKMataAnggaran;
+    getAllData() {
+      return this.ListTransaksi;
+    },
+    getSMataAnggaran() {
+      return this.rowSMataAnggaran;
+    },
+    getDepartemen() {
+      return this.rowDepartemen;
     },
   },
   methods: {
-    showInput() {
-      this.Form = {
-        kdkelmatanggaran: "",
-        nama_kelmatanggaran: "",
-        userid: "",
-        status: "",
-      };
-      const $targetEl = document.getElementById("input-modal");
-      this.modal = new Modal($targetEl);
-      this.modal.show();
-    },
-    async getData() {
-      this.loading = true;
-
+    async getAllDepartemen() {
+      let payload = {};
       try {
-        let respon = await serviceKMataAnggaran.getDataKMataAnggaran(
+        let respon = await serviceDepartemen.getDataDepartemen(
+          payload,
           this.token
         );
-        this.ListKMataAnggaran = respon.data.data;
-        this.loading = false;
-        console.log(this.ListKMataAnggaran);
+        this.rowDepartemen = respon.data.data;
+        console.log(respon.data.data);
       } catch (error) {
-        this.loading = false;
-        this.ListKMataAnggaran = null;
         this.$swal({
           icon: "error",
           title: "GAGAL",
@@ -504,31 +426,95 @@ export default {
         });
       }
     },
-    editKMataAnggaran(data) {
-      const $targetEl = document.getElementById("update-modal");
+    async getSubMataAnggaran() {
+      let payload = {};
+      try {
+        let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
+          payload,
+          this.token
+        );
+        console.log(res);
+        this.rowSMataAnggaran = res.data.data;
+      } catch (error) {
+        this.rowSMataAnggaran = null;
+        console.log(error);
+      }
+    },
+    showInput() {
+      this.Form = {
+        kdsubmatanggaran: "",
+        kddepartemen: "",
+        tahun: "",
+        nominal: "",
+        userid: "",
+      };
+      const $targetEl = document.getElementById("input-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
-      this.Form.kdkelmatanggaran = data.kode_kelompok_mata_anggaran;
-      this.Form.nama_kelmatanggaran = data.nama_kelompok_mata_anggaran;
-      this.Form.status = data.status_aktif;
-      this.idKey = data.id;
     },
-    deleteKMataAnggaran(data) {
+    deleteAnggaran(data) {
       const $targetEl = document.getElementById("delete-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
       this.idKey = data.id;
     },
+    async getData() {
+      this.loading = true;
+      let payload = {
+        kdsubmatanggaran: this.filters.kdsubmatanggaran,
+        kddepartemen: this.filters.kddepartemen,
+      };
+      console.log(payload);
+      try {
+        let res = await serviceAnggaran.getTransaksi(payload, this.token);
+        this.ListTransaksi = res.data.data;
+        this.loading = false;
+        console.log(res.data.data);
+      } catch (error) {
+        this.ListTransaksi = null;
+        this.loading = false;
+        console.log(error);
+      }
+    },
+    // async prosesDelete() {
+    //   let payload = {
+    //     id: this.idKey,
+    //   };
+    //   try {
+    //     let respon = await serviceAnggaran.deleteAnggaran(
+    //       payload,
+    //       this.token
+    //     );
+    //     this.modal.hide();
+    //     this.$swal({
+    //       icon: "success",
+    //       title: "Berhasil",
+    //       text: respon.data.Msg,
+    //       confirmButtonColor: "#e77817",
+    //     });
+    //     this.refreshListTable();
+    //   } catch (error) {
+    //     this.$swal({
+    //       icon: "error",
+    //       title: "Gagal",
+    //       text: error.response.data.Msg,
+    //       confirmButtonColor: "#e77817",
+    //     });
+    //   }
+    // },
     async prosesInput() {
       let Forminput = this.Form;
       Forminput.userid = this.userSession.username;
+      console.log(Forminput);
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         try {
-          let respon = await serviceKMataAnggaran.tambahDataKMataAnggaran(
+          let respon = await serviceAnggaran.inputAnggaran(
             Forminput,
             this.token
           );
+
+          console.log(respon);
           this.modal.hide();
           this.$swal({
             icon: "success",
@@ -537,73 +523,11 @@ export default {
             confirmButtonColor: "#e77817",
           });
           this.Form = {
-            kdkelmatanggaran: "",
-            nama_kelmatanggaran: "",
-            userid: "",
-            status: "",
+            kdsubmatanggaran: "",
+            kddepartemen: "",
+            tahun: "",
+            nominal: "",
           };
-          this.refreshListTable();
-        } catch (error) {
-          this.$swal({
-            icon: "error",
-            title: "Gagal",
-            text: error.response.data.Msg,
-            confirmButtonColor: "#e77817",
-          });
-        }
-      }
-    },
-    async prosesDelete() {
-      let payload = {
-        id: this.idKey,
-      };
-      try {
-        let respon = await serviceKMataAnggaran.deleteKMataAnggaran(
-          payload,
-          this.token
-        );
-        this.modal.hide();
-        this.$swal({
-          icon: "success",
-          title: "Berhasil",
-          text: respon.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
-        this.refreshListTable();
-      } catch (error) {
-        this.$swal({
-          icon: "error",
-          title: "Gagal",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
-      }
-    },
-    async prosesEdit() {
-      let Forminput = this.Form;
-      this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
-        Forminput.id = this.idKey;
-        Forminput.userid = this.userSession.username;
-        try {
-          let respon = await serviceKMataAnggaran.updateKMataAnggaran(
-            Forminput,
-            this.token
-          );
-          this.modal.hide();
-          this.Form = {
-            entitas: "",
-            nama_depart: "",
-            kddepart: "",
-            userid: "",
-            status: "",
-          };
-          this.$swal({
-            icon: "success",
-            title: "Berhasil",
-            text: respon.data.Msg,
-            confirmButtonColor: "#e77817",
-          });
           this.refreshListTable();
         } catch (error) {
           this.$swal({
@@ -625,6 +549,8 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
+    this.getSubMataAnggaran();
+    this.getAllDepartemen();
   },
 };
 </script>
@@ -636,24 +562,5 @@ export default {
 .p-datatable-thead tr th {
   background-color: #008073 !important;
   color: #fff !important;
-}
-.label-aktif {
-  width: 136px;
-  padding: 5px 10px 5px 10px;
-  border-radius: 5px;
-  background: #dcffeb;
-  color: #5bb07f;
-  text-align: center;
-  border-left: #5bb07f 5px solid;
-}
-
-.label-nonaktif {
-  width: 136px;
-  padding: 5px 10px 5px 10px;
-  border-radius: 5px;
-  background: #ffe3c2;
-  color: #f66512;
-  text-align: center;
-  border-left: #f66512 5px solid;
 }
 </style>

@@ -3,7 +3,7 @@
     class="container-fluid centered"
     style="
       height: 100vh;
-      background-image: linear-gradient(to right, #ff6600, #006699);
+      background-image: linear-gradient(to right, #ff3300, #008073);
     "
   >
     <div class="card card-custom">
@@ -53,7 +53,7 @@
           <div
             class="col-12 d-flex justify-content-center fixed cstm-logo-position"
           >
-            <img src="../../../assets/bnilogo.png" class="img-style" />
+            <img src="../../../assets/LogoBNI.png" class="img-style" />
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@ export default {
             sessionStorage.setItem("isLogin", true);
             sessionStorage.setItem("token", token);
             if (respon.data.data.leveluser == 1) {
-              sessionStorage.setItem("namaAkes", "Super Admin");
+              sessionStorage.setItem("namaAkes", "Superadmin");
             } else if (respon.data.data.leveluser == 2) {
               sessionStorage.setItem("namaAkes", "Officer");
             } else if (respon.data.data.leveluser == 3) {
@@ -165,7 +165,7 @@ export default {
   align-items: center;
 }
 .text-info-style {
-  color: #006699;
+  color: #008073;
   font-family: Roboto;
   font-size: 18px;
   font-style: normal;
@@ -176,7 +176,7 @@ export default {
 }
 .img-style {
   width: 35%;
-  height: 60px;
+  height: 50px;
 }
 .blockCstm {
   width: 100%;
@@ -184,15 +184,15 @@ export default {
 }
 .button-style {
   width: 50%;
-  background-color: #006699;
+  background-color: #008073;
   color: #ffff;
   border-radius: 16px;
-  border: 2px solid #006699;
+  border: 2px solid #008073;
   height: 48px;
 }
 .button-style:hover {
   background-color: #ffff;
-  color: #006699;
+  color: #008073;
 }
 .block-login {
   width: 100%;

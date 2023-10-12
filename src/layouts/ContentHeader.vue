@@ -37,7 +37,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&family=Roboto:ital,wght@0,100;0,300;0,400;1,400&display=swap');
 
 .cstm-label {
-  color: #006699;
+  color: #008073;
   font-family: Roboto;
   font-style: normal;
   font-weight: 700;
