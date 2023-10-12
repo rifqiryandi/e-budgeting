@@ -2,18 +2,23 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar elevation-4" style="background-color: #fff">
     <!-- Brand Logo -->
-    <div class="brand-link">
+    <div class="brand-link d-flex">
       <img
-        src="../assets/bnilogo.png"
-        class="brand-image elevation-3"
-        style="width: 40px; margin-top: 2%"
+        src="../assets/LogoBNI.png"
+        style="
+          width: 40px;
+          height: 15px;
+          margin-top: 7px;
+          margin-right: 5px;
+          margin-left: 5px;
+        "
         alt=""
       />
       <span
         class="brand-text white-all"
         style="
           text-transform: uppercase;
-          background: linear-gradient(to right, #ff6600 10%, #006699 100%);
+          background: linear-gradient(to right, #ff3300 10%, #008073 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           font: {
@@ -72,10 +77,11 @@
               <p style="color: #1e1e1e">Dashboard</p>
             </router-link>
           </li>
+          <!-- Admin Sistem -->
           <li class="nav-item" v-show="namaAkses == 'Admin Sistem'">
             <a href="#" class="nav-link">
               <p class="white-all">
-                ADMINISTRASI
+                Administrasi
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -161,7 +167,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <p class="white-all">
-                    MATA ANGGARAN
+                    Mata Anggaran
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
@@ -188,7 +194,9 @@
                   <li class="nav-item">
                     <router-link
                       to="/submataAnggaran"
-                      :class="NamePage == 'Sub Mata Anggaran' ? Active : notActive"
+                      :class="
+                        NamePage == 'Sub Mata Anggaran' ? Active : notActive
+                      "
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -205,6 +213,37 @@
                     </router-link>
                   </li>
                 </ul>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Superadmin -->
+          <li class="nav-item" v-show="namaAkses == 'Superadmin'">
+            <a href="#" class="nav-link">
+              <p class="white-all">
+                Transaksi
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link
+                  to="/anggaran"
+                  :class="NamePage == 'Daftar Anggaran' ? Active : notActive"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M549.999-451.539q-41.922 0-70.96-29.038-29.038-29.038-29.038-70.961 0-41.922 29.038-70.96 29.038-29.038 70.96-29.038 41.923 0 70.961 29.038 29.038 29.038 29.038 70.96 0 41.923-29.038 70.961-29.038 29.038-70.961 29.038ZM286.154-327.693q-29.826 0-51.067-21.24-21.24-21.24-21.24-51.067v-303.076q0-29.826 21.24-51.067 21.241-21.24 51.067-21.24h527.69q29.827 0 51.067 21.24 21.24 21.241 21.24 51.067V-400q0 29.827-21.24 51.067t-51.067 21.24h-527.69Zm59.999-59.998h407.693q0-29.923 21.24-51.115 21.24-21.193 51.067-21.193v-183.078q-29.923 0-51.115-21.24-21.192-21.241-21.192-51.067H346.153q0 29.923-21.24 51.115-21.241 21.192-51.067 21.192v183.078q29.923 0 51.115 21.241 21.192 21.24 21.192 51.067Zm420.768 199.997H146.156q-29.827 0-51.067-21.241-21.24-21.24-21.24-51.066v-396.151h59.998v396.151q0 4.615 3.847 8.462 3.846 3.846 8.462 3.846h620.765v59.999ZM286.154-387.691h-12.308V-715.384h12.308q-5 0-8.654 3.654t-3.654 8.654V-400q0 5 3.654 8.654 3.654 3.655 8.654 3.655Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Anggaran</p>
+                </router-link>
               </li>
             </ul>
           </li>
@@ -237,7 +276,7 @@ export default {
   color: #1e1e1e;
 }
 .active {
-  background-color: #ff6600 !important;
+  background-color: #ff3300 !important;
 }
 .active p {
   color: #fff !important;

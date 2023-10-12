@@ -1,6 +1,6 @@
 <template>
   <ToggleButton
-    v-model="getCheck"
+    v-model="checked"
     onLabel="Aktif"
     offLabel="Non-Aktif"
     @click="getValToggle()"

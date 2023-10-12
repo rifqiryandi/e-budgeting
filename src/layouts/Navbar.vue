@@ -89,7 +89,7 @@ export default {
               await serviceAuth.clearLogin(payload);
               sessionStorage.clear();
               // this.$router.push("/login");
-              window.location.href = "/login";
+              window.location.href = "/";
             });
           } else {
             this.countDownTimer();

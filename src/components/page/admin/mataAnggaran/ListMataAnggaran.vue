@@ -29,7 +29,7 @@
                 class="w-full"
                 style="
                   border-radius: 16px;
-                  background: #006699;
+                  background: #008073;
                   color: #ffff;
                   height: 48px;
                   padding-top: 11px;
@@ -54,7 +54,7 @@
           class="btn d-flex"
           style="
             border-radius: 16px;
-            background: #006699;
+            background: #008073;
             color: #ffff;
             height: 48px;
             padding-top: 11px;
@@ -785,7 +785,7 @@ export default {
   padding: 16px 6px 16px 6px !important;
 }
 .p-datatable-thead tr th {
-  background-color: #006699 !important;
+  background-color: #008073 !important;
   color: #fff !important;
 }
 </style>
