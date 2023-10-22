@@ -35,6 +35,14 @@ class MataAnggaranService {
         }
         return http.post("referensi/delmatanggaran", data, config);
     }
+    ubahStatus(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("referensi/updatestatusmatanggaran", data, config);
+    }
 
 }
 

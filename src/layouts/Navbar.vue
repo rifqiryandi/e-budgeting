@@ -20,12 +20,15 @@
         <a class="nav-link" data-toggle="dropdown" href="#">
           <span class="material-symbols-outlined"> person </span>
         </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <div
+          class="dropdown-menu dropdown-menu-lg dropdown-menu-right cursor-pointer p-0 m-0"
+          style="border-radius: 6px"
+        >
           <a
             @click="ProsesLogout()"
-            class="dropdown-item d-flex justify-content-center"
+            class="dropdown-item d-flex justify-content-center cursor-pointer cstm-logout"
           >
-            Log Out
+            LOGOUT
           </a>
           <div class="dropdown-divider"></div>
         </div>
@@ -55,7 +58,6 @@ export default {
       sessionStorage.clear();
       // this.$router.push("/");
       window.location.href = "/";
-
     },
     countDownTimer() {
       if (sessionStorage.getItem("expTime") != undefined) {
@@ -107,5 +109,22 @@ export default {
 <style>
 .main-header {
   z-index: 20 !important;
+}
+.cstm-logout {
+  width: 100% !important;
+  border: 2px solid #fff !important ;
+  background-color: #006699 !important;
+  border-radius: 6px;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 0 #ffff;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+}
+
+.cstm-logout:hover {
+  border: 2px solid #006699 !important ;
+  color: #006699 !important;
+  box-shadow: inset 0 0 0 50px #ffff;
 }
 </style>

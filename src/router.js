@@ -25,6 +25,19 @@ switch (namaAkses) {
         name: "Daftar Anggaran",
         component: () => import("./components/page/superadmin/transaksi/Anggaran.vue"),
       },
+      {
+        path: "/persenAnggaran",
+        alias: "/persenAnggaran",
+        name: "Persentasi Anggaran",
+        component: () => import("./components/page/superadmin/transaksi/PersentasiAnggaran.vue"),
+      },
+      {
+        path: "/tes",
+        alias: "/tes",
+        name: "",
+        component: () => import("./components/utils/ValidationBtn.vue"),
+      },
+
     ];
     break;
   case 'Admin Sistem':
@@ -79,6 +92,60 @@ switch (namaAkses) {
 
     ];
     break;
+  case "Officer":
+    routes = [{
+        path: "/",
+        alias: "/login",
+        name: "Login",
+        component: () => import("./components/page/auth/Login.vue"),
+      },
+      {
+        path: "/dashboard",
+        alias: "/admin",
+        name: "Dashboard",
+        component: () => import("./components/page/admin/Dashboard.vue"),
+      },
+      {
+        path: "/kegiatan",
+        alias: "/kegiatan",
+        name: "Daftar Proyeksi Kegiatan",
+        component: () => import("./components/page/officer/transaksi/Kegiatan.vue"),
+      },
+      {
+        path: "/anggaran",
+        alias: "/anggaran",
+        name: "Daftar Anggaran",
+        component: () => import("./components/page/officer/transaksi/Anggaran.vue"),
+      },
+    ];
+    break;
+    case "Departemen Head":
+      routes = [{
+        path: "/",
+        alias: "/login",
+        name: "Login",
+        component: () => import("./components/page/auth/Login.vue"),
+      },
+      {
+        path: "/dashboard",
+        alias: "/admin",
+        name: "Dashboard",
+        component: () => import("./components/page/admin/Dashboard.vue"),
+      },
+      {
+        path: "/anggaran",
+        alias: "/anggaran",
+        name: "Daftar Anggaran",
+        component: () => import("./components/page/departemenHead/transaksi/Anggaran.vue"),
+      },
+      {
+        path: "/kegiatan",
+        alias: "/kegiatan",
+        name: "Daftar Proyeksi Kegiatan",
+        component: () => import("./components/page/departemenHead/transaksi/Kegiatan.vue"),
+      },
+    ];
+      break;
 
   default:
     routes = [{
@@ -86,7 +153,7 @@ switch (namaAkses) {
       alias: "/login",
       name: "Login",
       component: () => import("./components/page/auth/Login.vue"),
-    } ];
+    }];
     break;
 }
 

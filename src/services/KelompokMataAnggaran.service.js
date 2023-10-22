@@ -35,7 +35,14 @@ class KMataAnggaranService {
         }
         return http.post("referensi/delkelmatanggaran", data, config);
     }
-
+    ubahStatus(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("referensi/updatestatusklpmataanggaran", data, config);
+    }
 }
 
 export default new KMataAnggaranService();

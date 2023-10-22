@@ -9,7 +9,14 @@
 <script>
 import { integer } from "@vuelidate/validators";
 import ToggleButton from "primevue/togglebutton";
+
 import serviceUser from "../../services/User.service";
+import serviceEntitas from "../../services/Entitas.service";
+import serviceDepartemen from "../../services/Departemen.service";
+import serviceKMataAnggaran from "../../services/KelompokMataAnggaran.service";
+import serviceMataAnggaran from "../../services/MataAnggaran.service";
+import serviceSMataAnggaran from "../../services/SubMataAnggaran.service";
+
 export default {
   name: "Toggle Button",
   props: {
@@ -19,17 +26,11 @@ export default {
   },
   data() {
     return {
-      checked: this.nilaiStatus == 1 ? true : false,
+      checked: false,
       urlApi: this.apihit,
       keyId: this.keyid,
-      token:sessionStorage.getItem('token')
-
+      token: sessionStorage.getItem("token"),
     };
-  },
-  computed: {
-    getCheck(){
-      return this.checked
-    }
   },
   components: {
     ToggleButton,
@@ -45,7 +46,7 @@ export default {
       } else {
         payload = {
           id: this.keyId,
-          status: 2,
+          status: 0,
         };
       }
       switch (this.urlApi) {
@@ -56,10 +57,72 @@ export default {
             console.log(error);
           }
           break;
+        case "Entitas":
+          try {
+            await serviceEntitas.ubahStatus(payload, this.token);
+          } catch (error) {
+            this.checked = true;
+            await this.responError(error);
+            console.log(error);
+          }
+          break;
+        case "Departemen":
+          try {
+            await serviceDepartemen.ubahStatus(payload, this.token);
+          } catch (error) {
+            this.checked = true;
+            await this.responError(error);
+            console.log(error);
+          }
+          break;
+        case "KMataAnggaran":
+          try {
+            await serviceKMataAnggaran.ubahStatus(payload, this.token);
+          } catch (error) {
+            this.checked = true;
+            await this.responError(error);
+            console.log(error);
+          }
+          break;
+        case "MataAnggaran":
+          try {
+            await serviceMataAnggaran.ubahStatus(payload, this.token);
+          } catch (error) {
+            this.checked = true;
+            await this.responError(error);
+            console.log(error);
+          }
+          break;
+        case "SMataAnggaran":
+          try {
+            await serviceSMataAnggaran.ubahStatus(payload, this.token);
+          } catch (error) {
+            this.checked = true;
+            await this.responError(error);
+            console.log(error);
+          }
+          break;
+      }
+    },
+    async responError(error) {
+      await this.$swal({
+        icon: "info",
+        title: "GAGAL",
+        text: error.response.data.Msg,
+        confirmButtonColor: "#e77817",
+      });
+    },
+    checkStatus() {
+      if (this.nilaiStatus == 1) {
+        this.checked = true;
+      } else {
+        this.checked = false;
       }
     },
   },
-  mounted() {},
+  async mounted() {
+    await this.checkStatus();
+  },
 };
 </script>
 <style>

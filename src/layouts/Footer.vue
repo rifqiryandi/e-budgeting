@@ -1,8 +1,8 @@
 <template>
   <footer class="main-footer">
-    Janari 2023 | E-Budgeting
+    BNI 2023 | E-Budgeting
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 0.1
+      <b>Version</b> 0.3
     </div>
   </footer>
 </template>
