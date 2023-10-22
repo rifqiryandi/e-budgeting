@@ -19,7 +19,7 @@ import PrimeVue from 'primevue/config';
 import "primevue/resources/themes/lara-light-blue/theme.css";
 import "primevue/resources/primevue.min.css"; /* Deprecated */
 import vSelect from "vue-select";
-
+import  JsonExcel  from  "vue-json-excel3" ;
 import './index.css'
 
 // Util
@@ -60,7 +60,9 @@ import "../node_modules/admin-lte/plugins/bootstrap4-duallistbox/bootstrap-duall
 import "../node_modules/admin-lte/plugins/bs-stepper/css/bs-stepper.min.css"
 import "../node_modules/admin-lte/plugins/dropzone/min/dropzone.min.css"
 
+// General Style handmade
+import './layouts/css/style.css'
 
 library.add(fas, fab, far, faLock, faEnvelope, faFacebook, faGooglePlus);
 dom.watch()
-createApp(App).use(router).use(VueSweetalert2).use(pinia).use(PrimeVue).component("font-awesome-icon", FontAwesomeIcon).component("v-select", vSelect).mount('#app')
+createApp(App).use(router).use(VueSweetalert2).use(pinia).use(PrimeVue).component("font-awesome-icon", FontAwesomeIcon).component("v-select", vSelect).component("unduhExcel" ,  JsonExcel).mount('#app')

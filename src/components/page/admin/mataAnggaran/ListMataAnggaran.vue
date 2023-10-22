@@ -28,15 +28,14 @@
               <button
                 class="w-full"
                 style="
-                  border-radius: 16px;
-                  background: #008073;
+                  border-radius: 6px;
+                  background: #006699;
                   color: #ffff;
                   height: 48px;
                   padding-top: 11px;
                   padding-bottom: 11px;
                 "
                 @click="getData"
-
               >
                 Tampilkan
               </button>
@@ -51,15 +50,8 @@
     <div class="row">
       <div class="col-12 d-flex justify-content-end">
         <button
-          class="btn d-flex"
-          style="
-            border-radius: 16px;
-            background: #008073;
-            color: #ffff;
-            height: 48px;
-            padding-top: 11px;
-            padding-bottom: 11px;
-          "
+          class="btn d-flex btn-add"
+          
           @click="showInput"
         >
           <svg
@@ -67,7 +59,6 @@
             height="24"
             viewBox="0 -960 960 960"
             width="24"
-            style="fill: #fff"
           >
             <path
               d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
@@ -154,6 +145,7 @@
                   <ToogleBtn
                     :nilaiStatus="data.status_aktif"
                     :apihit="this.apiHit"
+                    :keyid="data.id"
                   />
                 </template>
               </Column>
@@ -435,7 +427,7 @@
               Nama mata anggaran tidak boleh kosong!
             </p>
           </div>
-          <div class="">
+          <div class="hidden">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -576,7 +568,7 @@ export default {
       idKey: "",
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-      apiHit: "tes",
+      apiHit: "MataAnggaran",
     };
   },
   validations() {
@@ -608,12 +600,14 @@ export default {
         let res = await serviceKMataAnggaran.getDataKMataAnggaran(this.token);
         this.rowKelompokMataA = res.data.data;
       } catch (error) {
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
+        console.log(error.response.data.Msg);
+
+        // this.$swal({
+        //   icon: "error",
+        //   title: "GAGAL",
+        //   text: error.response.data.Msg,
+        //   confirmButtonColor: "#e77817",
+        // });
       }
     },
     showInput() {
@@ -643,6 +637,8 @@ export default {
       } catch (error) {
         this.loading = false;
         this.ListMataAnggaran = null;
+        console.log(error.response.data.Msg);
+
         // this.$swal({
         //   icon: "error",
         //   title: "GAGAL",
@@ -779,13 +775,5 @@ export default {
 };
 </script>
 <style>
-.p-datatable-header {
-  background-color: #ffff !important;
-  border: none !important;
-  padding: 16px 6px 16px 6px !important;
-}
-.p-datatable-thead tr th {
-  background-color: #008073 !important;
-  color: #fff !important;
-}
+
 </style>

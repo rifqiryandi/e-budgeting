@@ -35,6 +35,14 @@ class SubMataAnggaranService {
         }
         return http.post("referensi/delsubmatanggaran", data, config);
     }
+    ubahStatus(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("referensi/updatestatusubmatanggaran", data, config);
+    }
 
 }
 

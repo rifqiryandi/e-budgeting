@@ -18,7 +18,7 @@
         class="brand-text white-all"
         style="
           text-transform: uppercase;
-          background: linear-gradient(to right, #ff3300 10%, #008073 100%);
+          background: linear-gradient(to right, #ff3300 10%, #006699 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           font: {
@@ -58,7 +58,7 @@
         >
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item">
+          <li class="nav-item nav-style">
             <router-link
               to="/dashboard"
               :class="NamePage == 'Dashboard' ? Active : notActive"
@@ -81,12 +81,12 @@
           <li class="nav-item" v-show="namaAkses == 'Admin Sistem'">
             <a href="#" class="nav-link">
               <p class="white-all">
-                Administrasi
+                ADMINISTRASI
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+              <li class="nav-item nav-style">
                 <router-link
                   to="/user"
                   :class="NamePage == 'Daftar User' ? Active : notActive"
@@ -105,7 +105,7 @@
                   <p style="color: #1e1e1e">Pengguna</p>
                 </router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item nav-style">
                 <router-link
                   to="/entitas"
                   :class="NamePage == 'Daftar Entitas' ? Active : notActive"
@@ -124,7 +124,7 @@
                   <p style="color: #1e1e1e">Entitas</p>
                 </router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item nav-style">
                 <router-link
                   to="/departemen"
                   :class="NamePage == 'Daftar Departemen' ? Active : notActive"
@@ -143,7 +143,7 @@
                   <p style="color: #1e1e1e">Departemen</p>
                 </router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item nav-style">
                 <router-link
                   to="/kelompokMataAnggaran"
                   :class="
@@ -167,12 +167,12 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <p class="white-all">
-                    Mata Anggaran
+                    MATA ANGGARAN
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  <li class="nav-item">
+                  <li class="nav-item nav-style">
                     <router-link
                       to="/mataAnggaran"
                       :class="NamePage == 'Mata Anggaran' ? Active : notActive"
@@ -191,7 +191,7 @@
                       <p style="color: #1e1e1e">Mata Anggaran</p>
                     </router-link>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item nav-style">
                     <router-link
                       to="/submataAnggaran"
                       :class="
@@ -221,12 +221,12 @@
           <li class="nav-item" v-show="namaAkses == 'Superadmin'">
             <a href="#" class="nav-link">
               <p class="white-all">
-                Transaksi
+                TRANSAKSI
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
+              <li class="nav-item nav-style">
                 <router-link
                   to="/anggaran"
                   :class="NamePage == 'Daftar Anggaran' ? Active : notActive"
@@ -243,6 +243,131 @@
                     />
                   </svg>
                   <p style="color: #1e1e1e">Anggaran</p>
+                </router-link>
+              </li>
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/persenAnggaran"
+                  :class="
+                    NamePage == 'Persentasi Anggaran' ? Active : notActive
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M306.539-527.308q-52.423 0-89.48-37.058-37.058-37.057-37.058-89.48 0-52.422 37.058-89.48 37.057-37.057 89.48-37.057t89.48 37.057q37.057 37.058 37.057 89.48 0 52.423-37.057 89.48-37.057 37.058-89.48 37.058Zm-.023-59.999q27.715 0 47.139-19.4 19.423-19.401 19.423-47.116t-19.401-47.138q-19.4-19.424-47.115-19.424-27.716 0-47.139 19.401Q240-681.583 240-653.868t19.401 47.138q19.4 19.423 47.115 19.423Zm347.33 407.306q-52.423 0-89.48-37.058-37.058-37.057-37.058-89.48t37.058-89.48q37.057-37.057 89.48-37.057 52.422 0 89.48 37.057 37.057 37.057 37.057 89.48t-37.057 89.48q-37.058 37.058-89.48 37.058ZM653.823-240q27.715 0 47.138-19.401 19.424-19.4 19.424-47.115 0-27.715-19.401-47.139-19.401-19.423-47.116-19.423t-47.138 19.401q-19.423 19.4-19.423 47.115 0 27.716 19.4 47.139Q626.108-240 653.823-240Zm-428.207 56.152-41.768-41.768 550.921-550.921 41.768 41.768-550.921 550.921Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Persentasi Anggaran</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Officer -->
+          <li class="nav-item" v-show="namaAkses == 'Officer'">
+            <a href="#" class="nav-link">
+              <p class="white-all">
+                TRANSAKSI
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/anggaran"
+                  :class="NamePage == 'Daftar Anggaran' ? Active : notActive"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M549.999-451.539q-41.922 0-70.96-29.038-29.038-29.038-29.038-70.961 0-41.922 29.038-70.96 29.038-29.038 70.96-29.038 41.923 0 70.961 29.038 29.038 29.038 29.038 70.96 0 41.923-29.038 70.961-29.038 29.038-70.961 29.038ZM286.154-327.693q-29.826 0-51.067-21.24-21.24-21.24-21.24-51.067v-303.076q0-29.826 21.24-51.067 21.241-21.24 51.067-21.24h527.69q29.827 0 51.067 21.24 21.24 21.241 21.24 51.067V-400q0 29.827-21.24 51.067t-51.067 21.24h-527.69Zm59.999-59.998h407.693q0-29.923 21.24-51.115 21.24-21.193 51.067-21.193v-183.078q-29.923 0-51.115-21.24-21.192-21.241-21.192-51.067H346.153q0 29.923-21.24 51.115-21.241 21.192-51.067 21.192v183.078q29.923 0 51.115 21.241 21.192 21.24 21.192 51.067Zm420.768 199.997H146.156q-29.827 0-51.067-21.241-21.24-21.24-21.24-51.066v-396.151h59.998v396.151q0 4.615 3.847 8.462 3.846 3.846 8.462 3.846h620.765v59.999ZM286.154-387.691h-12.308V-715.384h12.308q-5 0-8.654 3.654t-3.654 8.654V-400q0 5 3.654 8.654 3.654 3.655 8.654 3.655Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Anggaran</p>
+                </router-link>
+              </li>
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/kegiatan"
+                  :class="
+                    NamePage == 'Daftar Proyeksi Kegiatan' ? Active : notActive
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M587.693-240q-38.538 0-65.423-26.884-26.884-26.885-26.884-65.423t26.884-65.423q26.885-26.884 65.423-26.884t65.423 26.884Q680-370.845 680-332.307t-26.884 65.423Q626.231-240 587.693-240ZM212.309-100.001q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h55.385v-84.615h61.537v84.615h303.076v-84.615h59.999v84.615h55.385q30.308 0 51.308 21t21 51.308v535.382q0 30.308-21 51.308t-51.308 21H212.309Zm0-59.999h535.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-375.382H200v375.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846ZM200-607.69h560v-100.001q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v100.001Zm0 0V-720v112.31Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Proyeksi Kegiatan</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Departemen Head -->
+          <li class="nav-item" v-show="namaAkses == 'Departemen Head'">
+            <a href="#" class="nav-link">
+              <p class="white-all">
+                TRANSAKSI
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/anggaran"
+                  :class="NamePage == 'Daftar Anggaran' ? Active : notActive"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M549.999-451.539q-41.922 0-70.96-29.038-29.038-29.038-29.038-70.961 0-41.922 29.038-70.96 29.038-29.038 70.96-29.038 41.923 0 70.961 29.038 29.038 29.038 29.038 70.96 0 41.923-29.038 70.961-29.038 29.038-70.961 29.038ZM286.154-327.693q-29.826 0-51.067-21.24-21.24-21.24-21.24-51.067v-303.076q0-29.826 21.24-51.067 21.241-21.24 51.067-21.24h527.69q29.827 0 51.067 21.24 21.24 21.241 21.24 51.067V-400q0 29.827-21.24 51.067t-51.067 21.24h-527.69Zm59.999-59.998h407.693q0-29.923 21.24-51.115 21.24-21.193 51.067-21.193v-183.078q-29.923 0-51.115-21.24-21.192-21.241-21.192-51.067H346.153q0 29.923-21.24 51.115-21.241 21.192-51.067 21.192v183.078q29.923 0 51.115 21.241 21.192 21.24 21.192 51.067Zm420.768 199.997H146.156q-29.827 0-51.067-21.241-21.24-21.24-21.24-51.066v-396.151h59.998v396.151q0 4.615 3.847 8.462 3.846 3.846 8.462 3.846h620.765v59.999ZM286.154-387.691h-12.308V-715.384h12.308q-5 0-8.654 3.654t-3.654 8.654V-400q0 5 3.654 8.654 3.654 3.655 8.654 3.655Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Anggaran</p>
+                </router-link>
+              </li>
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/kegiatan"
+                  :class="
+                    NamePage == 'Daftar Proyeksi Kegiatan' ? Active : notActive
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M587.693-240q-38.538 0-65.423-26.884-26.884-26.885-26.884-65.423t26.884-65.423q26.885-26.884 65.423-26.884t65.423 26.884Q680-370.845 680-332.307t-26.884 65.423Q626.231-240 587.693-240ZM212.309-100.001q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h55.385v-84.615h61.537v84.615h303.076v-84.615h59.999v84.615h55.385q30.308 0 51.308 21t21 51.308v535.382q0 30.308-21 51.308t-51.308 21H212.309Zm0-59.999h535.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-375.382H200v375.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846ZM200-607.69h560v-100.001q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v100.001Zm0 0V-720v112.31Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Validasi Kegiatan</p>
                 </router-link>
               </li>
             </ul>
@@ -275,6 +400,23 @@ export default {
 .white-all {
   color: #1e1e1e;
 }
+.nav-style {
+  border-radius: 0.25rem;
+  box-shadow: inset 0 0 0 0 #fff;
+  -webkit-transition: ease-out 0.6s;
+  -moz-transition: ease-out 0.6s;
+  transition: ease-out 0.6s;
+}
+.nav-style:hover {
+  box-shadow: inset 400px 0 0 0 #4f8ab8;
+}
+.nav-style:hover p {
+  color: #fff !important;
+}
+.nav-style:hover .nav-icon {
+  fill: #fff !important;
+}
+
 .active {
   background-color: #ff3300 !important;
 }

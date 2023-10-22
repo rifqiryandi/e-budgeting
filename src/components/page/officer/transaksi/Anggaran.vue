@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -21,26 +21,6 @@
                   :value="item.kode_sub_mata_anggaran"
                 >
                   {{ item.nama_sub_mata_anggaran }}
-                </option>
-              </select>
-            </div>
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-              >
-                Departemen
-              </label>
-              <select
-                v-model="filters.kddepartemen"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="">-- Pilih departemen --</option>
-                <option
-                  v-for="(item, index) in getDepartemen"
-                  :key="index"
-                  :value="item.kode_departement"
-                >
-                  {{ item.nama_departement }}
                 </option>
               </select>
             </div>
@@ -66,23 +46,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 d-flex justify-content-end">
-      <button class="btn d-flex btn-add" @click="showInput">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24"
-          viewBox="0 -960 960 960"
-          width="24"
-        >
-          <path
-            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
-          />
-        </svg>
-        Tambah Data
-      </button>
-    </div>
-  </div>
+
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -119,7 +83,7 @@
             <Column field="" header="" style="width: 20%">
               <template #body="{ data }">
                 <ValidationBtn
-                  :nilaiStatus="data.status_anggaran"
+                  :nilaiStatus="data.status_anggaran.toString()"
                   :keyid="data.id_anggaran"
                   :num="0"
                 />
@@ -594,7 +558,7 @@ export default {
       this.loading = true;
       let payload = {
         kdsubmatanggaran: this.filters.kdsubmatanggaran,
-        kddepartemen: this.filters.kddepartemen,
+        kddepartemen: this.userSession.departemen,
         status: "",
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,

@@ -3,25 +3,39 @@
     class="container-fluid centered"
     style="
       height: 100vh;
-      background-image: linear-gradient(to right, #ff3300, #008073);
+      background-image: linear-gradient(to right, #ff3300, #6792ff);
     "
   >
     <div class="card card-custom">
-      <div class="card-body" style="height: 60vh">
-        <div class="row">
+      <div class="card-body p-0">
+        <div class="row m-0" style="height: 60vh">
           <div
-            class="form-login col-lg-12 col-md-12 col-12 d-flex justify-content-center"
+            class="col-lg-6 col-0 d-flex justify-content-center col-custom-style p-0"
+          >
+            <img
+              src="../../../assets/imgvector.jpg"
+              class="img-left"
+              style="border-radius: 16px 0px 0px 16px; width: 100%"
+            />
+          </div>
+          <div
+            class="form-login col-lg-6 col-md-12 col-12 d-flex justify-content-center flex items-center"
+            style="height: 60vh"
           >
             <div class="blockCstm">
-              <p class="text-info-style">Selamat datang !</p>
-              <p class="text-info-style">Masukkan Username dan password anda</p>
               <label class="form-label">Username</label>
               <InputText
                 class="form-control"
                 type="text"
                 v-model="user.username"
                 placeholder="Masukkan Username ..."
-                style="border-radius: 16px; height: 48px; text-align: center"
+                style="
+                  height: 48px;
+                  text-align: center;
+                  border: none;
+                  border-bottom: 2px solid grey;
+                  border-radius: 0;
+                "
               />
               <p
                 class="mt-2 text-sm text-red-600 dark:text-red-500 m-0 text-center"
@@ -43,17 +57,16 @@
               >
                 Password tidak boleh kosong!
               </p>
-              <div class="d-flex justify-content-center" style="margin-top: 4%">
+              <div class="d-flex justify-content-center m-10">
                 <button type="submit" class="button-style" @click="login">
-                  Login
+                  LOGIN
                 </button>
               </div>
+              <div class="grid justify-center gap-3 mt-15">
+                <img src="../../../assets/bnilogo.png" class="img-style" />
+                <h4 class="text-info-style">E-BUDGETING</h4>
+              </div>
             </div>
-          </div>
-          <div
-            class="col-12 d-flex justify-content-center fixed cstm-logo-position"
-          >
-            <img src="../../../assets/LogoBNI.png" class="img-style" />
           </div>
         </div>
       </div>
@@ -155,6 +168,10 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&family=Roboto:ital,wght@0,100;0,300;0,400;1,400&display=swap");
+.col-custom-style {
+  border-radius: 0 16px 16px 0 !important;
+  height: 60vh !important;
+}
 .cstm-logo-position {
   height: 130px;
   padding-top: 16%;
@@ -165,34 +182,41 @@ export default {
   align-items: center;
 }
 .text-info-style {
-  color: #008073;
+  color: #006699;
   font-family: Roboto;
-  font-size: 18px;
+  font-size: 24px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 900;
   line-height: normal;
   text-align: center;
   margin-bottom: 10px;
 }
 .img-style {
-  width: 35%;
+  width: 100%;
   height: 50px;
 }
 .blockCstm {
   width: 100%;
-  margin-top: 10%;
+  padding-top: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 .button-style {
   width: 50%;
-  background-color: #008073;
+  background-color: #006699;
   color: #ffff;
-  border-radius: 16px;
-  border: 2px solid #008073;
+  border-radius: 6px;
+  border: 2px solid #006699;
   height: 48px;
+  box-shadow: inset 0 0 0 0 #006699;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
 }
 .button-style:hover {
-  background-color: #ffff;
-  color: #008073;
+  /* background-color: #ffff; */
+  color: #006699;
+  box-shadow: inset 0 0 0 50px #ffff;
 }
 .block-login {
   width: 100%;
@@ -233,10 +257,16 @@ export default {
   background-size: 100%;
 }
 .card-custom {
-  width: 30%;
+  width: 70%;
   border-radius: 16px !important;
 }
 @media only screen and (max-width: 720px) {
+  .col-custom-style {
+    height: 0 !important;
+  }
+  .col-custom-style img {
+    display: none !important;
+  }
   .cstm-logo-position {
     padding-top: 7%;
   }
@@ -245,9 +275,11 @@ export default {
   }
   .blockCstm {
     width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
   }
   .img-style {
-    width: 40%;
+    width: 100%;
   }
   .block-design {
     display: none;
@@ -270,6 +302,14 @@ export default {
 .p-password input {
   text-align: center;
   padding-right: 12px !important;
+  border: none;
+  border-bottom: 2px solid grey;
+  border-radius: 0 !important;
+  box-shadow: none;
+}
+.p-password input:focus,
+.p-password input:hover {
+  border-bottom: 2px solid #006699 !important;
 }
 .p-password svg {
   margin-right: 10%;
@@ -285,5 +325,12 @@ export default {
   font-style: normal !important;
   font-weight: 600 !important;
   line-height: normal !important;
+}
+.form-control {
+  box-shadow: none !important;
+}
+.form-control:focus,
+.form-control:hover {
+  border-color: #006699 !important;
 }
 </style>

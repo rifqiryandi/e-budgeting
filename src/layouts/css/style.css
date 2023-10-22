@@ -1,0 +1,38 @@
+/* Datatable */
+.p-datatable-header {
+    background-color: #ffff !important;
+    border: none !important;
+}
+
+.p-datatable-thead tr th {
+    background-color: #006699 !important;
+    color: #fff !important;
+}
+
+/* Button Add */
+.btn-add {
+    border-radius: 6px;
+    background: #006699;
+    color: #ffff;
+    height: 48px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    box-shadow: inset 0 0 0 0 #ffff;
+    -webkit-transition: ease-out 0.4s;
+    -moz-transition: ease-out 0.4s;
+    transition: ease-out 0.4s;
+}
+
+.btn-add svg {
+    fill: #fff;
+}
+
+.btn-add:hover {
+    border-color: #006699;
+    color: #006699;
+    box-shadow: inset 0 0 0 50px #ffff;
+}
+
+.btn-add:hover svg {
+    fill: #006699
+}

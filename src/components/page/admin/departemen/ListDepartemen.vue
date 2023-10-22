@@ -1,24 +1,12 @@
 <template>
   <div class="row">
     <div class="col-12 d-flex justify-content-end">
-      <button
-        class="btn d-flex"
-        style="
-          border-radius: 16px;
-          background: #008073;
-          color: #ffff;
-          height: 48px;
-          padding-top: 11px;
-          padding-bottom: 11px;
-        "
-        @click="showInput"
-      >
+      <button class="btn d-flex btn-add" @click="showInput">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"
           viewBox="0 -960 960 960"
           width="24"
-          style="fill: #fff"
         >
           <path
             d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
@@ -87,7 +75,11 @@
             </Column>
             <Column field="status" header="Status" style="width: 20%">
               <template #body="{ data }">
-                <ToogleBtn :nilaiStatus="data.status" :apihit="this.apiHit" />
+                <ToogleBtn
+                  :nilaiStatus="data.status"
+                  :apihit="this.apiHit"
+                  :keyid="data.id"
+                />
               </template>
             </Column>
             <Column field="" header="Aksi" style="width: 10%">
@@ -370,7 +362,7 @@
               Nama Departemen tidak boleh kosong!
             </p>
           </div>
-          <div class="">
+          <div class="hidden">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -511,7 +503,7 @@ export default {
       idKey: "",
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-      apiHit: "tes",
+      apiHit: "Departemen",
     };
   },
   validations() {
@@ -544,12 +536,14 @@ export default {
         this.rowEntitas = respon.data.data;
         this.loading = false;
       } catch (error) {
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
+        console.log(error.response.data.Msg);
+
+        // this.$swal({
+        //   icon: "error",
+        //   title: "GAGAL",
+        //   text: error.response.data.Msg,
+        //   confirmButtonColor: "#e77817",
+        // });
       }
     },
     showInput() {
@@ -577,16 +571,16 @@ export default {
         );
         this.ListDepartemen = respon.data.data;
         this.loading = false;
-        console.log(this.ListDepartemen);
       } catch (error) {
         this.loading = false;
         this.ListDepartemen = null;
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
+        console.log(error.response.data.Msg);
+        // this.$swal({
+        //   icon: "error",
+        //   title: "GAGAL",
+        //   text: error.response.data.Msg,
+        //   confirmButtonColor: "#e77817",
+        // });
       }
     },
     editDepartemen(data) {
@@ -722,14 +716,6 @@ export default {
 };
 </script>
 <style>
-.p-datatable-header {
-  background-color: #ffff !important;
-  border: none !important;
-}
-.p-datatable-thead tr th {
-  background-color: #008073 !important;
-  color: #fff !important;
-}
 .label-aktif {
   width: 136px;
   padding: 5px 10px 5px 10px;

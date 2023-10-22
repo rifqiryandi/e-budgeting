@@ -41,6 +41,42 @@ class TransactionService {
         }
         return http.post("transaksi/listpresentasianggaran", data, config);
     }
+    validasiAlokasi(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasialokasi", data, config);
+        
+    }
+    validasiKegiatan(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasikegiatan", data, config);
+        
+    }
+    inputKegiatan(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/inskegiatan", data, config);
+        
+    }
+    listKegiatan(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/listkegiatan", data, config);
+        
+    }
     // transaksi/inputpresenanggaran
 
 }

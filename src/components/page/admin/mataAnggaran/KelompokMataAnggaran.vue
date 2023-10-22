@@ -1,24 +1,12 @@
 <template>
   <div class="row">
     <div class="col-12 d-flex justify-content-end">
-      <button
-        class="btn d-flex"
-        style="
-          border-radius: 16px;
-          background: #008073;
-          color: #ffff;
-          height: 48px;
-          padding-top: 11px;
-          padding-bottom: 11px;
-        "
-        @click="showInput"
-      >
+      <button class="btn d-flex btn-add" @click="showInput">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"
           viewBox="0 -960 960 960"
           width="24"
-          style="fill: #fff"
         >
           <path
             d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
@@ -83,6 +71,7 @@
                 <ToogleBtn
                   :nilaiStatus="data.status_aktif"
                   :apihit="this.apiHit"
+                  :keyid="data.id"
                 />
               </template>
             </Column>
@@ -140,9 +129,7 @@
         <div
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
-          <h3 class="text-xl font-medium" style="color: #fff">
-            Tambah Data
-          </h3>
+          <h3 class="text-xl font-medium" style="color: #fff">Tambah Data</h3>
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -244,9 +231,7 @@
         <div
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
-          <h3 class="text-xl font-medium" style="color: #fff">
-            Edit Data
-          </h3>
+          <h3 class="text-xl font-medium" style="color: #fff">Edit Data</h3>
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -312,7 +297,7 @@
               Nama Kelompok mata anggaran tidak boleh kosong!
             </p>
           </div>
-          <div class="">
+          <div class="hidden">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -449,7 +434,7 @@ export default {
       idKey: "",
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-      apiHit:"tes"
+      apiHit: "KMataAnggaran",
     };
   },
   validations() {
@@ -464,7 +449,7 @@ export default {
     DataTable,
     Column,
     InputText,
-    ToogleBtn
+    ToogleBtn,
   },
   computed: {
     getAllKMataAnggaran() {
@@ -492,16 +477,17 @@ export default {
         );
         this.ListKMataAnggaran = respon.data.data;
         this.loading = false;
-        console.log(this.ListKMataAnggaran);
       } catch (error) {
         this.loading = false;
         this.ListKMataAnggaran = null;
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
+        console.log(error.response.data.Msg);
+
+        // this.$swal({
+        //   icon: "error",
+        //   title: "GAGAL",
+        //   text: error.response.data.Msg,
+        //   confirmButtonColor: "#e77817",
+        // });
       }
     },
     editKMataAnggaran(data) {
@@ -629,14 +615,6 @@ export default {
 };
 </script>
 <style>
-.p-datatable-header {
-  background-color: #ffff !important;
-  border: none !important;
-}
-.p-datatable-thead tr th {
-  background-color: #008073 !important;
-  color: #fff !important;
-}
 .label-aktif {
   width: 136px;
   padding: 5px 10px 5px 10px;

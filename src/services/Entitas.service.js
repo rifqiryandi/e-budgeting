@@ -35,6 +35,14 @@ class EntitasService {
         }
         return http.post("referensi/delentitas", data, config);
     }
+    ubahStatus(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("referensi/updatestatusentitas", data, config);
+    }
 
 }
 

@@ -5,7 +5,8 @@ module.exports = {
     extend: {
     },
     colors: {
-      'bni-blue': '#008073',
+      // 'bni-blue': '#008073',
+      'bni-blue': '#006699',
       'bni-orange': '#ff3300',
 
     },
