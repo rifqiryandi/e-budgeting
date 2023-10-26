@@ -58,7 +58,7 @@
         >
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item nav-style">
+          <li class="nav-item nav-style" v-show="false">
             <router-link
               to="/dashboard"
               :class="NamePage == 'Dashboard' ? Active : notActive"
@@ -318,6 +318,58 @@
                   <p style="color: #1e1e1e">Proyeksi Kegiatan</p>
                 </router-link>
               </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p class="white-all">
+                    PENGAJUAN
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item nav-style">
+                    <router-link
+                      to="/pengajuanBiaya"
+                      :class="
+                        NamePage == 'Pengajuan Biaya' ? Active : notActive
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                        class="nav-icon"
+                      >
+                        <path
+                          d="M200-607.69h560v-100.001q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v100.001Zm0 0V-720v112.31Zm12.309 507.689q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h55.385v-84.615h61.537v84.615h303.076v-84.615h59.999v84.615h55.385q30.308 0 51.308 21t21 51.308v218.537q-14.385-6.307-29.384-10.192-15-3.884-30.615-6.115v-42.23H200v375.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h260.077q5.077 16.615 12.269 31.422 7.192 14.808 16.346 28.577H212.309Zm515.384 40q-74.923 0-127.461-52.538Q547.694-165.078 547.694-240t52.538-127.461q52.538-52.538 127.461-52.538 74.922 0 127.46 52.538Q907.691-314.922 907.691-240t-52.538 127.461q-52.538 52.538-127.46 52.538Zm66.615-88.461 24.923-24.923-73.846-73.846v-110.461h-35.384v124.923l84.307 84.307Z"
+                        />
+                      </svg>
+                      <p style="color: #1e1e1e">Pengajuan Biaya</p>
+                    </router-link>
+                  </li>
+                  <li class="nav-item nav-style">
+                    <router-link
+                      to="/pengajuanKomitmen"
+                      :class="
+                        NamePage == 'Pengajuan Komitmen' ? Active : notActive
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                        class="nav-icon"
+                      >
+                        <path
+                          d="m618.924-298.924 42.152-42.152-151.077-151.087V-680h-59.998v212.154l168.923 168.922ZM480.067-100.001q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-480Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"
+                        />
+                      </svg>
+                      <p style="color: #1e1e1e">Pengajuan Komitmen</p>
+                    </router-link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
 
@@ -368,6 +420,27 @@
                     />
                   </svg>
                   <p style="color: #1e1e1e">Validasi Kegiatan</p>
+                </router-link>
+              </li>
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/validasiPengajuanBiaya"
+                  :class="
+                    NamePage == 'Validasi Pengajuan Biaya' ? Active : notActive
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M587.693-240q-38.538 0-65.423-26.884-26.884-26.885-26.884-65.423t26.884-65.423q26.885-26.884 65.423-26.884t65.423 26.884Q680-370.845 680-332.307t-26.884 65.423Q626.231-240 587.693-240ZM212.309-100.001q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h55.385v-84.615h61.537v84.615h303.076v-84.615h59.999v84.615h55.385q30.308 0 51.308 21t21 51.308v535.382q0 30.308-21 51.308t-51.308 21H212.309Zm0-59.999h535.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-375.382H200v375.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846ZM200-607.69h560v-100.001q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v100.001Zm0 0V-720v112.31Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Validasi Biaya</p>
                 </router-link>
               </li>
             </ul>

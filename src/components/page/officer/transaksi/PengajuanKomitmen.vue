@@ -8,15 +8,15 @@
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
               >
-                Sub Mata Anggaran
+                Pengajuan Biaya
               </label>
               <select
-                v-model="filters.kdsubmatanggaran"
+                v-model="filters.idpengajuan"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option value="">-- Pilih Sub Mata Anggaran --</option>
+                <option value="">-- Pilih Pengajuan Biaya --</option>
                 <option
-                  v-for="(item, index) in getSMataAnggaran"
+                  v-for="(item, index) in getPengajuan"
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
@@ -43,7 +43,23 @@
       </div>
     </div>
   </div>
-  
+  <div class="row">
+    <div class="col-12 d-flex justify-content-end">
+      <button class="btn d-flex btn-add" @click="showInput">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 -960 960 960"
+          width="24"
+        >
+          <path
+            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
+          />
+        </svg>
+        Tambah Data
+      </button>
+    </div>
+  </div>
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -76,15 +92,6 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="width: 20%">
-              <template #body="{ data }">
-                <ValidationBtnEvn
-                  :nilaiStatus="data.status_kegiatan"
-                  :keyid="data.id_kegiatan"
-                  :num="0"
-                />
-              </template>
-            </Column>
             <Column field="nama_entitas" header="Entitas" style="width: 20%">
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -92,40 +99,6 @@
                 </div>
               </template>
             </Column>
-            <Column
-              field="nama_departement"
-              header="Departemen"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_departement }}
-                </div>
-              </template>
-            </Column>
-            <Column
-              field="nama_kelompok_mata_anggaran"
-              header="Kelompok Mata Anggaran"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_kelompok_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-            <Column
-              field="nama_mata_anggaran"
-              header="Mata Anggaran"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-
             <Column
               field="nama_sub_mata_anggaran"
               header="Sub Mata Anggaran"
@@ -137,27 +110,40 @@
                 </div>
               </template>
             </Column>
-            <Column field="kegiatan" header="Kegiatan" style="width: 20%">
+            <Column
+              field="uraian_kegiatan"
+              header="Uraian Kegiatan"
+              style="width: 20%"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.kegiatan }}
+                  {{ data.uraian_kegiatan }}
                 </div>
               </template>
             </Column>
-
-            <Column field="Waktu Kegiatan" header="Tahun" style="width: 20%">
+            <Column field="" header="Tahun" style="width: 20%">
               <template #body="{ data }">
-                {{ data.bulan + " - " + data.tahun }}
+                {{ data.tahun }}
+              </template>
+            </Column>
+            <Column field="" header="Status" style="width: 20%">
+              <template #body="{ data }">
+                <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
+                  Belum diproses
+                </div>
+                <div class="label-Aktif" v-else-if="data.status_pengajuan == 2">
+                  Tervalidasi
+                </div>
               </template>
             </Column>
             <Column
               field=""
-              header="Nominal Kegiatan"
+              header="Nominal Pengajuan"
               class="text-right"
               style="width: 20%"
             >
               <template #body="{ data }">
-                {{ data.nonimal_anggaran.toLocaleString("de-DE") }}
+                {{ data.nominal_pengajuan.toLocaleString("de-DE") }}
               </template>
             </Column>
             <Column
@@ -167,7 +153,7 @@
               style="width: 20%"
             >
               <template #body="{ data }">
-                {{ data.nominal_kegiatan.toLocaleString("de-DE") }}
+                {{ data.nominal.toLocaleString("de-DE") }}
               </template>
             </Column>
           </DataTable>
@@ -189,7 +175,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Tambah Proyeksi Kegiatan
+            Pengajuan Komitmen
           </h3>
           <button
             type="button"
@@ -216,20 +202,21 @@
         </div>
         <!-- Modal body -->
         <div class="p-6 space-y-2">
+          
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Anggaran <span class="text-red-600">*</span>
+              Pengajuan Biaya <span class="text-red-600">*</span>
             </label>
             <select
-              v-model="Form.id_anggaran"
+              v-model="Form.id_pengajuan"
               @change="setPreview"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option value="">-- Pilih Anggaran --</option>
+              <option value="">-- Pilih Pengajuan Biaya --</option>
               <option
-                v-for="(item, index) in getAnggaran"
+                v-for="(item, index) in getPengajuan"
                 :key="index"
                 :value="item"
               >
@@ -244,9 +231,9 @@
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.id_anggaran.$error"
+              v-if="this.v$.Form.id_pengajuan.$error"
             >
-              Anggaran tidak boleh kosong!
+              Pengajuan biaya tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -256,7 +243,7 @@
               Sisa Anggaran
             </label>
             <InputNumber
-              v-model="preview.nominal_sisa"
+              v-model="Form.sisa_nominal"
               placeholder="Masukkan Sisa anggaran"
               class="w-full"
               disabled
@@ -266,47 +253,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kegiatan <span class="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              id="base-input"
-              v-model="Form.kegiatan"
-              placeholder="Masukkan Kegiatan"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.kegiatan.$error"
-            >
-              Kegiatan tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Bulan <span class="text-red-600">*</span>
-            </label>
-            <VueDatePicker
-              placeholder="Pilih Bulan"
-              v-model="Form.bulan"
-              format="MMMM/yyyy"
-              auto-apply
-              month-picker
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.bulan.$error"
-            >
-              Bulan tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nominal <span class="text-red-600">*</span>
+              Nominal Pengajuan biaya<span class="text-red-600">*</span>
             </label>
             <InputNumber
               v-model="Form.nominal"
@@ -353,28 +300,26 @@ import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import VueDatePicker from "@vuepic/vue-datepicker";
+// import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
-import ValidationBtnEvn from "../../../utils/ValidationBtnEvn.vue";
 
 import serviceAnggaran from "../../../../services/Transaction.service";
 import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
-import serviceDepartemen from "../../../../services/Departemen.service";
 export default {
-  name: "Kegiatan",
+  name: "Pengajuan Komitmen",
   data() {
     return {
       v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      ListKegiatan: null,
+      listPengajuan: null,
       rowSMataAnggaran: null,
       rowDepartemen: null,
       rowAnggaran: null,
+      rowPengajuan: null,
       filters: {
-        kdsubmatanggaran: "",
-        kddepartemen: "",
+        idpengajuan: "",
         cari: "",
         status: "",
       },
@@ -384,14 +329,11 @@ export default {
         totaldata: 0,
       },
       Form: {
-        id_anggaran: "",
-        kegiatan: "",
+        id_pengajuan: "",
         nominal: "",
-        bulan: "",
-        userid: "",
-      },
-      preview: {
-        nominal_sisa: "",
+        cek: "",
+        sisa_nominal: "",
+        id_anggaran: "",
       },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
@@ -400,11 +342,11 @@ export default {
   validations() {
     return {
       Form: {
-        id_anggaran: { required },
-        kegiatan: { required },
+        id_pengajuan: { required },
         nominal: { required },
-        bulan: { required },
-        userid: { required },
+        cek: { required },
+        sisa_nominal: { required },
+        id_anggaran: { required },
       },
     };
   },
@@ -413,39 +355,22 @@ export default {
     Column,
     InputText,
     InputNumber,
-    VueDatePicker,
-    ValidationBtnEvn
+    // VueDatePicker,
   },
   computed: {
     getAllData() {
-      return this.ListKegiatan;
+      return this.listPengajuan;
     },
     getSMataAnggaran() {
       return this.rowSMataAnggaran;
     },
-    getDepartemen() {
-      return this.rowDepartemen;
-    },
-    getAnggaran() {
-      return this.rowAnggaran;
+    getPengajuan() {
+      return this.rowPengajuan;
     },
   },
   methods: {
     cariData() {
       this.refreshListTable(1);
-    },
-    setPreview() {
-      this.preview.nominal_sisa = this.Form.id_anggaran.nominal_kegiatan;
-    },
-    validationNominal(evt) {
-      if (evt.value > this.preview.nominal_sisa) {
-        this.$swal({
-          icon: "info",
-          title: "INFO",
-          text: "Nominal tidak boleh lebih dari sisa anggaran",
-          confirmButtonColor: "#e77817",
-        });
-      }
     },
     filterShow() {
       this.pagination.currentPage = 1;
@@ -462,36 +387,6 @@ export default {
       }
       this.refreshListTable();
     },
-    async getAllAnggaran() {
-      let payload = {
-        idanggaran: "",
-        status: 3,
-        kddepartemen: this.userSession.departemen,
-      };
-      try {
-        let res = await serviceAnggaran.getIdAnggaran(payload, this.token);
-        this.rowAnggaran = res.data.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getAllDepartemen() {
-      let payload = {};
-      try {
-        let respon = await serviceDepartemen.getDataDepartemen(
-          payload,
-          this.token
-        );
-        this.rowDepartemen = respon.data.data;
-      } catch (error) {
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
-      }
-    },
     async getSubMataAnggaran() {
       let payload = {};
       try {
@@ -505,15 +400,28 @@ export default {
         console.log(error);
       }
     },
+    async getRowPengajuan() {
+      let payload = {
+        idkegiatan: "",
+        status: 1,
+        kddepartemen: "",
+      };
+      try {
+        let res = await serviceAnggaran.getPengajuanPK(payload, this.token);
+        this.rowPengajuan = res.data.data;
+        console.log(this.rowPengajuan);
+      } catch (error) {
+        this.rowPengajuan = null;
+        console.log(error);
+      }
+    },
     showInput() {
       this.Form = {
-        id_anggaran: "",
-        kegiatan: "",
+        id_pengajuan: "",
         nominal: "",
-        userid: "",
-      };
-      this.preview = {
-        nominal_sisa: "",
+        cek: "",
+        sisa_nominal: "",
+        id_anggaran: "",
       };
       const $targetEl = document.getElementById("input-modal");
       this.modal = new Modal($targetEl);
@@ -522,28 +430,26 @@ export default {
     async getData() {
       this.loading = true;
       let payload = {
-        kdsubmatanggaran: this.filters.kdsubmatanggaran,
-        kddepartemen: this.userSession.departemen,
-        status: "",
+        idpengajuan: this.filters.kdsubmatanggaran,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
       };
       try {
-        let res = await serviceAnggaran.listKegiatan(payload, this.token);
+        let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
-        this.ListKegiatan = res.data.data.data;
+        this.listPengajuan = res.data.data.data;
 
         this.loading = false;
       } catch (error) {
-        this.ListKegiatan = null;
+        this.listPengajuan = null;
         this.loading = false;
         console.log(error);
       }
     },
     async prosesInput() {
       let Forminput = this.Form;
-      if (Forminput.nominal > this.preview.nominal_sisa) {
+      if (Forminput.nominal > this.Form.sisa_nominal) {
         return this.$swal({
           icon: "info",
           title: "INFO",
@@ -552,21 +458,20 @@ export default {
         });
       }
       Forminput.userid = this.userSession.username;
-
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
-        Forminput.id_anggaran = this.Form.id_anggaran.id;
-        let addMonth = this.Form.bulan.month + 1;
-        if (addMonth >= 10) {
-          Forminput.bulan = addMonth.toString();
-        } else {
-          Forminput.bulan = "0" + addMonth.toString();
-        }
+      if (!this.v$.Form.$error && !this.v$.Upload.$error) {
+        console.log(!this.v$.Form.$error);
+        Forminput.sisa_nominal =
+          Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
+        Forminput.id_anggaran =
+          this.Form.id_kegiatan.id_anggaran.toLocaleString();
+        Forminput.id_kegiatan = this.Form.id_kegiatan.id.toLocaleString();
         try {
-          let respon = await serviceAnggaran.inputKegiatan(
+          let respon = await serviceAnggaran.inputPengajuanBiaya(
             Forminput,
             this.token
           );
+          console.log(respon);
           this.modal.hide();
           this.$swal({
             icon: "success",
@@ -576,13 +481,17 @@ export default {
           });
           this.Form = {
             id_anggaran: "",
-            kegiatan: "",
+            jnspengajuan: "",
+            id_kegiatan: "",
             nominal: "",
             userid: "",
+            uraian_kegiatan: "",
+            sisa_nominal: "",
           };
           this.refreshListTable();
-          this.getAllAnggaran();
+          // this.getAllAnggaran();
         } catch (error) {
+          console.log(error);
           this.$swal({
             icon: "error",
             title: "Gagal",
@@ -605,26 +514,7 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
-    this.getAllDepartemen();
-    this.getSubMataAnggaran();
-    this.getAllAnggaran();
   },
 };
 </script>
-<style>
-.dp__input_wrap input {
-  color: black !important;
-  background-color: rgba(249, 250, 251) !important;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  width: 100% !important;
-  height: 46px;
-}
-.dp__input_wrap input:hover {
-  border-color: rgb(219, 222, 225) !important;
-}
-.dp__input_wrap input:focus {
-  border-color: #006699 !important;
-  box-shadow: none !important;
-}
-</style>
+<style></style>

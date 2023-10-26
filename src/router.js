@@ -117,10 +117,23 @@ switch (namaAkses) {
         name: "Daftar Anggaran",
         component: () => import("./components/page/officer/transaksi/Anggaran.vue"),
       },
+      {
+        path: "/pengajuanBiaya",
+        alias: "/pengajuanBiaya",
+        name: "Pengajuan Biaya",
+        component: () => import("./components/page/officer/transaksi/PengajuanBiaya.vue"),
+      },
+      {
+        path: "/pengajuanKomitmen",
+        alias: "/pengajuanKomitmen",
+        name: "Pengajuan Komitmen",
+        component: () => import("./components/page/officer/transaksi/PengajuanKomitmen.vue"),
+      },
+
     ];
     break;
-    case "Departemen Head":
-      routes = [{
+  case "Departemen Head":
+    routes = [{
         path: "/",
         alias: "/login",
         name: "Login",
@@ -144,8 +157,15 @@ switch (namaAkses) {
         name: "Daftar Proyeksi Kegiatan",
         component: () => import("./components/page/departemenHead/transaksi/Kegiatan.vue"),
       },
+      {
+        path: "/validasiPengajuanBiaya",
+        alias: "/validasiPengajuanBiaya",
+        name: "Validasi Pengajuan Biaya",
+        component: () => import("./components/page/departemenHead/transaksi/ValidasiPengajuanBiaya.vue"),
+      },
+
     ];
-      break;
+    break;
 
   default:
     routes = [{
