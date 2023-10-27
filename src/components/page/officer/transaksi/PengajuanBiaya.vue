@@ -131,7 +131,7 @@
                 <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
                   Belum diproses
                 </div>
-                <div class="label-Aktif" v-else-if="data.status_pengajuan == 2">
+                <div class="label-Aktif" v-else-if="data.status_pengajuan == 1">
                   Tervalidasi
                 </div>
               </template>
@@ -223,6 +223,7 @@
             <select
               v-model="Form.id_kegiatan"
               @change="setPreview"
+              :disabled="Form.jnspengajuan == ''"
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">-- Pilih Kegiatan --</option>
@@ -414,10 +415,13 @@
             </label>
             <FileUpload
               :customUpload="true"
-              @uploader="setFileUpload($event)"
+              @select="setFileUpload($event)"
+              :showUploadButton="false"
+              :showCancelButton="false"
               :multiple="false"
               accept="application/pdf,zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
               :maxFileSize="1000000"
+              chooseLabel="Browse"
             >
               <template #empty>
                 <p>Drag and drop files to here to upload.</p>
@@ -470,6 +474,7 @@ import { Modal } from "flowbite";
 
 import serviceAnggaran from "../../../../services/Transaction.service";
 import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
+import serviceFile from "../../../../services/File.service";
 // import serviceDepartemen from "../../../../services/Departemen.service";
 
 export default {
@@ -571,20 +576,12 @@ export default {
   },
   methods: {
     setPreviewKegiatan() {
-      console.log(this.FormAddon.id_anggaran.nominal_kegiatan);
+      // console.log(this.FormAddon.id_anggaran.nominal_kegiatan);
       this.preview.nominal_sisa_kegiatan =
         this.FormAddon.id_anggaran.nominal_kegiatan;
     },
     setFileUpload(evt) {
       this.Upload.file = evt.files[0];
-      this.$swal({
-        icon: "info",
-        title: "INFO",
-        text: "File siap untuk disimpan",
-        confirmButtonColor: "#e77817",
-      });
-      this.Upload.rubrik = this.userSession.departemen;
-      console.log(this.Upload);
     },
     validationNominal(evt) {
       if (evt.value > this.Form.sisa_nominal) {
@@ -598,6 +595,7 @@ export default {
     },
     setPreview() {
       this.Form.sisa_nominal = this.Form.id_kegiatan.nominal;
+      this.Form.nominal = this.Form.id_kegiatan.nominal;
     },
     cariData() {
       this.refreshListTable(1);
@@ -696,7 +694,10 @@ export default {
       }
     },
     async prosesInput() {
+      let formData = new FormData();
       let Forminput = this.Form;
+      let Upload = this.Upload;
+
       if (Forminput.nominal > this.Form.sisa_nominal) {
         return this.$swal({
           icon: "info",
@@ -706,11 +707,23 @@ export default {
         });
       }
       Forminput.userid = this.userSession.username;
+      // Set File Upload value
+      if (!this.v$.Form.$error) {
+        formData.append("myFile", Upload.file);
+        formData.append("rubrik", Forminput.id_kegiatan.kode_departemen);
+        formData.append(
+          "kdsubmatanggaran",
+          Forminput.id_kegiatan.kode_sub_mata_anggaran
+        );
+        formData.append("nominal", Forminput.nominal);
+        formData.append("jnspengajuan", Forminput.jnspengajuan);
+      }
+      console.log(Forminput);
+      console.log(Upload);
       this.v$.$validate(); // checks all inputs
       if (!this.v$.Form.jnspengajuan.$error) {
         if (Forminput.jnspengajuan != "PB") {
           if (!this.v$.Form.$error && !this.v$.Upload.$error) {
-            console.log(!this.v$.Form.$error);
             Forminput.sisa_nominal =
               Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
             Forminput.id_anggaran =
@@ -721,7 +734,8 @@ export default {
                 Forminput,
                 this.token
               );
-              console.log(respon);
+              formData.append("idpengajuan", respon.data.idpengajuan);
+              await serviceFile.uploadFile(formData, this.token);
               this.modal.hide();
               this.$swal({
                 icon: "success",
@@ -737,6 +751,14 @@ export default {
                 userid: "",
                 uraian_kegiatan: "",
                 sisa_nominal: "",
+              };
+              this.Upload = {
+                file: null,
+                rubrik: "",
+                kdsubmatanggaran: "",
+                nominal: "",
+                jnspengajuan: "",
+                idpengajuan: "",
               };
               this.refreshListTable();
               // this.getAllAnggaran();

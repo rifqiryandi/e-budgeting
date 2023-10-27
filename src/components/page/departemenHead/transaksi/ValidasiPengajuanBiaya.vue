@@ -84,17 +84,30 @@
                     title="Validasi Pengajuan"
                     @click="showValidasi(data)"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24"
-                      viewBox="0 -960 960 960"
-                      width="24"
-                      v-show="data.status_pengajuan == 0"
-                    >
-                      <path
-                        d="M480.067-100.001q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.925-148.204q29.925-69.369 81.225-120.682 51.3-51.314 120.65-81.247Q401.15-859.999 480-859.999q63.204 0 119.602 19t103.474 53l-43.383 44.384q-38.769-26.692-83.991-41.539Q530.48-800 480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-21.077-2.769-41.69-2.77-20.612-8.308-40.08l48.46-48.845q11 30.846 16.808 63.463 5.808 32.617 5.808 67.152 0 78.85-29.92 148.199-29.92 69.35-81.21 120.65-51.291 51.3-120.629 81.225-69.337 29.925-148.173 29.925Zm-56.836-209.846L267.078-466l42.153-42.153 114 114 394.615-395.23 42.153 42.153-436.768 437.383Z"
-                      />
-                    </svg>
+                    <div v-if="data.status_pengajuan == 0">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                      >
+                        <path
+                          d="M480.067-100.001q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.925-148.204q29.925-69.369 81.225-120.682 51.3-51.314 120.65-81.247Q401.15-859.999 480-859.999q63.204 0 119.602 19t103.474 53l-43.383 44.384q-38.769-26.692-83.991-41.539Q530.48-800 480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-21.077-2.769-41.69-2.77-20.612-8.308-40.08l48.46-48.845q11 30.846 16.808 63.463 5.808 32.617 5.808 67.152 0 78.85-29.92 148.199-29.92 69.35-81.21 120.65-51.291 51.3-120.629 81.225-69.337 29.925-148.173 29.925Zm-56.836-209.846L267.078-466l42.153-42.153 114 114 394.615-395.23 42.153 42.153-436.768 437.383Z"
+                        />
+                      </svg>
+                    </div>
+                    <div v-else>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                      >
+                        <path
+                          d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
+                        />
+                      </svg>
+                    </div>
                   </button>
                 </div>
               </template>
@@ -158,7 +171,7 @@
       </div>
     </div>
   </div>
-  <!-- Modal Insert -->
+  <!-- Modal Validasi -->
   <div
     id="validasi-modal"
     tabindex="-1"
@@ -198,61 +211,87 @@
           </button>
         </div>
         <!-- Modal body -->
-        <div class="p-6 grid grid-cols-2 gap-2">
-          <div class="">
-            <div class="mb-1">
-              <p class="text-lg font-semibold mb-0">Entitas</p>
-              <p class="text-base">{{ Detail.nama_entitas }}</p>
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-2 mb-2">
+            <div class="">
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Entitas</p>
+                <p class="text-base">{{ Detail.nama_entitas }}</p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
+                <p class="text-base">{{ Detail.nama_sub_mata_anggaran }}</p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Uraian Kegiatan</p>
+                <p class="text-base">
+                  {{ Detail.uraian_kegiatan }}
+                </p>
+              </div>
             </div>
-            <div class="mb-1">
-              <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
-              <p class="text-base">{{ Detail.nama_sub_mata_anggaran }}</p>
-            </div>
-            <div class="mb-1">
-              <p class="text-lg font-semibold mb-0">Uraian Kegiatan</p>
-              <p class="text-base border-2 border-bni-blue p-3 rounded-md">
-                {{ Detail.uraian_kegiatan }}
-              </p>
+            <div class>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Sisa Anggaran</p>
+                <p class="text-base">
+                  {{
+                    Detail.nominal != undefined
+                      ? "Rp." + Detail.nominal.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Nominal yang di ajukan</p>
+                <p class="text-base">
+                  {{
+                    Detail.nominal_pengajuan != undefined
+                      ? "Rp." + Detail.nominal_pengajuan.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Status</p>
+                <div class="label-nonAktif" v-if="Detail.status_pengajuan == 0">
+                  Belum diproses
+                </div>
+                <div
+                  class="label-Aktif"
+                  v-else-if="Detail.status_pengajuan == 1"
+                >
+                  Tervalidasi
+                </div>
+              </div>
             </div>
           </div>
-          <div class>
-            <div class="mb-1">
-              <p class="text-lg font-semibold mb-0">Sisa Anggaran</p>
-              <p class="text-base">
-                {{
-                  Detail.nominal != undefined
-                    ? "Rp." + Detail.nominal.toLocaleString("de-DE")
-                    : ""
-                }}
-              </p>
-            </div>
-            <div class="mb-1">
-              <p class="text-lg font-semibold mb-0">Nominal yang di ajukan</p>
-              <p class="text-base">
-                {{
-                  Detail.nominal_pengajuan != undefined
-                    ? "Rp." + Detail.nominal_pengajuan.toLocaleString("de-DE")
-                    : ""
-                }}
-              </p>
-            </div>
-            <div class="mb-1">
-              <p class="text-lg font-semibold mb-0">Status</p>
-              <div class="label-nonAktif" v-if="Detail.status_pengajuan == 0">
-                Belum diproses
-              </div>
-              <div
-                class="label-nonAktif"
-                v-else-if="Detail.status_pengajuan == 1"
+          <hr class="bg-gray-400" />
+          <p class="text-lg font-semibold mb-0">Lampiran File</p>
+          <div class="grid grid-cols-1 lg:grid-cols-2 mb-1">
+            <div class="flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="64"
+                viewBox="0 -960 960 960"
+                width="64"
+                style="fill: #006699"
               >
-                Tervalidasi
-              </div>
+                <path
+                  d="M252.309-100.001q-30.308 0-51.308-21t-21-51.308v-615.382q0-30.308 21-51.308t51.308-21h317.692l209.998 209.998v477.692q0 30.308-21 51.308t-51.308 21H252.309Zm287.692-520V-800H252.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v615.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h455.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-447.692H540.001ZM240-800v179.999V-800v640V-800Z"
+                />
+              </svg>
+              <p class="text-base m-0 pt-3">
+                {{ listFile != null ? listFile[0].lampiran : "" }}
+              </p>
             </div>
+            <button class="download-style w-full lg:w-1/4 lg:mt-1">
+              Download
+            </button>
           </div>
         </div>
         <!-- Modal footer -->
         <div
           class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+          v-show="Detail.status_pengajuan == 0"
         >
           <button
             type="button"
@@ -286,6 +325,7 @@ import { Modal } from "flowbite";
 
 import serviceAnggaran from "../../../../services/Transaction.service";
 import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
+import serviceFile from "../../../../services/File.service";
 
 export default {
   name: "Validasi Pengajuan Biaya",
@@ -319,6 +359,7 @@ export default {
         sisa_nominal: "",
       },
       Detail: {},
+      listFile: null,
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
@@ -342,7 +383,7 @@ export default {
         rubrik: this.Detail.kode_departement,
         kdsubmatanggaran: this.Detail.kode_sub_mata_anggaran,
         nominal: this.Detail.nominal_pengajuan,
-        alasan : ""
+        alasan: "",
       };
       this.$swal({
         icon: "question",
@@ -366,7 +407,7 @@ export default {
               this.token
             );
             this.responBerhasil(respon);
-            this.modal.hide();
+            this.hideModal();
             this.refreshListTable(1);
           } catch (error) {
             this.responError(error);
@@ -381,7 +422,6 @@ export default {
         text: respon.data.kode_unik,
         confirmButtonColor: "#e77817",
       });
-      console.log(respon);
     },
     async responError(error) {
       await this.$swal({
@@ -391,8 +431,17 @@ export default {
         confirmButtonColor: "#e77817",
       });
     },
-    showValidasi(data) {
+    async showValidasi(data) {
       this.Detail = data;
+      let payload = {
+        idpengajuan: this.Detail.id,
+      };
+      try {
+        let res = await serviceFile.listFile(payload, this.token);
+        this.listFile = res.data.data;
+      } catch (error) {
+        this.responError(error);
+      }
       const $targetEl = document.getElementById("validasi-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
@@ -442,7 +491,6 @@ export default {
         let res = await serviceAnggaran.getListPengajuan(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
         this.listPengajuan = res.data.data.data;
-        console.log(this.listPengajuan);
         this.loading = false;
       } catch (error) {
         this.listPengajuan = null;
@@ -451,6 +499,7 @@ export default {
       }
     },
     hideModal() {
+      this.listFile = null;
       this.modal.hide();
     },
     refreshListTable(reset = 0) {
