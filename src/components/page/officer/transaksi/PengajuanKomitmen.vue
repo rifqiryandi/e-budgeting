@@ -131,7 +131,7 @@
                 <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
                   Belum diproses
                 </div>
-                <div class="label-Aktif" v-else-if="data.status_pengajuan == 2">
+                <div class="label-Aktif" v-else-if="data.status_pengajuan == 1">
                   Tervalidasi
                 </div>
               </template>
@@ -313,7 +313,7 @@ export default {
       v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      listPengajuan: null,
+      listPengajuanKomitmen: null,
       rowSMataAnggaran: null,
       rowDepartemen: null,
       rowAnggaran: null,
@@ -359,7 +359,7 @@ export default {
   },
   computed: {
     getAllData() {
-      return this.listPengajuan;
+      return this.listPengajuanKomitmen;
     },
     getSMataAnggaran() {
       return this.rowSMataAnggaran;
@@ -438,11 +438,11 @@ export default {
       try {
         let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
-        this.listPengajuan = res.data.data.data;
+        this.listPengajuanKomitmen = res.data.data.data;
 
         this.loading = false;
       } catch (error) {
-        this.listPengajuan = null;
+        this.listPengajuanKomitmen = null;
         this.loading = false;
         console.log(error);
       }

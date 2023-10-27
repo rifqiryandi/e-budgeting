@@ -158,8 +158,19 @@ export default {
         }
       }
     },
+    showAlert() {
+      if (sessionStorage.length == 0) {
+        this.$swal({
+          icon: "warning",
+          title: "Waspada",
+          text: "Jangan berikan data pribadi seperti Username dan password kepada siapapun termasuk pihak BNI",
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
   },
   mounted() {
+    this.showAlert();
     document.querySelector(".p-password-input").classList.add("form-control");
     document.querySelector(".p-password-input").classList.add("cstm-Input");
   },
