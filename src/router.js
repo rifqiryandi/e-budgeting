@@ -129,6 +129,12 @@ switch (namaAkses) {
         name: "Pengajuan Komitmen",
         component: () => import("./components/page/officer/transaksi/PengajuanKomitmen.vue"),
       },
+      {
+        path: "/pengajuanRetur",
+        alias: "/pengajuanRetur",
+        name: "Pengajuan Retur",
+        component: () => import("./components/page/officer/transaksi/PengajuanRetur.vue"),
+      },
 
     ];
     break;

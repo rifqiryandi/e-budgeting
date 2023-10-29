@@ -56,7 +56,20 @@
             d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
           />
         </svg>
-        Tambah Data
+        Pengajuan Biaya
+      </button>
+      <button class="btn d-flex btn-add ml-2" @click="showInputBaru">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 -960 960 960"
+          width="24"
+        >
+          <path
+            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
+          />
+        </svg>
+        Pengajuan Baru
       </button>
     </div>
   </div>
@@ -134,6 +147,9 @@
                 <div class="label-Aktif" v-else-if="data.status_pengajuan == 1">
                   Tervalidasi
                 </div>
+                <div class="label-Retur" v-else-if="data.status_pengajuan == 2">
+                  Retur
+                </div>
               </template>
             </Column>
             <Column
@@ -151,7 +167,7 @@
       </div>
     </div>
   </div>
-  <!-- Modal Insert -->
+  <!-- Modal Insert pengajuan biaya -->
   <div
     id="input-modal"
     tabindex="-1"
@@ -205,7 +221,6 @@
               <option value="">-- Pilih Jenis Pengajuan --</option>
               <option value="PBI">Pengajuan Biasa</option>
               <option value="PK">Pengajuan Komitmen</option>
-              <option value="PB">Pengajuan Baru</option>
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -214,7 +229,7 @@
               Jenis Pengajuan tidak boleh kosong!
             </p>
           </div>
-          <div class="" v-show="Form.jnspengajuan != 'PB'">
+          <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -248,7 +263,7 @@
               Kegiatan tidak boleh kosong!
             </p>
           </div>
-          <div class="" v-show="Form.jnspengajuan != 'PB'">
+          <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -267,113 +282,235 @@
               Uraian Kegiatan tidak boleh kosong!
             </p>
           </div>
-          <div class="mt-6" v-if="Form.jnspengajuan == 'PB'">
-            <p class="text-center text-xl font-medium mt-4">Uraian Kegiatan</p>
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-              >
-                Anggaran <span class="text-red-600">*</span>
-              </label>
-              <select
-                v-model="FormAddon.id_anggaran"
-                @change="setPreviewKegiatan"
-                class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="">-- Pilih Anggaran --</option>
-                <option
-                  v-for="(item, index) in getAnggaran"
-                  :key="index"
-                  :value="item"
-                >
-                  {{
-                    item.nama_departement +
-                    " - " +
-                    item.nama_sub_mata_anggaran +
-                    " - " +
-                    item.nominal.toLocaleString("de-DE")
-                  }}
-                </option>
-              </select>
-              <p
-                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-                v-if="this.v$.FormAddon.id_anggaran.$error"
-              >
-                Anggaran tidak boleh kosong!
-              </p>
-            </div>
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-              >
-                Sisa Anggaran
-              </label>
-              <InputNumber
-                v-model="preview.nominal_sisa_kegiatan"
-                placeholder="Masukkan Sisa anggaran"
-                class="w-full"
-                disabled
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Sisa Anggaran
+            </label>
+            <InputNumber
+              v-model="Form.sisa_nominal"
+              placeholder="Masukkan Sisa anggaran"
+              class="w-full"
+              disabled
+            />
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nominal Pengajuan biaya<span class="text-red-600">*</span>
+            </label>
+            <InputNumber
+              v-model="Form.nominal"
+              placeholder="Masukkan Nominal"
+              class="w-full"
+              @input="validationNominal"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nominal.$error"
+            >
+              Nominal tidak boleh kosong!
+            </p>
+          </div>
+          <div class="mt-2">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              File Pengajuan biaya<span class="text-red-600">*</span>
+            </label>
+            <FileUpload
+              :customUpload="true"
+              @select="setFileUpload($event)"
+              :showUploadButton="false"
+              :showCancelButton="false"
+              :multiple="false"
+              accept="application/pdf,zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
+              :maxFileSize="1000000"
+              chooseLabel="Browse"
+            >
+              <template #empty>
+                <p>Drag and drop files to here to upload.</p>
+              </template>
+            </FileUpload>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Upload.file.$error"
+            >
+              File tidak boleh kosong!
+            </p>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div
+          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+        >
+          <button
+            type="button"
+            @click="prosesInput"
+            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
+          >
+            SIMPAN
+          </button>
+          <button
+            @click="hideModal"
+            type="button"
+            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          >
+            TUTUP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Insert pengajuan baru -->
+  <div
+    id="input-modal-baru"
+    tabindex="-1"
+    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative w-full max-w-4xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
+        >
+          <h3 class="text-xl font-medium" style="color: #fff">
+            Pengajuan Baru
+          </h3>
+          <button
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            @click="hideModal"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
               />
-            </div>
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-6 space-y-2">
+          <p class="text-center text-xl font-medium mt-4">Uraian Kegiatan</p>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Anggaran <span class="text-red-600">*</span>
+            </label>
+            <select
+              v-model="FormAddon.id_anggaran"
+              @change="setPreviewKegiatan"
+              class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Anggaran --</option>
+              <option
+                v-for="(item, index) in getAnggaran"
+                :key="index"
+                :value="item"
               >
-                Kegiatan <span class="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                id="base-input"
-                v-model="FormAddon.kegiatan"
-                placeholder="Masukkan Kegiatan"
-                class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-              <p
-                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-                v-if="this.v$.FormAddon.kegiatan.$error"
-              >
-                Kegiatan tidak boleh kosong!
-              </p>
-            </div>
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-              >
-                Bulan <span class="text-red-600">*</span>
-              </label>
-              <VueDatePicker
-                placeholder="Pilih Bulan"
-                v-model="FormAddon.bulan"
-                format="MMMM/yyyy"
-                auto-apply
-                month-picker
-              />
-              <p
-                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-                v-if="this.v$.FormAddon.bulan.$error"
-              >
-                Bulan tidak boleh kosong!
-              </p>
-            </div>
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-              >
-                Nominal <span class="text-red-600">*</span>
-              </label>
-              <InputNumber
-                v-model="FormAddon.nominal"
-                placeholder="Masukkan Nominal"
-                class="w-full"
-                @input="validationNominal"
-              />
-              <p
-                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-                v-if="this.v$.FormAddon.nominal.$error"
-              >
-                Nominal tidak boleh kosong!
-              </p>
-            </div>
+                {{
+                  item.nama_departement +
+                  " - " +
+                  item.nama_sub_mata_anggaran +
+                  " - " +
+                  item.nominal.toLocaleString("de-DE")
+                }}
+              </option>
+            </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormAddon.id_anggaran.$error"
+            >
+              Anggaran tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Sisa Anggaran
+            </label>
+            <InputNumber
+              v-model="preview.nominal_sisa_kegiatan"
+              placeholder="Masukkan Sisa anggaran"
+              class="w-full"
+              disabled
+            />
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Kegiatan <span class="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="base-input"
+              v-model="FormAddon.kegiatan"
+              placeholder="Masukkan Kegiatan"
+              class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormAddon.kegiatan.$error"
+            >
+              Kegiatan tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Bulan <span class="text-red-600">*</span>
+            </label>
+            <VueDatePicker
+              placeholder="Pilih Bulan"
+              v-model="FormAddon.bulan"
+              format="MMMM/yyyy"
+              auto-apply
+              month-picker
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormAddon.bulan.$error"
+            >
+              Bulan tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nominal <span class="text-red-600">*</span>
+            </label>
+            <InputNumber
+              v-model="FormAddon.nominal"
+              placeholder="Masukkan Nominal"
+              class="w-full"
+              @input="validationNominal"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormAddon.nominal.$error"
+            >
+              Nominal tidak boleh kosong!
+            </p>
           </div>
           <div class="">
             <label
@@ -668,6 +805,21 @@ export default {
         nominal_sisa: "",
       };
       const $targetEl = document.getElementById("input-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+    },
+    showInputBaru() {
+      this.Form = {
+        id_anggaran: "",
+        jnspengajuan: "",
+        id_kegiatan: "",
+        nominal: "",
+        userid: "",
+      };
+      this.preview = {
+        nominal_sisa: "",
+      };
+      const $targetEl = document.getElementById("input-modal-baru");
       this.modal = new Modal($targetEl);
       this.modal.show();
     },
