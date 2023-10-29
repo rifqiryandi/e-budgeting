@@ -164,6 +164,9 @@
                 <div class="label-Aktif" v-else-if="data.status_pengajuan == 1">
                   Tervalidasi
                 </div>
+                <div class="label-Retur" v-else-if="data.status_pengajuan == 2">
+                  Retur
+                </div>
               </template>
             </Column>
           </DataTable>
@@ -261,6 +264,12 @@
                 >
                   Tervalidasi
                 </div>
+                <div
+                  class="label-Retur"
+                  v-else-if="Detail.status_pengajuan == 2"
+                >
+                  Retur
+                </div>
               </div>
             </div>
           </div>
@@ -296,14 +305,14 @@
           <button
             type="button"
             @click="prosesValidasi"
-            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
+            class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
             VALIDASI
           </button>
           <button
-            @click="hideModal"
+            @click="prosesRetur"
             type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            class="bg-retur text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
             RETUR
           </button>
@@ -375,6 +384,55 @@ export default {
     },
   },
   methods: {
+    async prosesRetur() {
+      let payload = {
+        id_pengajuan: this.Detail.id,
+        id_anggaran: this.Detail.id_anggaran,
+        status: 2,
+        rubrik: this.Detail.kode_departement,
+        kdsubmatanggaran: this.Detail.kode_sub_mata_anggaran,
+        nominal: this.Detail.nominal_pengajuan,
+        alasan: "",
+      };
+      this.$swal({
+        icon: "question",
+        title: "Retur pengajuan biaya?",
+        input: "textarea",
+        inputLabel: "ALASAN",
+        inputPlaceholder: "Alasan di retur",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonColor: "#eb4034",
+        cancelButtonColor: "grey",
+        confirmButtonText: "Retur",
+        cancelButtonText: "Batal",
+        customClass: {
+          actions: "my-actions",
+          cancelButton: "order-2 right-gap",
+          confirmButton: "order-1",
+        },
+        inputValidator: (value) => {
+          if (!value) {
+            return "Alasan tidak boleh kosong!";
+          }
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            payload.alasan = result.value
+            let respon = await serviceAnggaran.validasiPengajuan(
+              payload,
+              this.token
+            );
+            this.responBerhasil(respon);
+            this.hideModal();
+            this.refreshListTable(1);
+          } catch (error) {
+            this.responError(error);
+          }
+        }
+      });
+    },
     async prosesValidasi() {
       let payload = {
         id_pengajuan: this.Detail.id,
@@ -516,48 +574,4 @@ export default {
   },
 };
 </script>
-<style>
-.label-nonAktif {
-  width: 136px;
-  height: 32px;
-  padding: 5px 10px 5px 10px;
-  border-left: #f66512 5px solid;
-  background: #ffe3c2;
-  color: #f66512;
-  border-radius: 5px;
-  text-align: center;
-  font-family: Lato;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-}
-.label-Aktif {
-  width: 136px;
-  height: 32px;
-  padding: 5px 10px 5px 10px;
-  border-left: #5bb07f 5px solid;
-  background: #dcffeb;
-  color: #5bb07f;
-  border-radius: 5px;
-  text-align: center;
-  font-family: Lato;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-}
-
-.label-Proses {
-  width: 136px;
-  height: 32px;
-  padding: 5px 10px 5px 10px;
-  border-left: #eebe12 5px solid;
-  background: #fffee4;
-  color: #eebe12;
-  border-radius: 5px;
-  text-align: center;
-  font-family: Lato;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-}
-</style>
+<style></style>

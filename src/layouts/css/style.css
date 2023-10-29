@@ -51,8 +51,55 @@
     -moz-transition: ease-out 0.4s;
     transition: ease-out 0.4s;
 }
+
 .download-style:hover {
     border: 2px solid #006699;
     color: #006699;
     box-shadow: inset 0 0 0 50px #ffff;
+}
+
+/* Label */
+.label-nonAktif {
+    width: 136px;
+    height: 32px;
+    padding: 5px 10px 5px 10px;
+    border-left: #f66512 5px solid;
+    background: #ffe3c2;
+    color: #f66512;
+    border-radius: 5px;
+    text-align: center;
+    font-family: Lato;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.label-Aktif {
+    width: 136px;
+    height: 32px;
+    padding: 5px 10px 5px 10px;
+    border-left: #5bb07f 5px solid;
+    background: #dcffeb;
+    color: #5bb07f;
+    border-radius: 5px;
+    text-align: center;
+    font-family: Lato;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.label-Retur {
+    width: 136px;
+    height: 32px;
+    padding: 5px 10px 5px 10px;
+    border-left: #eb4034 5px solid;
+    background: #e968685e;
+    color: #eb4034;
+    border-radius: 5px;
+    text-align: center;
+    font-family: Lato;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
 }

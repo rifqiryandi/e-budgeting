@@ -140,8 +140,25 @@ class TransactionService {
         }
         return http.post("pengajuan/inspengajuanpk", data, config);
     }
-    
 
+    // Retur
+    listRetur(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/listretur", data, config);
+    }
+
+    inputRetur(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/retur", data, config);
+    }
 
 }
 
