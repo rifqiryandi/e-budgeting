@@ -1,6 +1,6 @@
 # webapp | E-budgeting
 
-![Example](example.png)
+![Example](example1.png)
 
 ## Project setup
 ```
