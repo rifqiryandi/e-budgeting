@@ -95,65 +95,8 @@
             <Column field="nama_entitas" header="Entitas" style="width: 20%">
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_entitas }}
+                  {{ data }}
                 </div>
-              </template>
-            </Column>
-            <Column
-              field="nama_sub_mata_anggaran"
-              header="Sub Mata Anggaran"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-            <Column
-              field="uraian_kegiatan"
-              header="Uraian Kegiatan"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.uraian_kegiatan }}
-                </div>
-              </template>
-            </Column>
-            <Column field="" header="Tahun" style="width: 20%">
-              <template #body="{ data }">
-                {{ data.tahun }}
-              </template>
-            </Column>
-            <Column field="" header="Status" style="width: 20%">
-              <template #body="{ data }">
-                <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
-                  Belum diproses
-                </div>
-                <div class="label-Aktif" v-else-if="data.status_pengajuan == 1">
-                  Tervalidasi
-                </div>
-              </template>
-            </Column>
-            <Column
-              field=""
-              header="Nominal Pengajuan"
-              class="text-right"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                {{ data.nominal_pengajuan.toLocaleString("de-DE") }}
-              </template>
-            </Column>
-            <Column
-              field=""
-              header="Nominal Anggaran"
-              class="text-right"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                {{ data.nominal.toLocaleString("de-DE") }}
               </template>
             </Column>
           </DataTable>
@@ -202,7 +145,6 @@
         </div>
         <!-- Modal body -->
         <div class="p-6 space-y-2">
-          
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -216,7 +158,7 @@
             >
               <option value="">-- Pilih Pengajuan Biaya --</option>
               <option
-                v-for="(item, index) in getPengajuan"
+                v-for="(item, index) in getPengajuanPK"
                 :key="index"
                 :value="item"
               >
@@ -225,7 +167,7 @@
                   " - " +
                   item.nama_sub_mata_anggaran +
                   " - " +
-                  item.nominal.toLocaleString("de-DE")
+                  item.sisa_pengajuan.toLocaleString("de-DE")
                 }}
               </option>
             </select>
@@ -234,6 +176,26 @@
               v-if="this.v$.Form.id_pengajuan.$error"
             >
               Pengajuan biaya tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Bulan <span class="text-red-600">*</span>
+            </label>
+            <VueDatePicker
+              placeholder="Pilih Bulan"
+              v-model="Form.bulan_kegiatan"
+              format="MMMM/yyyy"
+              auto-apply
+              month-picker
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.bulan_kegiatan.$error"
+            >
+              Bulan tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -300,7 +262,7 @@ import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-// import VueDatePicker from "@vuepic/vue-datepicker";
+import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
 
@@ -317,7 +279,7 @@ export default {
       rowSMataAnggaran: null,
       rowDepartemen: null,
       rowAnggaran: null,
-      rowPengajuan: null,
+      rowPengajuanPK: null,
       filters: {
         idpengajuan: "",
         cari: "",
@@ -334,6 +296,7 @@ export default {
         cek: "",
         sisa_nominal: "",
         id_anggaran: "",
+        bulan_kegiatan: "",
       },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
@@ -344,9 +307,9 @@ export default {
       Form: {
         id_pengajuan: { required },
         nominal: { required },
-        cek: { required },
         sisa_nominal: { required },
         id_anggaran: { required },
+        bulan_kegiatan: { required },
       },
     };
   },
@@ -355,7 +318,7 @@ export default {
     Column,
     InputText,
     InputNumber,
-    // VueDatePicker,
+    VueDatePicker,
   },
   computed: {
     getAllData() {
@@ -364,11 +327,24 @@ export default {
     getSMataAnggaran() {
       return this.rowSMataAnggaran;
     },
-    getPengajuan() {
-      return this.rowPengajuan;
+    getPengajuanPK() {
+      return this.rowPengajuanPK;
     },
   },
   methods: {
+    setPreview() {
+      this.Form.sisa_nominal = this.Form.id_pengajuan.sisa_pengajuan;
+    },
+    validationNominal(evt) {
+      if (evt.value > this.Form.sisa_nominal) {
+        this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal tidak boleh lebih dari sisa anggaran",
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
     cariData() {
       this.refreshListTable(1);
     },
@@ -400,18 +376,19 @@ export default {
         console.log(error);
       }
     },
-    async getRowPengajuan() {
+    async getRowPengajuanPK() {
       let payload = {
-        idkegiatan: "",
-        status: 1,
-        kddepartemen: "",
+        // idkegiatan: "",
+        // status: 1,
+        // kddepartemen: "",
+        id_pengajuan: "",
       };
       try {
         let res = await serviceAnggaran.getPengajuanPK(payload, this.token);
-        this.rowPengajuan = res.data.data;
-        console.log(this.rowPengajuan);
+        this.rowPengajuanPK = res.data.data;
+        console.log(this.rowPengajuanPK);
       } catch (error) {
-        this.rowPengajuan = null;
+        this.rowPengajuanPK = null;
         console.log(error);
       }
     },
@@ -430,7 +407,7 @@ export default {
     async getData() {
       this.loading = true;
       let payload = {
-        idpengajuan: this.filters.kdsubmatanggaran,
+        idpengajuan: this.filters.idpengajuan,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
@@ -439,7 +416,7 @@ export default {
         let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
         this.listPengajuanKomitmen = res.data.data.data;
-
+        console.log(res);
         this.loading = false;
       } catch (error) {
         this.listPengajuanKomitmen = null;
@@ -459,15 +436,23 @@ export default {
       }
       Forminput.userid = this.userSession.username;
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.Form.$error && !this.v$.Upload.$error) {
-        console.log(!this.v$.Form.$error);
+      console.log(!this.v$.Form);
+      if (!this.v$.Form.$error) {
+        let addMonth = this.Form.bulan_kegiatan.month + 1;
+        if (addMonth >= 10) {
+          Forminput.bulan_kegiatan = addMonth.toString();
+        } else {
+          Forminput.bulan_kegiatan = "0" + addMonth.toString();
+        }
         Forminput.sisa_nominal =
           Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
         Forminput.id_anggaran =
-          this.Form.id_kegiatan.id_anggaran.toLocaleString();
-        Forminput.id_kegiatan = this.Form.id_kegiatan.id.toLocaleString();
+          this.Form.id_pengajuan.id_anggaran.toLocaleString();
+        Forminput.id_pengajuan = this.Form.id_pengajuan.id.toLocaleString();
+
+        console.log(Forminput);
         try {
-          let respon = await serviceAnggaran.inputPengajuanBiaya(
+          let respon = await serviceAnggaran.inputPengajuanPK(
             Forminput,
             this.token
           );
@@ -514,6 +499,7 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
+    this.getRowPengajuanPK();
   },
 };
 </script>
