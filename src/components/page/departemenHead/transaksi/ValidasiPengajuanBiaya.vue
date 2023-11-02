@@ -112,13 +112,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="nama_entitas" header="Entitas" style="width: 20%">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_entitas }}
-                </div>
-              </template>
-            </Column>
+
             <Column
               field="nama_sub_mata_anggaran"
               header="Sub Mata Anggaran"
@@ -132,7 +126,7 @@
             </Column>
             <Column
               field="uraian_kegiatan"
-              header="Uraian Kegiatan"
+              header="Nama Kegiatan"
               style="width: 20%"
             >
               <template #body="{ data }">
@@ -226,9 +220,29 @@
                 <p class="text-base">{{ Detail.nama_sub_mata_anggaran }}</p>
               </div>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Uraian Kegiatan</p>
+                <p class="text-lg font-semibold mb-0">Jenis Pengajuan</p>
+                <p class="text-base">
+                  {{
+                    Detail.jenis_pengajuan == "PBI"
+                      ? "Pengajuan biasa"
+                      : Detail.jenis_pengajuan == "PB"
+                      ? "Pengajuan Baru"
+                      : Detail.jenis_pengajuan == "PK"
+                      ? "Pengajuan Komitmen"
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Nama Kegiatan</p>
                 <p class="text-base">
                   {{ Detail.uraian_kegiatan }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Uraian Kegiatan</p>
+                <p class="text-base">
+                  {{ Detail.uraian_pengajuan }}
                 </p>
               </div>
             </div>
@@ -382,6 +396,9 @@ export default {
     getAllData() {
       return this.listPengajuan;
     },
+    getSMataAnggaran() {
+      return this.rowSMataAnggaran;
+    },
   },
   methods: {
     async prosesRetur() {
@@ -419,7 +436,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            payload.alasan = result.value
+            payload.alasan = result.value;
             let respon = await serviceAnggaran.validasiPengajuan(
               payload,
               this.token

@@ -105,13 +105,7 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="nama_entitas" header="Entitas" style="width: 20%">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_entitas }}
-                </div>
-              </template>
-            </Column>
+
             <Column
               field="nama_sub_mata_anggaran"
               header="Sub Mata Anggaran"
@@ -125,7 +119,7 @@
             </Column>
             <Column
               field="uraian_kegiatan"
-              header="Uraian Kegiatan"
+              header="Nama Kegiatan"
               style="width: 20%"
             >
               <template #body="{ data }">
@@ -252,7 +246,7 @@
                   " - " +
                   item.nama_sub_mata_anggaran +
                   " - " +
-                  item.nominal.toLocaleString("de-DE")
+                  item.nominal_kegiatan.toLocaleString("de-DE")
                 }}
               </option>
             </select>
@@ -261,6 +255,26 @@
               v-if="this.v$.Form.id_kegiatan.$error"
             >
               Kegiatan tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Bulan <span class="text-red-600">*</span>
+            </label>
+            <VueDatePicker
+              placeholder="Pilih Bulan"
+              v-model="Form.bulan_pengajuan"
+              format="MMMM/yyyy"
+              auto-apply
+              month-picker
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.bulan_pengajuan.$error"
+            >
+              Bulan tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -306,6 +320,7 @@
               placeholder="Masukkan Nominal"
               class="w-full"
               @input="validationNominal"
+              :disabled="Form.jnspengajuan == 'PK'"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -629,6 +644,9 @@ export default {
       filters: {
         kdsubmatanggaran: "",
         kddepartemen: "",
+        status_anggaran: "",
+        status_pengajuan: "",
+        jenis_pengajuan: "",
         cari: "",
         status: "",
       },
@@ -645,6 +663,7 @@ export default {
         userid: "",
         uraian_kegiatan: "",
         sisa_nominal: "",
+        bulan_pengajuan: "",
       },
       FormAddon: {
         id_anggaran: "",
@@ -677,6 +696,7 @@ export default {
         id_kegiatan: { required },
         nominal: { required },
         uraian_kegiatan: { required },
+        bulan_pengajuan: { required },
       },
       FormAddon: {
         id_anggaran: { required },
@@ -705,6 +725,7 @@ export default {
       return this.rowSMataAnggaran;
     },
     getKegiatan() {
+      console.log(this.rowKegiatan);
       return this.rowKegiatan;
     },
     getAnggaran() {
@@ -731,8 +752,8 @@ export default {
       }
     },
     setPreview() {
-      this.Form.sisa_nominal = this.Form.id_kegiatan.nominal;
-      this.Form.nominal = this.Form.id_kegiatan.nominal;
+      this.Form.sisa_nominal = this.Form.id_kegiatan.nominal_anggaran;
+      this.Form.nominal = this.Form.id_kegiatan.nominal_kegiatan;
     },
     cariData() {
       this.refreshListTable(1);
@@ -828,6 +849,9 @@ export default {
       let payload = {
         kdsubmatanggaran: this.filters.kdsubmatanggaran,
         kddepartemen: this.userSession.departemen,
+        status_anggaran: "",
+        status_pengajuan: "",
+        jenis_pengajuan: "",
         status: "",
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
@@ -870,12 +894,17 @@ export default {
         formData.append("nominal", Forminput.nominal);
         formData.append("jnspengajuan", Forminput.jnspengajuan);
       }
-      console.log(Forminput);
-      console.log(Upload);
+
       this.v$.$validate(); // checks all inputs
       if (!this.v$.Form.jnspengajuan.$error) {
         if (Forminput.jnspengajuan != "PB") {
           if (!this.v$.Form.$error && !this.v$.Upload.$error) {
+            let addMonth = this.Form.bulan_pengajuan.month + 1;
+            if (addMonth >= 10) {
+              Forminput.bulan_pengajuan = addMonth.toString();
+            } else {
+              Forminput.bulan_pengajuan = "0" + addMonth.toString();
+            }
             Forminput.sisa_nominal =
               Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
             Forminput.id_anggaran =
@@ -894,25 +923,27 @@ export default {
                 title: "Berhasil",
                 text: respon.data.Msg,
                 confirmButtonColor: "#e77817",
+              }).then(() => {
+                this.Form = {
+                  id_anggaran: "",
+                  jnspengajuan: "",
+                  id_kegiatan: "",
+                  nominal: "",
+                  userid: "",
+                  uraian_kegiatan: "",
+                  sisa_nominal: "",
+                };
+                this.Upload = {
+                  file: null,
+                  rubrik: "",
+                  kdsubmatanggaran: "",
+                  nominal: "",
+                  jnspengajuan: "",
+                  idpengajuan: "",
+                };
+                this.refreshListTable();
               });
-              this.Form = {
-                id_anggaran: "",
-                jnspengajuan: "",
-                id_kegiatan: "",
-                nominal: "",
-                userid: "",
-                uraian_kegiatan: "",
-                sisa_nominal: "",
-              };
-              this.Upload = {
-                file: null,
-                rubrik: "",
-                kdsubmatanggaran: "",
-                nominal: "",
-                jnspengajuan: "",
-                idpengajuan: "",
-              };
-              this.refreshListTable();
+
               // this.getAllAnggaran();
             } catch (error) {
               console.log(error);
