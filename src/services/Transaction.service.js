@@ -140,6 +140,14 @@ class TransactionService {
         }
         return http.post("pengajuan/inspengajuanpk", data, config);
     }
+    validasiPengajuanPK(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasipengajuanpk", data, config);
+    }
 
     // Retur
     listRetur(data, token) {

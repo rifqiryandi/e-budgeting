@@ -464,6 +464,29 @@
                   <p style="color: #1e1e1e">Validasi Biaya</p>
                 </router-link>
               </li>
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/validasiPengajuanKomitmen"
+                  :class="
+                    NamePage == 'Validasi Pengajuan Komitmen'
+                      ? Active
+                      : notActive
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Validasi Komitmen</p>
+                </router-link>
+              </li>
             </ul>
           </li>
         </ul>

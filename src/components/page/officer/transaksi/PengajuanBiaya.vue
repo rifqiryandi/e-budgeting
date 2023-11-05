@@ -165,14 +165,14 @@
   <div
     id="input-modal"
     tabindex="-1"
-    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+    class="fixed z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto top-10 bottom-10 left-0 right-0 h-[calc(100%-1rem)] max-h-full"
   >
     <div class="relative w-full max-w-4xl max-h-full">
       <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <div class="relative w-full max-w-4xl bg-white rounded-lg shadow dark:bg-gray-700">
         <!-- Modal header -->
         <div
-          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
+          class=" flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
             Pengajuan Biaya
@@ -246,7 +246,7 @@
                   " - " +
                   item.nama_sub_mata_anggaran +
                   " - " +
-                  item.nominal_kegiatan.toLocaleString("de-DE")
+                  item.nominal.toLocaleString("de-DE")
                 }}
               </option>
             </select>
@@ -384,7 +384,7 @@
   <div
     id="input-modal-baru"
     tabindex="-1"
-    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+    class="fixed  mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto top-10 bottom-10 left-0 right-0 h-[calc(100%-1rem)] max-h-full"
   >
     <div class="relative w-full max-w-4xl max-h-full">
       <!-- Modal content -->
@@ -421,7 +421,6 @@
         </div>
         <!-- Modal body -->
         <div class="p-6 space-y-2">
-          <p class="text-center text-xl font-medium mt-4">Uraian Kegiatan</p>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -752,8 +751,14 @@ export default {
       }
     },
     setPreview() {
-      this.Form.sisa_nominal = this.Form.id_kegiatan.nominal_anggaran;
-      this.Form.nominal = this.Form.id_kegiatan.nominal_kegiatan;
+      this.Form.sisa_nominal =
+        this.Form.id_kegiatan.sisa_nominal_pengajuan == null
+          ? this.Form.id_kegiatan.nominal_anggaran
+          : this.Form.id_kegiatan.sisa_nominal_pengajuan;
+      this.Form.nominal =
+        this.Form.id_kegiatan.sisa_nominal_pengajuan == null
+          ? this.Form.id_kegiatan.nominal_anggaran
+          : this.Form.id_kegiatan.sisa_nominal_pengajuan;
     },
     cariData() {
       this.refreshListTable(1);
@@ -803,7 +808,7 @@ export default {
       let payload = {
         idkegiatan: "",
         status: 1,
-        kddepartemen: "",
+        kddepartemen: this.userSession.departemen,
       };
       try {
         let res = await serviceAnggaran.getKegiatan(payload, this.token);
