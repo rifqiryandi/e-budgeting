@@ -70,6 +70,10 @@
           </div>
         </div>
       </div>
+      <div class="card-footer justify-center bg-transparent inline-flex py-0">
+        <p class="m-0 text-center pt-3 text-base">Powered by </p>
+        <img src="../../../assets/janariLogo.png" width="48" height="48" alt="">
+      </div>
     </div>
   </div>
 </template>
@@ -163,7 +167,7 @@ export default {
         this.$swal({
           icon: "warning",
           title: "Waspada",
-          text: "Jangan berikan data pribadi seperti Username dan password kepada siapapun termasuk pihak BNI",
+          text: "Jangan berikan data pribadi seperti username dan password kepada siapapun termasuk pihak yang tidak berkepentingan",
           confirmButtonColor: "#e77817",
         });
       }

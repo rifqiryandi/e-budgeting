@@ -169,6 +169,12 @@ switch (namaAkses) {
         name: "Validasi Pengajuan Biaya",
         component: () => import("./components/page/departemenHead/transaksi/ValidasiPengajuanBiaya.vue"),
       },
+      {
+        path: "/validasiPengajuanKomitmen",
+        alias: "/validasiPengajuanKomitmen",
+        name: "Validasi Pengajuan Komitmen",
+        component: () => import("./components/page/departemenHead/transaksi/ValidasiPengajuanKomitmen.vue"),
+      },
 
     ];
     break;

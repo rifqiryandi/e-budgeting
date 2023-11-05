@@ -16,9 +16,9 @@
               >
                 <option value="">-- Pilih Pengajuan Biaya --</option>
                 <option
-                  v-for="(item, index) in getPengajuan"
+                  v-for="(item, index) in getPengajuanPK"
                   :key="index"
-                  :value="item.kode_sub_mata_anggaran"
+                  :value="item.id_pengajuan"
                 >
                   {{ item.nama_sub_mata_anggaran }}
                 </option>
@@ -92,10 +92,45 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="nama_entitas" header="Entitas" style="width: 20%">
+            <Column field="uraian_pengajuan" header="Kegiatan">
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data }}
+                  {{ data.uraian_pengajuan }}
+                </div>
+              </template>
+            </Column>
+            <Column field="nama_sub_mata_anggaran" header="Sub Mata Anggaran">
+              <template #body="{ data }">
+                <div >
+                  {{ data.nama_sub_mata_anggaran }}
+                </div>
+              </template>
+            </Column>
+            <Column field="status_pengajuan" header="Status">
+              <template #body="{ data }">
+                <div>
+                  <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
+                    Belum diproses
+                  </div>
+                  <div
+                    class="label-Aktif"
+                    v-else-if="data.status_pengajuan == 1"
+                  >
+                    Tervalidasi
+                  </div>
+                  <div
+                    class="label-Retur"
+                    v-else-if="data.status_pengajuan == 2"
+                  >
+                    Retur
+                  </div>
+                </div>
+              </template>
+            </Column>
+            <Column field="nominal_realisasi" header="Nominal">
+              <template #body="{ data }">
+                <div>
+                  {{ data.nominal_realisasi.toLocaleString("de-DE") }}
                 </div>
               </template>
             </Column>
@@ -167,7 +202,7 @@
                   " - " +
                   item.nama_sub_mata_anggaran +
                   " - " +
-                  item.sisa_pengajuan.toLocaleString("de-DE")
+                  item.nominal_pengajuan.toLocaleString("de-DE")
                 }}
               </option>
             </select>
@@ -333,7 +368,7 @@ export default {
   },
   methods: {
     setPreview() {
-      this.Form.sisa_nominal = this.Form.id_pengajuan.sisa_pengajuan;
+      this.Form.sisa_nominal = this.Form.id_pengajuan.sisa_nominal;
     },
     validationNominal(evt) {
       if (evt.value > this.Form.sisa_nominal) {
@@ -416,7 +451,7 @@ export default {
         let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
         this.listPengajuanKomitmen = res.data.data.data;
-        console.log(res);
+        console.log(this.listPengajuanKomitmen);
         this.loading = false;
       } catch (error) {
         this.listPengajuanKomitmen = null;
@@ -434,9 +469,12 @@ export default {
           confirmButtonColor: "#e77817",
         });
       }
+      Forminput.id_anggaran =
+        this.Form.id_pengajuan.id_anggaran.toLocaleString();
+      Forminput.id_pengajuan =
+        this.Form.id_pengajuan.id_pengajuan.toLocaleString();
       Forminput.userid = this.userSession.username;
       this.v$.$validate(); // checks all inputs
-      console.log(!this.v$.Form);
       if (!this.v$.Form.$error) {
         let addMonth = this.Form.bulan_kegiatan.month + 1;
         if (addMonth >= 10) {
@@ -446,17 +484,12 @@ export default {
         }
         Forminput.sisa_nominal =
           Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
-        Forminput.id_anggaran =
-          this.Form.id_pengajuan.id_anggaran.toLocaleString();
-        Forminput.id_pengajuan = this.Form.id_pengajuan.id.toLocaleString();
 
-        console.log(Forminput);
         try {
           let respon = await serviceAnggaran.inputPengajuanPK(
             Forminput,
             this.token
           );
-          console.log(respon);
           this.modal.hide();
           this.$swal({
             icon: "success",
