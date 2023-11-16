@@ -154,7 +154,9 @@
               style="width: 20%"
             >
               <template #body="{ data }">
-                {{ data.nominal.toLocaleString("de-DE") }}
+                <div style="color: green;">
+                  {{ data.nominal.toLocaleString("de-DE") }}
+                </div>
               </template>
             </Column>
           </DataTable>

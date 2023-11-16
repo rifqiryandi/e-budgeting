@@ -92,6 +92,29 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
+            <Column field="" header="">
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  <button
+                    class="bg-transparent border-0"
+                    title="Validasi Pengajuan"
+                    @click="showInputRetur(data)"
+                    v-show="data.status_pengajuan == 2"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <path
+                        d="m480-320 56-56-63-64h167v-80H473l63-64-56-56-160 160 160 160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm280-590q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </template>
+            </Column>
             <Column field="uraian_pengajuan" header="Kegiatan">
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -101,7 +124,7 @@
             </Column>
             <Column field="nama_sub_mata_anggaran" header="Sub Mata Anggaran">
               <template #body="{ data }">
-                <div >
+                <div>
                   {{ data.nama_sub_mata_anggaran }}
                 </div>
               </template>
@@ -288,6 +311,155 @@
       </div>
     </div>
   </div>
+  <!-- Modal Input Retur -->
+  <div
+    id="retur-modal"
+    tabindex="-1"
+    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative w-full max-w-4xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
+        >
+          <h3 class="text-xl font-medium" style="color: #fff">
+            Pengajuan Komitmen Kembali
+          </h3>
+          <button
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            @click="hideModal"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-6 space-y-2">
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Pengajuan Biaya <span class="text-red-600">*</span>
+            </label>
+            <select
+              v-model="FormRetur.id_pengajuan"
+              @change="setPreview"
+              class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Pengajuan Biaya --</option>
+              <option
+                v-for="(item, index) in getPengajuanPKRetur"
+                :key="index"
+                :value="item"
+              >
+                {{
+                  item.nama_departement +
+                  " - " +
+                  item.nama_sub_mata_anggaran +
+                  " - " +
+                  item.nominal_pengajuan.toLocaleString("de-DE")
+                }}
+              </option>
+            </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormRetur.id_pengajuan.$error"
+            >
+              Pengajuan biaya tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Bulan <span class="text-red-600">*</span>
+            </label>
+            <VueDatePicker
+              placeholder="Pilih Bulan"
+              v-model="FormRetur.bulan_kegiatan"
+              format="MMMM/yyyy"
+              auto-apply
+              month-picker
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormRetur.bulan_kegiatan.$error"
+            >
+              Bulan tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Sisa Anggaran
+            </label>
+            <InputNumber
+              v-model="FormRetur.sisa_nominal"
+              placeholder="Masukkan Sisa anggaran"
+              class="w-full"
+              disabled
+            />
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nominal Pengajuan biaya<span class="text-red-600">*</span>
+            </label>
+            <InputNumber
+              v-model="FormRetur.nominal"
+              placeholder="Masukkan Nominal"
+              class="w-full"
+              @input="validationNominal"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormRetur.nominal.$error"
+            >
+              Nominal tidak boleh kosong!
+            </p>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div
+          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+        >
+          <button
+            type="button"
+            @click="proesInputRetur"
+            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
+          >
+            SIMPAN
+          </button>
+          <button
+            @click="hideModal"
+            type="button"
+            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          >
+            TUTUP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import InputNumber from "primevue/inputnumber";
@@ -333,6 +505,15 @@ export default {
         id_anggaran: "",
         bulan_kegiatan: "",
       },
+      FormRetur: {
+        id_pengajuan: "",
+        nominal: "",
+        cek: "",
+        sisa_nominal: "",
+        id_anggaran: "",
+        id: "",
+        bulan_kegiatan: "",
+      },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
@@ -344,6 +525,12 @@ export default {
         nominal: { required },
         sisa_nominal: { required },
         id_anggaran: { required },
+        bulan_kegiatan: { required },
+      },
+      FormRetur: {
+        id_pengajuan: { required },
+        nominal: { required },
+        sisa_nominal: { required },
         bulan_kegiatan: { required },
       },
     };
@@ -365,8 +552,43 @@ export default {
     getPengajuanPK() {
       return this.rowPengajuanPK;
     },
+    getPengajuanPKRetur() {
+      if (this.FormRetur.id_pengajuan == "") {
+        return this.rowPengajuanPK;
+      } else {
+        let asArr = Object.entries(this.rowPengajuanPK);
+        asArr.filter((value) => {
+          if (value[1].id_pengajuan == this.FormRetur.id_pengajuan) {
+            this.FormRetur.id_pengajuan = [];
+            this.FormRetur.id_pengajuan = value[1];
+          }
+        });
+        return this.rowPengajuanPK;
+      }
+    },
   },
   methods: {
+    proesInputRetur() {
+      let FormData = this.FormRetur;
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.FormRetur.$error) {
+        console.log(FormData);
+      }
+    },
+    showInputRetur(data) {
+      this.FormRetur = {
+        id_pengajuan: data.id_pengajuan,
+        nominal: data.nominal_realisasi,
+        cek: "",
+        sisa_nominal: data.sisa_realisasi,
+        id_anggaran: data.id_anggaran,
+        id: data.id_pk,
+        bulan_kegiatan: "",
+      };
+      const $targetEl = document.getElementById("retur-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+    },
     setPreview() {
       this.Form.sisa_nominal = this.Form.id_pengajuan.sisa_nominal;
     },
@@ -449,8 +671,8 @@ export default {
       };
       try {
         let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);
-        this.pagination.totaldata = res.data.data.total_data;
-        this.listPengajuanKomitmen = res.data.data.data;
+        this.pagination.totaldata = res.data.total_data;
+        this.listPengajuanKomitmen = res.data.data;
         console.log(this.listPengajuanKomitmen);
         this.loading = false;
       } catch (error) {
@@ -484,7 +706,9 @@ export default {
         }
         Forminput.sisa_nominal =
           Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
-
+        if (Forminput.sisa_nominal == 0) {
+          Forminput.cek = "habis"
+        }
         try {
           let respon = await serviceAnggaran.inputPengajuanPK(
             Forminput,
@@ -507,9 +731,8 @@ export default {
             sisa_nominal: "",
           };
           this.refreshListTable();
-          // this.getAllAnggaran();
+          this.getRowPengajuanPK();
         } catch (error) {
-          console.log(error);
           this.$swal({
             icon: "error",
             title: "Gagal",

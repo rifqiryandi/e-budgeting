@@ -179,6 +179,30 @@ switch (namaAkses) {
     ];
     break;
 
+    case "BUM":
+    routes = [{
+        path: "/",
+        alias: "/login",
+        name: "Login",
+        component: () => import("./components/page/auth/Login.vue"),
+      },
+      {
+        path: "/dashboard",
+        alias: "/admin",
+        name: "Dashboard",
+        component: () => import("./components/page/admin/Dashboard.vue"),
+      },
+      {
+        path:"/realisasianggaran",
+        alias : "/realisasianggaran",
+        name:"Realisasi Anggaran",
+        component: () => import("./components/page/keuangan/transaksi/PengajuanRealisasi.vue"),
+        
+      }
+
+    ];
+    break;
+
   default:
     routes = [{
       path: "/",

@@ -66,6 +66,8 @@
                 <img src="../../../assets/bnilogo.png" class="img-style" />
                 <h4 class="text-info-style">E-BUDGETING</h4>
               </div>
+              <h4 class="text-info-style text-center">Corporate secretary division</h4>
+
             </div>
           </div>
         </div>
@@ -139,7 +141,7 @@ export default {
             } else if (respon.data.data.leveluser == 3) {
               sessionStorage.setItem("namaAkes", "Departemen Head");
             } else if (respon.data.data.leveluser == 4) {
-              sessionStorage.setItem("namaAkes", "Keuangan/Treasury");
+              sessionStorage.setItem("namaAkes", "BUM");
             } else if (respon.data.data.leveluser == 5) {
               sessionStorage.setItem("namaAkes", "General Manager");
             } else if (respon.data.data.leveluser == 6) {

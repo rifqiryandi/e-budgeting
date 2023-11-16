@@ -168,6 +168,64 @@ class TransactionService {
         return http.post("transaksi/retur", data, config);
     }
 
+    listRealisasi(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/getpengajuan", data, config);
+    }
+
+    inputRealisasi(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/realisasi", data, config);
+    }
+
+    getPengajuanRealisasi(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("pengajuan/getidpengajuan", data, config);
+        
+    }
+
+    getListPengajuanPB(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("pengajuan/getidpengajuan", data, config);
+    }
+
+    inputPengajuanPB(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("pengajuan/inspengajuanpb", data, config);
+    }
+
+    validasiPengajuanPB(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasipengajuan", data, config);
+    }
+
+    
+
+
 }
 
 export default new TransactionService();

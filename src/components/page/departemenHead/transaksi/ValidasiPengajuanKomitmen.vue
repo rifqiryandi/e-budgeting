@@ -201,7 +201,6 @@
         <div class="p-6">
           <div class="grid grid-cols-2 gap-2 mb-2">
             <div class="">
-              
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
                 <p class="text-base">{{ Detail.nama_sub_mata_anggaran }}</p>
@@ -235,11 +234,21 @@
             </div>
             <div class>
               <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Anggaran Asal</p>
+                <p class="text-base">
+                  {{
+                    Detail.nominal_pengajuan != undefined
+                      ? "Rp." + Detail.nominal_pengajuan.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sisa Anggaran</p>
                 <p class="text-base">
                   {{
-                    Detail.nominal != undefined
-                      ? "Rp." + Detail.nominal.toLocaleString("de-DE")
+                    Detail.sisa_realisasi != undefined
+                      ? "Rp." + Detail.sisa_realisasi.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
@@ -274,7 +283,6 @@
               </div>
             </div>
           </div>
-          
         </div>
         <!-- Modal footer -->
         <div
@@ -339,7 +347,7 @@ export default {
   components: {
     DataTable,
     Column,
-    InputText
+    InputText,
   },
   computed: {
     getAllData() {
@@ -391,8 +399,8 @@ export default {
       };
       try {
         let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);
-        this.pagination.totaldata = res.data.data.total_data;
-        this.listPengajuanKomitmen = res.data.data.data;
+        this.pagination.totaldata = res.data.total_data;
+        this.listPengajuanKomitmen = res.data.data;
         console.log(this.listPengajuanKomitmen);
         this.loading = false;
       } catch (error) {
@@ -403,12 +411,11 @@ export default {
     },
     async prosesRetur() {
       let payload = {
-        id_pengajuan: this.Detail.id,
-        id_anggaran: this.Detail.id_anggaran,
+        id_pengajuan: this.Detail.id_pk,
         status: 2,
         rubrik: this.Detail.kode_departement,
         kdsubmatanggaran: this.Detail.kode_sub_mata_anggaran,
-        nominal: this.Detail.nominal_pengajuan,
+        nominal: this.Detail.nominal_realisasi,
         alasan: "",
       };
       this.$swal({
@@ -437,7 +444,7 @@ export default {
         if (result.isConfirmed) {
           try {
             payload.alasan = result.value;
-            let respon = await serviceAnggaran.validasiPengajuan(
+            let respon = await serviceAnggaran.validasiPengajuanPK(
               payload,
               this.token
             );
@@ -459,14 +466,13 @@ export default {
     },
     async prosesValidasi() {
       let payload = {
-        id_pengajuan: this.Detail.id_pengajuan,
+        id_pengajuan: this.Detail.id_pk,
         status: 1,
         rubrik: this.Detail.kode_departement,
         kdsubmatanggaran: this.Detail.kode_sub_mata_anggaran,
         nominal: this.Detail.nominal_realisasi,
         alasan: "",
       };
-      console.log(payload);
       this.$swal({
         icon: "question",
         title: "Validasi pengajuan biaya?",
