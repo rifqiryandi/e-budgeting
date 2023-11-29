@@ -16,9 +16,50 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Notifications Dropdown Menu -->
+      <!-- v-show="namaAkses == 'Departemen Head'" -->
+      <li class="nav-item dropdown" v-show="false">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+          >
+            <path
+              d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"
+            />
+          </svg>
+          <span class="badge badge-warning navbar-badge">5</span>
+        </a>
+        <div
+          class="dropdown-menu dropdown-menu-lg dropdown-menu-right cursor-pointer p-0 m-0"
+          style="border-radius: 6px"
+        >
+          <div
+            class="dropdown-item d-flex justify-content-center cursor-pointer"
+          >
+            (5) Notifikasi
+          </div>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item d-flex cursor-pointer">
+            ---Pesan notifikasi---
+          </div>
+          <div class="dropdown-divider"></div>
+        </div>
+      </li>
+
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <span class="material-symbols-outlined"> person </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+          >
+            <path
+              d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"
+            />
+          </svg>
         </a>
         <div
           class="dropdown-menu dropdown-menu-lg dropdown-menu-right cursor-pointer p-0 m-0"
@@ -47,6 +88,7 @@ export default {
       countDown: 10,
       textTime: "",
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
+      namaAkses: sessionStorage.getItem("namaAkes"),
     };
   },
   methods: {
@@ -99,9 +141,29 @@ export default {
         }, 1000);
       }
     },
+    toastNotifikasi() {
+      const Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = this.$swal.stopTimer;
+          toast.onmouseleave = this.$swal.resumeTimer;
+        },
+      });
+      if (this.namaAkses == "Departemen Head") {
+        return Toast.fire({
+          icon: "info",
+          title: "Terdapat 5 notifikasi baru, jangan lupa di lihat :)",
+        });
+      }
+    },
   },
   mounted() {
     this.countDownTimer();
+    // this.toastNotifikasi();
   },
 };
 </script>

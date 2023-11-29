@@ -64,7 +64,7 @@
               </div>
               <div class="grid justify-center gap-3 mt-15">
                 <img src="../../../assets/bnilogo.png" class="img-style" />
-                <h4 class="text-info-style">E-BUDGETING</h4>
+                <h4 class="text-info-style">e-Budgeting</h4>
               </div>
               <h4 class="text-info-style text-center">Corporate secretary division</h4>
 

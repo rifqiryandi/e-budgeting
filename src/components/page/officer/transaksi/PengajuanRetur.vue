@@ -208,6 +208,15 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
+              Alasan 
+            </label>
+            {{Detail.alasan}}
+            
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
               Jenis Pengajuan <span class="text-red-600">*</span>
             </label>
             <select
@@ -217,6 +226,7 @@
               <option value="">-- Pilih Jenis Pengajuan --</option>
               <option value="PBI">Pengajuan Biasa</option>
               <option value="PK">Pengajuan Komitmen</option>
+              <option value="PB">Pengajuan Baru</option>
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -380,6 +390,9 @@ export default {
         sisa_nominal: "",
         id: "",
       },
+      Detail:{
+        alasan : ""
+      },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
@@ -417,6 +430,7 @@ export default {
       } else {
         let asArr = Object.entries(this.rowKegiatan);
         asArr.filter((value) => {
+          console.log(value[1].id)
           if (value[1].id == this.Form.id_kegiatan) {
             this.Form.id_kegiatan = [];
             this.Form.id_kegiatan = value[1];
@@ -431,7 +445,7 @@ export default {
       let payload = {
         idkegiatan: "",
         status: 1,
-        kddepartemen: "",
+        kddepartemen: this.userSession.departemen,
       };
       try {
         let res = await serviceAnggaran.getKegiatan(payload, this.token);
@@ -497,6 +511,9 @@ export default {
         sisa_nominal: data.sisanominal_pengajuan,
         id: data.id,
       };
+      this.Detail = {
+        alasan : data.alasan
+      }
       const $targetEl = document.getElementById("detail-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();

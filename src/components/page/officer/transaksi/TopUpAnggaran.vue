@@ -3,25 +3,22 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <div class="grid grid-cols-1 gap-2">
+          <div class="">
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
               >
-                Sub Mata Anggaran
+                Status
               </label>
               <select
-                v-model="filters.kdsubmatanggaran"
+                v-model="filters.status"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option value="">-- Pilih Sub Mata Anggaran --</option>
-                <option
-                  v-for="(item, index) in getSMataAnggaran"
-                  :key="index"
-                  :value="item.kode_sub_mata_anggaran"
-                >
-                  {{ item.nama_sub_mata_anggaran }}
-                </option>
+                <option value="">-- Pilih Status--</option>
+                <option value="0">Belum divalidasi</option>
+                <option value="1">Tervalidasi Level 1</option>
+                <option value="2">Tervalidasi Level 2</option>
+                <option value="3">Tervalidasi Level 3</option>
               </select>
             </div>
           </div>
@@ -46,7 +43,7 @@
       </div>
     </div>
   </div>
-
+  
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -83,9 +80,12 @@
             <Column field="" header="" style="width: 20%">
               <template #body="{ data }">
                 <ValidationBtn
-                  :nilaiStatus="data.status_anggaran.toString()"
+                  :nilaiStatus="data.status_topup"
                   :keyid="data.id_anggaran"
                   :num="0"
+                  :idtopUp="data.id_topup"
+                  :nominal="data.nominal_sisa_anggaran"
+                  :nominalTopup = "data.nominal_topup"
                 />
               </template>
             </Column>
@@ -149,22 +149,22 @@
             </Column>
             <Column
               field=""
-              header="Nominal"
-              class="text-right"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                {{ data.nominal.toLocaleString("de-DE") }}
-              </template>
-            </Column>
-            <Column
-              field=""
               header="Sisa Anggaran"
               class="text-right"
               style="width: 20%"
             >
               <template #body="{ data }">
-                {{ data.sisa_anggaran.toLocaleString("de-DE") }}
+                {{ data.nominal_sisa_anggaran.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Top Up"
+              class="text-right"
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                {{ data.nominal_topup.toLocaleString("de-DE") }}
               </template>
             </Column>
           </DataTable>
@@ -217,13 +217,13 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Sub Mata Anggaran <span class="text-red-600">*</span>
+              Anggaran <span class="text-red-600">*</span>
             </label>
             <select
-              v-model="Form.kdsubmatanggaran"
+              v-model="Form.idanggaran"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option value="">-- Pilih Sub Mata Anggaran --</option>
+              <option value="">-- Pilih Anggaran --</option>
               <option
                 v-for="(item, index) in getSMataAnggaran"
                 :key="index"
@@ -234,67 +234,46 @@
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.kdsubmatanggaran.$error"
+              v-if="this.v$.Form.idanggaran.$error"
             >
-              Sub Mata Anggaran tidak boleh kosong!
+              Anggaran tidak boleh kosong!
             </p>
           </div>
+
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Departemen <span class="text-red-600">*</span>
-            </label>
-            <select
-              v-model="Form.kddepartemen"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="">-- Pilih departemen --</option>
-              <option
-                v-for="(item, index) in getDepartemen"
-                :key="index"
-                :value="item.kode_departement"
-              >
-                {{ item.nama_departement }}
-              </option>
-            </select>
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.kddepartemen.$error"
-            >
-              Kode Departemen tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Tahun <span class="text-red-600">*</span>
-            </label>
-            <VueDatePicker v-model="Form.tahun" auto-apply year-picker />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.tahun.$error"
-            >
-              Tahun tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nominal <span class="text-red-600">*</span>
+              Nominal Awal<span class="text-red-600">*</span>
             </label>
             <InputNumber
-              v-model="Form.nominal"
-              placeholder="Masukkan Nominal"
+              v-model="Form.nominalawal"
+              placeholder="Masukkan Nominal Awal"
               class="w-full"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nominal.$error"
+              v-if="this.v$.Form.nominalawal.$error"
             >
-              Nominal tidak boleh kosong!
+              Nominal Awal tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nominal Top Up<span class="text-red-600">*</span>
+            </label>
+            <InputNumber
+              v-model="Form.nominaltopup"
+              placeholder="Masukkan Nominal Awal"
+              class="w-full"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nominaltopup.$error"
+            >
+              Nominal Top Up tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -339,76 +318,8 @@
       </div>
     </div>
   </div>
-  <!-- Modal Delete -->
-  <div
-    id="delete-modal"
-    tabindex="-1"
-    class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-  >
-    <div class="relative w-full max-w-md max-h-full">
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <button
-          type="button"
-          class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          @click="hideModal"
-        >
-          <svg
-            class="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-            />
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-        <div class="p-6 text-center">
-          <svg
-            class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-          <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-            Apakah anda yakin ingin menghapus data ini?
-          </h3>
-          <button
-            type="button"
-            @click="prosesDelete"
-            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-          >
-            Hapus
-          </button>
-          <button
-            @click="hideModal"
-            type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-          >
-            Tidak
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 <script>
-import exportFromJSON from "export-from-json";
 import InputNumber from "primevue/inputnumber";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -416,28 +327,25 @@ import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import VueDatePicker from "@vuepic/vue-datepicker";
+// import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
-import ValidationBtn from "../../../utils/ValidationBtn.vue";
+import ValidationBtn from "../../../utils/ValidationBtnTopUp.vue";
 
 import serviceAnggaran from "../../../../services/Transaction.service";
-import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
-import serviceDepartemen from "../../../../services/Departemen.service";
 
 export default {
-  name: "Anggaran",
+  name: "Top Up Anggaran",
   data() {
     return {
       v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      ListTransaksi: null,
+      ListTopUp: null,
       rowSMataAnggaran: null,
       rowDepartemen: null,
       filters: {
-        kdsubmatanggaran: "",
-        kddepartemen: "",
+        status: "",
         cari: "",
       },
       pagination: {
@@ -447,13 +355,11 @@ export default {
         first: 0,
       },
       Form: {
-        kdsubmatanggaran: "",
-        kddepartemen: "",
-        tahun: "",
-        nominal: "",
+        idanggaran: "",
+        nominalawal: "",
+        nominaltopup: "",
+        penanggungjwb: "",
         keterangan: "",
-        status: 0,
-        userid: "",
       },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
@@ -462,10 +368,10 @@ export default {
   validations() {
     return {
       Form: {
-        kdsubmatanggaran: { required },
-        kddepartemen: { required },
-        tahun: { required },
-        nominal: { required },
+        idanggaran: { required },
+        nominalawal: { required },
+        nominaltopup: { required },
+        penanggungjwb: { required },
         keterangan: { required },
       },
     };
@@ -474,153 +380,45 @@ export default {
     DataTable,
     Column,
     InputText,
-    VueDatePicker,
+    // VueDatePicker,
     InputNumber,
     ValidationBtn,
   },
   computed: {
     getAllData() {
-      return this.ListTransaksi;
-    },
-    getSMataAnggaran() {
-      return this.rowSMataAnggaran;
-    },
-    getDepartemen() {
-      return this.rowDepartemen;
+      return this.ListTopUp;
     },
   },
   methods: {
-    tes() {
-      const data = this.ListTransaksi;
-      const fileName = "download";
-      const exportType = exportFromJSON.types.csv;
-
-      exportFromJSON({ data, fileName, exportType });
-    },
-    cariData() {
-      this.refreshListTable(1);
-    },
-    filterShow() {
-      this.pagination.currentPage = 1;
-      this.refreshListTable();
-    },
-    paginationTable(evt) {
-      this.pagination.first = evt.first;
-      this.pagination.perPage = evt.rows;
-      if (this.pagination.currentPage == evt.page) {
-        this.pagination.currentPage++;
-      } else if (this.pagination.currentPage - evt.page == 1) {
-        this.pagination.currentPage--;
-      } else {
-        this.pagination.currentPage = evt.page + 1;
-      }
-      this.refreshListTable();
-    },
-    async getAllDepartemen() {
-      let payload = {};
-      try {
-        let respon = await serviceDepartemen.getDataDepartemen(
-          payload,
-          this.token
-        );
-        this.rowDepartemen = respon.data.data;
-      } catch (error) {
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
-      }
-    },
-    async getSubMataAnggaran() {
-      let payload = {};
-      try {
-        let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
-          payload,
-          this.token
-        );
-        this.rowSMataAnggaran = res.data.data;
-      } catch (error) {
-        this.rowSMataAnggaran = null;
-        console.log(error);
-      }
-    },
     showInput() {
       this.Form = {
-        kdsubmatanggaran: "",
-        kddepartemen: "",
-        tahun: "",
-        nominal: "",
-        userid: "",
+        idanggaran: "",
+        nominalawal: "",
+        nominaltopup: "",
+        penanggungjwb: "",
+        keterangan: "",
       };
       const $targetEl = document.getElementById("input-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
     },
-    deleteAnggaran(data) {
-      const $targetEl = document.getElementById("delete-modal");
-      this.modal = new Modal($targetEl);
-      this.modal.show();
-      this.idKey = data.id;
-    },
     async getData() {
       this.loading = true;
       let payload = {
-        kdsubmatanggaran: this.filters.kdsubmatanggaran,
-        kddepartemen: this.userSession.departemen,
-        status: "",
+        status: this.filters.status,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
       };
       try {
-        let res = await serviceAnggaran.getTransaksi(payload, this.token);
+        let res = await serviceAnggaran.listTopUp(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
-        this.ListTransaksi = res.data.data.data;
+        this.ListTopUp = res.data.data.data;
         this.loading = false;
       } catch (error) {
-        this.ListTransaksi = null;
+        this.ListTopUp = null;
         this.loading = false;
         console.log(error);
-      }
-    },
-    async prosesInput() {
-      let Forminput = this.Form;
-      Forminput.userid = this.userSession.username;
-      Forminput.status = 0;
-      this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
-        try {
-          let respon = await serviceAnggaran.inputAnggaran(
-            Forminput,
-            this.token
-          );
-          this.modal.hide();
-          this.$swal({
-            icon: "success",
-            title: "Berhasil",
-            text: respon.data.Msg,
-            confirmButtonColor: "#e77817",
-          });
-          this.Form = {
-            kdsubmatanggaran: "",
-            kddepartemen: "",
-            tahun: "",
-            nominal: "",
-            keterangan: "",
-            status: 0,
-            userid: "",
-          };
-          this.refreshListTable(1);
-        } catch (error) {
-          this.$swal({
-            icon: "error",
-            title: "Gagal",
-            text: error.response.data.Msg,
-            confirmButtonColor: "#e77817",
-          });
-        }
       }
     },
     hideModal() {
@@ -629,7 +427,6 @@ export default {
     refreshListTable(reset = 0) {
       if (reset != 0) {
         this.pagination.first = 0;
-
         this.pagination.currentPage = 1;
       }
       this.getData();
@@ -638,39 +435,7 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
-    this.getSubMataAnggaran();
-    this.getAllDepartemen();
   },
 };
 </script>
-<style>
-.p-inputnumber input {
-  color: black !important;
-  background-color: rgba(249, 250, 251) !important;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  width: 100% !important;
-}
-.p-inputnumber input:hover {
-  border-color: rgb(219, 222, 225) !important;
-}
-.p-inputnumber input:focus {
-  border-color: #006699 !important;
-  box-shadow: none !important;
-}
-.dp__input_wrap input {
-  color: black !important;
-  background-color: rgba(249, 250, 251) !important;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  width: 100% !important;
-  height: 46px;
-}
-.dp__input_wrap input:hover {
-  border-color: rgb(219, 222, 225) !important;
-}
-.dp__input_wrap input:focus {
-  border-color: #006699 !important;
-  box-shadow: none !important;
-}
-</style>
+<style></style>

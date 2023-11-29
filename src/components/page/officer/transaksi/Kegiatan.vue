@@ -438,7 +438,7 @@ export default {
       this.refreshListTable(1);
     },
     setPreview() {
-      this.preview.nominal_sisa = this.Form.id_anggaran.nominal_kegiatan;
+      this.preview.nominal_sisa = this.Form.id_anggaran.sisa_nominal_pengajaun;
     },
     validationNominal(evt) {
       if (evt.value > this.preview.nominal_sisa) {
@@ -468,7 +468,7 @@ export default {
     async getAllAnggaran() {
       let payload = {
         idanggaran: "",
-        status: 3,
+        status: 2,
         kddepartemen: this.userSession.departemen,
       };
       try {

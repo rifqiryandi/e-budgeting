@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
@@ -62,13 +62,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="row">
     <div class="col-12 d-flex justify-content-end">
-      <button
-        class="btn d-flex btn-add"
-        @click="showInput"
-      >
+      <button class="btn d-flex btn-add" @click="showInput">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"
@@ -115,59 +112,13 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column
-              field="nama_departement"
-              header="Departemen"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div>
-                  {{ data.nama_departement }}
-                </div>
-              </template>
-            </Column>
-            <Column
-              field="nama_sub_mata_anggaran"
-              header="Sub Mata Anggaran"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
+
             <Column field="bulan" header="Bulan" style="width: 20%">
               <template #body="{ data }">
                 {{ data.bulan }}
               </template>
             </Column>
-            <Column
-              field=""
-              header="Nominal Realisasi"
-              class="text-right"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                {{ data.nominal.toLocaleString("de-DE") }}
-              </template>
-            </Column>
-            <Column
-              field=""
-              header="Nominal Asal"
-              class="text-right"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                {{ data.nominal_fy.toLocaleString("de-DE") }}
-              </template>
-            </Column>
-            <Column
-              field=""
-              header="Persentasi"
-              class="text-right"
-              style="width: 20%"
-            >
+            <Column field="" header="Persentasi" style="width: 20%">
               <template #body="{ data }">
                 {{ data.presentasi + "%" }}
               </template>
@@ -218,7 +169,7 @@
         </div>
         <!-- Modal body -->
         <div class="p-6 space-y-2">
-          <div class="">
+          <!-- <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -263,7 +214,7 @@
               class="w-full"
               disabled
             />
-          </div>
+          </div> -->
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -306,7 +257,7 @@
               Persentasi tidak boleh kosong!
             </p>
           </div>
-          <div class="">
+          <!-- <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -343,7 +294,7 @@
             >
               Sisa Nominal tidak boleh kosong!
             </p>
-          </div>
+          </div> -->
         </div>
         <!-- Modal footer -->
         <div
@@ -405,12 +356,10 @@ export default {
         totaldata: 0,
       },
       Form: {
-        id_anggaran: "",
         bulan: "",
         presentasi: "",
         userid: "",
-        nominal: "",
-        sisanominal: "",
+        tahun: "",
       },
       preview: {
         subMataAnggaran: "",
@@ -423,11 +372,9 @@ export default {
   validations() {
     return {
       Form: {
-        id_anggaran: { required },
         bulan: { required },
         presentasi: { required },
-        nominal: { required },
-        sisanominal: { required },
+        tahun: { required },
       },
     };
   },
@@ -472,15 +419,22 @@ export default {
       this.Form.sisanominal = Number(this.preview.nominal) - nominalPersentasi;
     },
     calculationNominal(evt) {
-      let kaliValue;
+      // let kaliValue;
       if (evt.value > 100) {
-        kaliValue = 100;
+        this.Form.presentasi = 100;
+        return this.$swal({
+          icon: "info",
+          title: "Pemberitahuan",
+          text: "Tidak boleh lebih dari 100%",
+          confirmButtonColor: "#e77817",
+        });
       } else {
-        kaliValue = evt.value;
+        this.Form.presentasi = evt.value;
       }
-      let bagiNominal = this.Form.id_anggaran.susunan_anggaran / 100;
-      this.Form.nominal = bagiNominal * kaliValue;
-      this.calculationSisa(this.Form.nominal);
+
+      // let bagiNominal = this.Form.id_anggaran.susunan_anggaran / 100;
+      // this.Form.nominal = bagiNominal * kaliValue;
+      // this.calculationSisa(this.Form.nominal);
     },
     async getAllAnggaran() {
       let payload = {
@@ -489,7 +443,6 @@ export default {
       try {
         let res = await serviceAnggaran.getIdAnggaran(payload, this.token);
         this.rowAnggaran = res.data.data;
-        console.log(this.rowAnggaran);
       } catch (error) {
         console.log(error);
       }
@@ -526,24 +479,17 @@ export default {
     },
 
     showInput() {
-      this.preview = {
-        subMataAnggaran: "",
-        nominal: "",
-      };
       this.Form = {
-        id_anggaran: "",
         bulan: "",
         presentasi: "",
         userid: "",
-        nominal: "",
+        tahun: "",
       };
       const $targetEl = document.getElementById("input-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
     },
     showPreview() {
-      //   toLocaleString("de-DE")
-      console.log(this.Form.id_anggaran);
       this.preview = {
         nominal: this.Form.id_anggaran.susunan_anggaran,
       };
@@ -551,9 +497,6 @@ export default {
     async getData() {
       this.loading = true;
       let payload = {
-        kdsubmatanggaran: this.filters.kdsubmatanggaran,
-        kddepartemen: this.filters.kddepartemen,
-        status: "",
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
@@ -575,13 +518,15 @@ export default {
     async prosesInput() {
       let Forminput = this.Form;
       Forminput.userid = this.userSession.username;
-      Forminput.id_anggaran = Forminput.id_anggaran.id;
+      Forminput.tahun = this.Form.bulan.year.toString();
       let addMonth = this.Form.bulan.month + 1;
+      console.log(this.Form.bulan);
       if (addMonth >= 10) {
         Forminput.bulan = addMonth.toString();
       } else {
         Forminput.bulan = "0" + addMonth.toString();
       }
+      // console.log(Forminput);
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         try {
@@ -597,11 +542,10 @@ export default {
             confirmButtonColor: "#e77817",
           });
           this.Form = {
-            id_anggaran: "",
             bulan: "",
             presentasi: "",
             userid: "",
-            nominal: "",
+            tahun: "",
           };
           this.refreshListTable();
           this.getAllAnggaran();
@@ -635,7 +579,6 @@ export default {
 };
 </script>
 <style>
-
 .p-inputnumber input {
   color: black !important;
   background-color: rgba(249, 250, 251) !important;

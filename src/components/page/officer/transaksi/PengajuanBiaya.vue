@@ -24,6 +24,23 @@
                 </option>
               </select>
             </div>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Jenis Pengajuan
+              </label>
+              <select
+                v-model="filters.jenis_pengajuan"
+                class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                style="height: 50px"
+              >
+                <option value="">-- Pilih Jenis Beban --</option>
+                <option value="PBI">Beban Reguler</option>
+                <option value="PK">Beban Komitmen</option>
+                <!-- <option value="PB">Pengajuan Baru</option> -->
+              </select>
+            </div>
           </div>
           <button
             class="btn w-full mt-3"
@@ -58,7 +75,7 @@
         </svg>
         Pengajuan Biaya
       </button>
-      <button class="btn d-flex btn-add ml-2" @click="showInputBaru">
+      <!-- <button class="btn d-flex btn-add ml-2" @click="showInputBaru" >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"
@@ -70,7 +87,7 @@
           />
         </svg>
         Pengajuan Baru
-      </button>
+      </button> -->
     </div>
   </div>
   <div class="row mt-3">
@@ -133,6 +150,13 @@
                 {{ data.tahun }}
               </template>
             </Column>
+            <Column field="" header="Jenis Pengajuan" style="width: 20%">
+              <template #body="{ data }">
+                {{ data.jenis_pengajuan }}
+              </template>
+            </Column>
+            
+
             <Column field="" header="Status" style="width: 20%">
               <template #body="{ data }">
                 <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
@@ -169,10 +193,12 @@
   >
     <div class="relative w-full max-w-4xl max-h-full">
       <!-- Modal content -->
-      <div class="relative w-full max-w-4xl bg-white rounded-lg shadow dark:bg-gray-700">
+      <div
+        class="relative w-full max-w-4xl bg-white rounded-lg shadow dark:bg-gray-700"
+      >
         <!-- Modal header -->
         <div
-          class=" flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
+          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
             Pengajuan Biaya
@@ -211,10 +237,11 @@
             <select
               v-model="Form.jnspengajuan"
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              style="height: 50px"
             >
-              <option value="">-- Pilih Jenis Pengajuan --</option>
-              <option value="PBI">Pengajuan Biasa</option>
-              <option value="PK">Pengajuan Komitmen</option>
+              <option value="">-- Pilih Jenis Beban --</option>
+              <option value="PBI">Beban Reguler</option>
+              <option value="PK">Beban Komitmen</option>
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -227,13 +254,14 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kegiatan <span class="text-red-600">*</span>
+              Beban Opex <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.id_kegiatan"
               @change="setPreview"
               :disabled="Form.jnspengajuan == ''"
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              style="height: 50px"
             >
               <option value="">-- Pilih Kegiatan --</option>
               <option
@@ -242,8 +270,6 @@
                 :value="item"
               >
                 {{
-                  item.nama_departement +
-                  " - " +
                   item.nama_sub_mata_anggaran +
                   " - " +
                   item.nominal.toLocaleString("de-DE")
@@ -384,7 +410,7 @@
   <div
     id="input-modal-baru"
     tabindex="-1"
-    class="fixed  mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto top-10 bottom-10 left-0 right-0 h-[calc(100%-1rem)] max-h-full"
+    class="fixed mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto top-10 bottom-10 left-0 right-0 h-[calc(100%-1rem)] max-h-full"
   >
     <div class="relative w-full max-w-4xl max-h-full">
       <!-- Modal content -->
@@ -428,9 +454,10 @@
               Anggaran <span class="text-red-600">*</span>
             </label>
             <select
-              v-model="FormAddon.id_anggaran"
+              v-model="FormPB.id_anggaran"
               @change="setPreviewKegiatan"
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              style="height: 50px"
             >
               <option value="">-- Pilih Anggaran --</option>
               <option
@@ -438,18 +465,12 @@
                 :key="index"
                 :value="item"
               >
-                {{
-                  item.nama_departement +
-                  " - " +
-                  item.nama_sub_mata_anggaran +
-                  " - " +
-                  item.nominal.toLocaleString("de-DE")
-                }}
+                {{ item.nama_sub_mata_anggaran }}
               </option>
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormAddon.id_anggaran.$error"
+              v-if="this.v$.FormPB.id_anggaran.$error"
             >
               Anggaran tidak boleh kosong!
             </p>
@@ -471,18 +492,38 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kegiatan <span class="text-red-600">*</span>
+              Nominal Kegiatan<span class="text-red-600">*</span>
+            </label>
+            <InputNumber
+              v-model="FormPB.nominal_kegiatan"
+              placeholder="Masukkan Nominal"
+              class="w-full"
+              @input="validationNominalPB"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormPB.nominal_kegiatan.$error"
+            >
+              Nominal tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Uraian Kegiatan <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="base-input"
-              v-model="FormAddon.kegiatan"
-              placeholder="Masukkan Kegiatan"
+              v-model="FormPB.uraian_kegiatan"
+              placeholder="Masukkan Urain Kegiatan"
               class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              style="height: 50px"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormAddon.kegiatan.$error"
+              v-if="this.v$.FormPB.uraian_kegiatan.$error"
             >
               Kegiatan tidak boleh kosong!
             </p>
@@ -495,14 +536,14 @@
             </label>
             <VueDatePicker
               placeholder="Pilih Bulan"
-              v-model="FormAddon.bulan"
+              v-model="FormPB.bulan_pengajuan"
               format="MMMM/yyyy"
               auto-apply
               month-picker
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormAddon.bulan.$error"
+              v-if="this.v$.FormPB.bulan_pengajuan.$error"
             >
               Bulan tidak boleh kosong!
             </p>
@@ -511,49 +552,19 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Nominal <span class="text-red-600">*</span>
-            </label>
-            <InputNumber
-              v-model="FormAddon.nominal"
-              placeholder="Masukkan Nominal"
-              class="w-full"
-              @input="validationNominal"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormAddon.nominal.$error"
-            >
-              Nominal tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Sisa Anggaran
-            </label>
-            <InputNumber
-              v-model="Form.sisa_nominal"
-              placeholder="Masukkan Sisa anggaran"
-              class="w-full"
-              disabled
-            />
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
               Nominal Pengajuan biaya<span class="text-red-600">*</span>
             </label>
             <InputNumber
-              v-model="Form.nominal"
+              v-model="FormPB.nominal_pengajuan"
               placeholder="Masukkan Nominal"
               class="w-full"
-              @input="validationNominal"
+              @input="validationNominalPBPengajuan"
+              :disabled="FormPB.nominal_kegiatan == 0"
+              style="height: 50px"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nominal.$error"
+              v-if="this.v$.FormPB.nominal_pengajuan.$error"
             >
               Nominal tidak boleh kosong!
             </p>
@@ -592,7 +603,7 @@
         >
           <button
             type="button"
-            @click="prosesInput"
+            @click="prosesInputPB"
             class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
             SIMPAN
@@ -664,12 +675,15 @@ export default {
         sisa_nominal: "",
         bulan_pengajuan: "",
       },
-      FormAddon: {
+      FormPB: {
         id_anggaran: "",
-        kegiatan: "",
-        nominal: "",
-        bulan: "",
+        jnspengajuan: "PB",
+        nominal_kegiatan: "",
         userid: "",
+        nominal_pengajuan: "",
+        uraian_kegiatan: "",
+        sisa_nominal: "",
+        bulan_pengajuan: "",
       },
       preview: {
         nominal_sisa: "",
@@ -697,11 +711,12 @@ export default {
         uraian_kegiatan: { required },
         bulan_pengajuan: { required },
       },
-      FormAddon: {
+      FormPB: {
         id_anggaran: { required },
-        kegiatan: { required },
-        nominal: { required },
-        bulan: { required },
+        nominal_kegiatan: { required },
+        nominal_pengajuan: { required },
+        uraian_kegiatan: { required },
+        bulan_pengajuan: { required },
       },
       Upload: {
         file: { required },
@@ -724,7 +739,6 @@ export default {
       return this.rowSMataAnggaran;
     },
     getKegiatan() {
-      console.log(this.rowKegiatan);
       return this.rowKegiatan;
     },
     getAnggaran() {
@@ -733,9 +747,8 @@ export default {
   },
   methods: {
     setPreviewKegiatan() {
-      // console.log(this.FormAddon.id_anggaran.nominal_kegiatan);
       this.preview.nominal_sisa_kegiatan =
-        this.FormAddon.id_anggaran.nominal_kegiatan;
+        this.FormPB.id_anggaran.sisa_nominal_pengajaun;
     },
     setFileUpload(evt) {
       this.Upload.file = evt.files[0];
@@ -745,20 +758,40 @@ export default {
         this.$swal({
           icon: "info",
           title: "INFO",
+          text: "Nominal kegiatan tidak boleh lebih dari sisa anggaran",
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
+    validationNominalPB(evt) {
+      if (evt.value > this.preview.nominal_sisa_kegiatan) {
+        this.$swal({
+          icon: "info",
+          title: "INFO",
           text: "Nominal tidak boleh lebih dari sisa anggaran",
           confirmButtonColor: "#e77817",
         });
       }
     },
+    validationNominalPBPengajuan(evt) {
+      if (evt.value > this.FormPB.nominal_kegiatan) {
+        this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal pengajuan tidak boleh lebih dari nominal kegiatan",
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
     setPreview() {
-      this.Form.sisa_nominal =
+      this.Form.sisa_nominal = 
         this.Form.id_kegiatan.sisa_nominal_pengajuan == null
           ? this.Form.id_kegiatan.nominal_anggaran
           : this.Form.id_kegiatan.sisa_nominal_pengajuan;
       this.Form.nominal =
-        this.Form.id_kegiatan.sisa_nominal_pengajuan == null
-          ? this.Form.id_kegiatan.nominal_anggaran
-          : this.Form.id_kegiatan.sisa_nominal_pengajuan;
+        this.Form.id_kegiatan.nominal == null
+          ? this.Form.id_kegiatan.nominal
+          : this.Form.id_kegiatan.nominal;
     },
     cariData() {
       this.refreshListTable(1);
@@ -779,15 +812,17 @@ export default {
       this.refreshListTable();
     },
     async getAllAnggaran() {
+      this.rowAnggaran = null;
       let payload = {
         idanggaran: "",
-        status: 3,
+        status: 2,
         kddepartemen: this.userSession.departemen,
       };
       try {
         let res = await serviceAnggaran.getIdAnggaran(payload, this.token);
         this.rowAnggaran = res.data.data;
       } catch (error) {
+        this.rowAnggaran = null;
         console.log(error);
       }
     },
@@ -813,7 +848,6 @@ export default {
       try {
         let res = await serviceAnggaran.getKegiatan(payload, this.token);
         this.rowKegiatan = res.data.data;
-        console.log(this.rowKegiatan);
       } catch (error) {
         this.rowKegiatan = null;
         console.log(error);
@@ -856,7 +890,7 @@ export default {
         kddepartemen: this.userSession.departemen,
         status_anggaran: "",
         status_pengajuan: "",
-        jenis_pengajuan: "",
+        jenis_pengajuan: this.filters.jenis_pengajuan,
         status: "",
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
@@ -887,7 +921,16 @@ export default {
           confirmButtonColor: "#e77817",
         });
       }
+      if (this.Form.sisa_nominal == 0) {
+        return this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Sisa Anggaran tidak boleh kosong",
+          confirmButtonColor: "#e77817",
+        });
+      }
       Forminput.userid = this.userSession.username;
+      this.v$.$validate();
       // Set File Upload value
       if (!this.v$.Form.$error) {
         formData.append("myFile", Upload.file);
@@ -900,68 +943,154 @@ export default {
         formData.append("jnspengajuan", Forminput.jnspengajuan);
       }
 
-      this.v$.$validate(); // checks all inputs
+      // checks all inputs
       if (!this.v$.Form.jnspengajuan.$error) {
-        if (Forminput.jnspengajuan != "PB") {
-          if (!this.v$.Form.$error && !this.v$.Upload.$error) {
-            let addMonth = this.Form.bulan_pengajuan.month + 1;
-            if (addMonth >= 10) {
-              Forminput.bulan_pengajuan = addMonth.toString();
-            } else {
-              Forminput.bulan_pengajuan = "0" + addMonth.toString();
-            }
-            Forminput.sisa_nominal =
-              Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
-            Forminput.id_anggaran =
-              this.Form.id_kegiatan.id_anggaran.toLocaleString();
-            Forminput.id_kegiatan = this.Form.id_kegiatan.id.toLocaleString();
-            try {
-              let respon = await serviceAnggaran.inputPengajuanBiaya(
-                Forminput,
-                this.token
-              );
-              formData.append("idpengajuan", respon.data.idpengajuan);
-              await serviceFile.uploadFile(formData, this.token);
-              this.modal.hide();
-              this.$swal({
-                icon: "success",
-                title: "Berhasil",
-                text: respon.data.Msg,
-                confirmButtonColor: "#e77817",
-              }).then(() => {
-                this.Form = {
-                  id_anggaran: "",
-                  jnspengajuan: "",
-                  id_kegiatan: "",
-                  nominal: "",
-                  userid: "",
-                  uraian_kegiatan: "",
-                  sisa_nominal: "",
-                };
-                this.Upload = {
-                  file: null,
-                  rubrik: "",
-                  kdsubmatanggaran: "",
-                  nominal: "",
-                  jnspengajuan: "",
-                  idpengajuan: "",
-                };
-                this.refreshListTable();
-              });
-
-              // this.getAllAnggaran();
-            } catch (error) {
-              console.log(error);
-              this.$swal({
-                icon: "error",
-                title: "Gagal",
-                text: error.response.data.Msg,
-                confirmButtonColor: "#e77817",
-              });
-            }
+        if (!this.v$.Form.$error && !this.v$.Upload.$error) {
+          let addMonth = this.Form.bulan_pengajuan.month + 1;
+          if (addMonth >= 10) {
+            Forminput.bulan_pengajuan = addMonth.toString();
+          } else {
+            Forminput.bulan_pengajuan = "0" + addMonth.toString();
           }
+          Forminput.sisa_nominal =
+            Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
+          Forminput.id_anggaran =
+            this.Form.id_kegiatan.id_anggaran.toLocaleString();
+          Forminput.id_kegiatan = this.Form.id_kegiatan.id.toLocaleString();
+          try {
+            let respon = await serviceAnggaran.inputPengajuanBiaya(
+              Forminput,
+              this.token
+            );
+            formData.append("idpengajuan", respon.data.idpengajuan);
+            await serviceFile.uploadFile(formData, this.token);
+            this.modal.hide();
+            this.$swal({
+              icon: "success",
+              title: "Berhasil",
+              text: respon.data.Msg,
+              confirmButtonColor: "#e77817",
+            }).then(() => {
+              this.Form = {
+                id_anggaran: "",
+                jnspengajuan: "",
+                id_kegiatan: "",
+                nominal: "",
+                userid: "",
+                uraian_kegiatan: "",
+                sisa_nominal: "",
+              };
+              this.Upload = {
+                file: null,
+                rubrik: "",
+                kdsubmatanggaran: "",
+                nominal: "",
+                jnspengajuan: "",
+                idpengajuan: "",
+              };
+              this.refreshListTable(0);
+              this.getAllAnggaran();
+            });
+
+            // this.getAllAnggaran();
+          } catch (error) {
+            this.$swal({
+              icon: "error",
+              title: "Gagal",
+              text: error.response.data.Msg,
+              confirmButtonColor: "#e77817",
+            });
+          }
+        }
+      }
+    },
+    async prosesInputPB() {
+      let formData = new FormData();
+      let Forminput = this.FormPB;
+      let Upload = this.Upload;
+      Forminput.userid = this.userSession.username;
+      if (Forminput.nominal_kegiatan > this.preview.nominal_sisa_kegiatan) {
+        return this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal kegiatan tidak boleh lebih dari sisa anggaran",
+          confirmButtonColor: "#e77817",
+        });
+      }
+      if (Forminput.nominal_pengajuan > this.FormPB.nominal_kegiatan) {
+        return this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal pengajuan tidak boleh lebih dari nominal kegiatan",
+          confirmButtonColor: "#e77817",
+        });
+      }
+
+      this.v$.$validate();
+      if (!this.v$.FormPB.$error && !this.v$.Upload.$error) {
+        formData.append("myFile", Upload.file);
+        formData.append("rubrik", Forminput.id_anggaran.kode_departemen);
+        formData.append(
+          "kdsubmatanggaran",
+          Forminput.id_anggaran.kode_sub_mata_anggaran
+        );
+        formData.append("nominal", Forminput.nominal_pengajuan);
+        formData.append("jnspengajuan", Forminput.jnspengajuan);
+
+        Forminput.sisa_nominal =
+          this.preview.nominal_sisa_kegiatan - Forminput.nominal_pengajuan;
+        Forminput.id_anggaran = Forminput.id_anggaran.id;
+        let addMonth = this.FormPB.bulan_pengajuan.month + 1;
+        if (addMonth >= 10) {
+          Forminput.bulan_pengajuan = addMonth.toString();
         } else {
-          console.log(this.FormAddon);
+          Forminput.bulan_pengajuan = "0" + addMonth.toString();
+        }
+        try {
+          let respon = await serviceAnggaran.inputPengajuanPB(
+            Forminput,
+            this.token
+          );
+          formData.append("idpengajuan", respon.data.idpengajuan);
+          await serviceFile.uploadFile(formData, this.token);
+          this.modal.hide();
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: respon.data.Msg,
+            confirmButtonColor: "#e77817",
+          }).then(() => {
+            this.FormPB = {
+              id_anggaran: "",
+              jnspengajuan: "PB",
+              nominal_kegiatan: "",
+              userid: "",
+              nominal_pengajuan: "",
+              uraian_kegiatan: "",
+              sisa_nominal: "",
+              bulan_pengajuan: "",
+            };
+            this.Upload = {
+              file: null,
+              rubrik: "",
+              kdsubmatanggaran: "",
+              nominal: "",
+              jnspengajuan: "",
+              idpengajuan: "",
+            };
+            // this.refreshListTable(0);
+            this.pagination.currentPage = 1;
+            this.getData();
+            this.getAllAnggaran();
+          });
+        } catch (error) {
+          console.log(error);
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
         }
       }
     },
@@ -1028,4 +1157,54 @@ export default {
   font-style: normal;
   font-weight: 700;
 }
+
+.dp__pointer {
+  height: 50px !important;
+}
+/* .p-fileupload-choose {
+  box-shadow: none;
+  border: none;
+  border-radius: 6px;
+  background: #ff3300;
+  color: #ffff;
+  height: 48px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  box-shadow: inset 0 0 0 0 #ffff;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+}
+.p-fileupload-choose:hover {
+  border-color: #ff3300 !important;
+  color: #ff3300 !important;
+  box-shadow: inset 0 0 0 50px #ffff;
+}
+.p-fileupload-choose:focus {
+  border-color: #ff3300 !important;
+  color: #ff3300 !important;
+  box-shadow: inset 0 0 0 50px #ffff;
+}
+
+
+
+.p-focus {
+  box-shadow: none;
+  border: none;
+  border-radius: 6px;
+  background: #ff3300;
+  color: #ffff;
+  height: 48px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  box-shadow: inset 0 0 0 0 #ffff;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+}
+.p-focus:hover {
+  border-color: #ff3300 !important;
+  color: #ff3300 !important;
+  box-shadow: inset 0 0 0 50px #ffff;
+} */
 </style>

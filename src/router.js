@@ -32,10 +32,10 @@ switch (namaAkses) {
         component: () => import("./components/page/superadmin/transaksi/PersentasiAnggaran.vue"),
       },
       {
-        path: "/tes",
-        alias: "/tes",
-        name: "",
-        component: () => import("./components/utils/ValidationBtn.vue"),
+        path: "/topupanggaran",
+        alias: "/topupanggaran",
+        name: "Top Up Anggaran",
+        component: () => import("./components/page/superadmin/transaksi/TopUpAnggaran.vue"),
       },
 
     ];
@@ -135,6 +135,25 @@ switch (namaAkses) {
         name: "Pengajuan Retur",
         component: () => import("./components/page/officer/transaksi/PengajuanRetur.vue"),
       },
+      {
+        path: "/switchSubMataAnggaran",
+        alias: "/switchSubMataAnggaran",
+        name: "Switch Sub Mata Anggaran",
+        component: () => import("./components/page/officer/transaksi/SwitchAnggaranSubMata.vue"),
+      },
+      {
+        path: "/switchDepartemen",
+        alias: "/switchDepartemen",
+        name: "Switch Anggaran Antar Departemen",
+        component: () => import("./components/page/officer/transaksi/SwitchAnggaranDepartemen.vue"),
+      },
+      {
+        path: "/topupanggaran",
+        alias: "/topupanggaran",
+        name: "Top Up Anggaran",
+        component: () => import("./components/page/officer/transaksi/TopUpAnggaran.vue"),
+      },
+
 
     ];
     break;
@@ -174,6 +193,12 @@ switch (namaAkses) {
         alias: "/validasiPengajuanKomitmen",
         name: "Validasi Pengajuan Komitmen",
         component: () => import("./components/page/departemenHead/transaksi/ValidasiPengajuanKomitmen.vue"),
+      },
+      {
+        path: "/topupanggaran",
+        alias: "/topupanggaran",
+        name: "Top Up Anggaran",
+        component: () => import("./components/page/departemenHead/transaksi/TopUpAnggaran.vue"),
       },
 
     ];

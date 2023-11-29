@@ -248,7 +248,7 @@
             </div>
             <div class>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Sisa Anggaran</p>
+                <p class="text-lg font-semibold mb-0">Nominal Anggaran FY</p>
                 <p class="text-base">
                   {{
                     Detail.nominal != undefined
@@ -258,7 +258,18 @@
                 </p>
               </div>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Nominal yang di ajukan</p>
+                <p class="text-lg font-semibold mb-0">Sisa Anggaran</p>
+                <p class="text-base">
+                  {{
+                    Detail.sisanominal_pengajuan != undefined
+                      ? "Rp." + Detail.sisanominal_pengajuan.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+              
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Nominal yang diajukan</p>
                 <p class="text-base">
                   {{
                     Detail.nominal_pengajuan != undefined

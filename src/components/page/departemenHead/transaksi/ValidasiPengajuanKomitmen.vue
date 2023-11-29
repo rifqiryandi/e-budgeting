@@ -234,7 +234,7 @@
             </div>
             <div class>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Anggaran Asal</p>
+                <p class="text-lg font-semibold mb-0">Komitmen Anggaran</p>
                 <p class="text-base">
                   {{
                     Detail.nominal_pengajuan != undefined
@@ -244,17 +244,9 @@
                 </p>
               </div>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Sisa Anggaran</p>
-                <p class="text-base">
-                  {{
-                    Detail.sisa_realisasi != undefined
-                      ? "Rp." + Detail.sisa_realisasi.toLocaleString("de-DE")
-                      : ""
-                  }}
+                <p class="text-lg font-semibold mb-0">
+                  Nominal Pengajuan Komitmen
                 </p>
-              </div>
-              <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Nominal yang di ajukan</p>
                 <p class="text-base">
                   {{
                     Detail.nominal_realisasi != undefined
@@ -263,6 +255,17 @@
                   }}
                 </p>
               </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Sisa Komitmen Anggaran</p>
+                <p class="text-base">
+                  {{
+                    Detail.sisa_realisasi != undefined
+                      ? "Rp." + Detail.sisa_realisasi.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Status</p>
                 <div class="label-nonAktif" v-if="Detail.status_pengajuan == 0">

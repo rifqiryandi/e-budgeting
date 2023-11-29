@@ -221,8 +221,6 @@
                 :value="item"
               >
                 {{
-                  item.nama_departement +
-                  " - " +
                   item.nama_sub_mata_anggaran +
                   " - " +
                   item.nominal_pengajuan.toLocaleString("de-DE")
@@ -356,11 +354,20 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
+              Alasan 
+            </label>
+            {{Detail.alasan}}
+            
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
               Pengajuan Biaya <span class="text-red-600">*</span>
             </label>
             <select
               v-model="FormRetur.id_pengajuan"
-              @change="setPreview"
+              @change="setPreviewRetur"
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">-- Pilih Pengajuan Biaya --</option>
@@ -428,7 +435,7 @@
               v-model="FormRetur.nominal"
               placeholder="Masukkan Nominal"
               class="w-full"
-              @input="validationNominal"
+              @input="validationNominalRetur"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -514,6 +521,9 @@ export default {
         id: "",
         bulan_kegiatan: "",
       },
+      Detail:{
+        alasan : ""
+      },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
@@ -568,11 +578,61 @@ export default {
     },
   },
   methods: {
-    proesInputRetur() {
+    async proesInputRetur() {
       let FormData = this.FormRetur;
+      if (FormData.nominal > FormData.sisa_nominal) {
+        return this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal tidak boleh lebih dari sisa anggaran",
+          confirmButtonColor: "#e77817",
+        });
+      }
+      let idPengajuan = FormData.id_pengajuan.id_pengajuan;
+      FormData.id_pengajuan = "";
+      FormData.id_pengajuan = idPengajuan;
       this.v$.$validate(); // checks all inputs
       if (!this.v$.FormRetur.$error) {
-        console.log(FormData);
+        let addMonth = this.FormRetur.bulan_kegiatan.month + 1;
+        if (addMonth >= 10) {
+          FormData.bulan_kegiatan = addMonth.toString();
+        } else {
+          FormData.bulan_kegiatan = "0" + addMonth.toString();
+        }
+        FormData.sisa_nominal =
+          Number(this.FormRetur.sisa_nominal) - Number(this.FormRetur.nominal);
+        if (FormData.sisa_nominal == 0) {
+          FormData.cek = "habis";
+        }
+        try {
+          let respon = await serviceAnggaran.inputReturPK(FormData, this.token);
+          this.modal.hide();
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: respon.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+          this.FormRetur = {
+            id_pengajuan: "",
+            nominal: "",
+            cek: "",
+            sisa_nominal: "",
+            id_anggaran: "",
+            id: "",
+            bulan_kegiatan: "",
+          };
+          this.refreshListTable();
+          this.getRowPengajuanPK();
+          console.log(FormData);
+        } catch (error) {
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+        }
       }
     },
     showInputRetur(data) {
@@ -585,6 +645,9 @@ export default {
         id: data.id_pk,
         bulan_kegiatan: "",
       };
+      this.Detail = {
+        alasan : data.alasan
+      }
       const $targetEl = document.getElementById("retur-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
@@ -592,8 +655,21 @@ export default {
     setPreview() {
       this.Form.sisa_nominal = this.Form.id_pengajuan.sisa_nominal;
     },
+    setPreviewRetur() {
+      this.FormRetur.sisa_nominal = this.FormRetur.id_pengajuan.sisa_nominal;
+    },
     validationNominal(evt) {
       if (evt.value > this.Form.sisa_nominal) {
+        this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal tidak boleh lebih dari sisa anggaran",
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
+    validationNominalRetur(evt) {
+      if (evt.value > this.FormRetur.sisa_nominal) {
         this.$swal({
           icon: "info",
           title: "INFO",
@@ -707,7 +783,7 @@ export default {
         Forminput.sisa_nominal =
           Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
         if (Forminput.sisa_nominal == 0) {
-          Forminput.cek = "habis"
+          Forminput.cek = "habis";
         }
         try {
           let respon = await serviceAnggaran.inputPengajuanPK(

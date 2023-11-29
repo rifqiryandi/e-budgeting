@@ -12,11 +12,14 @@ import { integer } from "@vuelidate/validators";
 import ToggleButton from "primevue/togglebutton";
 import serviceTrans from "../../services/Transaction.service";
 export default {
-  name: "validation button",
+  name: "validation button top up",
   props: {
     nilaiStatus: integer,
     keyid: integer,
     num: integer,
+    nominal: integer,
+    nominalTopup: integer,
+    idtopUp: integer,
   },
   data() {
     return {
@@ -34,19 +37,21 @@ export default {
         } else {
           return true;
         }
-      } else if (this.namaAkses == "Officer") {
+      }
+      // else if (this.namaAkses == "Officer") {
+      //   if (this.checked == 0) {
+      //     return this.nilaiStatus == 0
+      //       ? true
+      //       : this.nilaiStatus == 1
+      //       ? false
+      //       : true;
+      //   } else {
+      //     return true;
+      //   }
+      // }
+      else {
         if (this.checked == 0) {
-          return this.nilaiStatus == 0
-            ? true
-            : this.nilaiStatus == 1
-            ? false
-            : true;
-        } else {
-          return true;
-        }
-      } else {
-        if (this.checked == 0) {
-          return this.nilaiStatus == 9 ? false : true;
+          return this.nilaiStatus == 1 ? false : true;
         } else {
           return true;
         }
@@ -56,27 +61,29 @@ export default {
       if (this.namaAkses == "Superadmin") {
         return this.nilaiStatus == 1
           ? "Tervalidasi Level 1"
-          : this.nilaiStatus == 9
+          : this.nilaiStatus == 2
           ? "Tervalidasi Level 2"
           : this.nilaiStatus == 0
           ? "Tervalidasi Level 1"
-          : "Tervalidasi Level 3";
-      } else if(this.namaAkses == "Officer"){
-        return this.nilaiStatus == 1
-          ? "Tervalidasi Level 2"
-          : this.nilaiStatus == 9
-          ? "Tervalidasi Level 2"
-          : this.nilaiStatus == 0
-          ? "Belum di proses level 1"
-          : "Tervalidasi Level 3";
-      }else{
+          : "Tervalidasi Level 2";
+      }
+      // else if (this.namaAkses == "Officer") {
+      //   return this.nilaiStatus == 1
+      //     ? "Tervalidasi Level 2"
+      //     : this.nilaiStatus == 2
+      //     ? "Tervalidasi Level 2"
+      //     : this.nilaiStatus == 0
+      //     ? "Belum di proses level 1"
+      //     : "Tervalidasi Level 3";
+      // }
+      else {
         return this.nilaiStatus == 1
           ? "Belum di proses level 2"
           : this.nilaiStatus == 2
-          ? "Tervalidasi Level 3"
+          ? "Tervalidasi Level 2"
           : this.nilaiStatus == 0
           ? "Belum di proses level 1"
-          : "Tervalidasi Level 3";
+          : "Tervalidasi Level 2";
       }
     },
     getLabelFalse() {
@@ -93,16 +100,18 @@ export default {
         case "Superadmin":
           status = 1;
           break;
-        case "Officer":
-          status = 9;
-          break;
+        // case "Officer":
+        //   status = 2;
+        //   break;
         case "Departemen Head":
           status = 2;
           break;
       }
       let payload = {
-        id_anggaran: this.keyid,
+        id_topup: this.idtopUp,
         status: status,
+        nominal: this.nominal + this.nominalTopup,
+        id_anggaran: this.keyid,
       };
       this.$swal({
         icon: "question",
@@ -121,10 +130,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            let respon = await serviceTrans.validasiAlokasi(
-              payload,
-              this.token
-            );
+            let respon = await serviceTrans.validasiTopUp(payload, this.token);
             this.checked++;
             this.responBerhasil(respon);
           } catch (error) {
@@ -142,6 +148,12 @@ export default {
         title: "Berhasil",
         text: respon.data.Msg,
         confirmButtonColor: "#e77817",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (this.namaAkses == "Departemen Head") {
+            return location.reload();
+          }
+        }
       });
     },
     async responError(error) {

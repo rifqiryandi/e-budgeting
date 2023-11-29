@@ -247,6 +247,25 @@
               </li>
               <li class="nav-item nav-style">
                 <router-link
+                  to="/topupanggaran"
+                  :class="NamePage == 'Top Up Anggaran' ? Active : notActive"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M549.999-451.539q-41.922 0-70.96-29.038-29.038-29.038-29.038-70.961 0-41.922 29.038-70.96 29.038-29.038 70.96-29.038 41.923 0 70.961 29.038 29.038 29.038 29.038 70.96 0 41.923-29.038 70.961-29.038 29.038-70.961 29.038ZM286.154-327.693q-29.826 0-51.067-21.24-21.24-21.24-21.24-51.067v-303.076q0-29.826 21.24-51.067 21.241-21.24 51.067-21.24h527.69q29.827 0 51.067 21.24 21.24 21.241 21.24 51.067V-400q0 29.827-21.24 51.067t-51.067 21.24h-527.69Zm59.999-59.998h407.693q0-29.923 21.24-51.115 21.24-21.193 51.067-21.193v-183.078q-29.923 0-51.115-21.24-21.192-21.241-21.192-51.067H346.153q0 29.923-21.24 51.115-21.241 21.192-51.067 21.192v183.078q29.923 0 51.115 21.241 21.192 21.24 21.192 51.067Zm420.768 199.997H146.156q-29.827 0-51.067-21.241-21.24-21.24-21.24-51.066v-396.151h59.998v396.151q0 4.615 3.847 8.462 3.846 3.846 8.462 3.846h620.765v59.999ZM286.154-387.691h-12.308V-715.384h12.308q-5 0-8.654 3.654t-3.654 8.654V-400q0 5 3.654 8.654 3.654 3.655 8.654 3.655Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Validasi Top Up Anggaran</p>
+                </router-link>
+              </li>
+              <li class="nav-item nav-style">
+                <router-link
                   to="/persenAnggaran"
                   :class="
                     NamePage == 'Persentasi Anggaran' ? Active : notActive
@@ -297,6 +316,25 @@
                   <p style="color: #1e1e1e">Anggaran</p>
                 </router-link>
               </li>
+              <!-- <li class="nav-item nav-style">
+                <router-link
+                  to="/topupanggaran"
+                  :class="NamePage == 'Top Up Anggaran' ? Active : notActive"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M549.999-451.539q-41.922 0-70.96-29.038-29.038-29.038-29.038-70.961 0-41.922 29.038-70.96 29.038-29.038 70.96-29.038 41.923 0 70.961 29.038 29.038 29.038 29.038 70.96 0 41.923-29.038 70.961-29.038 29.038-70.961 29.038ZM286.154-327.693q-29.826 0-51.067-21.24-21.24-21.24-21.24-51.067v-303.076q0-29.826 21.24-51.067 21.241-21.24 51.067-21.24h527.69q29.827 0 51.067 21.24 21.24 21.241 21.24 51.067V-400q0 29.827-21.24 51.067t-51.067 21.24h-527.69Zm59.999-59.998h407.693q0-29.923 21.24-51.115 21.24-21.193 51.067-21.193v-183.078q-29.923 0-51.115-21.24-21.192-21.241-21.192-51.067H346.153q0 29.923-21.24 51.115-21.241 21.192-51.067 21.192v183.078q29.923 0 51.115 21.241 21.192 21.24 21.192 51.067Zm420.768 199.997H146.156q-29.827 0-51.067-21.241-21.24-21.24-21.24-51.066v-396.151h59.998v396.151q0 4.615 3.847 8.462 3.846 3.846 8.462 3.846h620.765v59.999ZM286.154-387.691h-12.308V-715.384h12.308q-5 0-8.654 3.654t-3.654 8.654V-400q0 5 3.654 8.654 3.654 3.655 8.654 3.655Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">History Top Up Anggaran</p>
+                </router-link>
+              </li> -->
               <li class="nav-item nav-style">
                 <router-link
                   to="/kegiatan"
@@ -318,6 +356,64 @@
                   <p style="color: #1e1e1e">Proyeksi Kegiatan</p>
                 </router-link>
               </li>
+              <!-- switch anggaran -->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p class="white-all">
+                    SWITCH ANGGARAN
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item nav-style">
+                    <router-link
+                      to="/switchSubMataAnggaran"
+                      :class="
+                        NamePage == 'Switch Sub Mata Anggaran'
+                          ? Active
+                          : notActive
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                        class="nav-icon"
+                      >
+                        <path
+                          d="M320-160q-117 0-198.5-81.5T40-440q0-107 70.5-186.5T287-718l-63-66 56-56 160 160-160 160-56-57 59-59q-71 14-117 69t-46 127q0 83 58.5 141.5T320-240h120v80H320Zm200-360v-280h360v280H520Zm0 360v-280h360v280H520Zm80-80h200v-120H600v120Z"
+                        />
+                      </svg>
+                      <p style="color: #1e1e1e">(Sub Mata Anggaran)</p>
+                    </router-link>
+                  </li>
+                  <li class="nav-item nav-style">
+                    <router-link
+                      to="/switchDepartemen"
+                      :class="
+                        NamePage == 'Switch Anggaran Antar Departemen'
+                          ? Active
+                          : notActive
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                        class="nav-icon"
+                      >
+                        <path
+                          d="M320-160q-117 0-198.5-81.5T40-440q0-107 70.5-186.5T287-718l-63-66 56-56 160 160-160 160-56-57 59-59q-71 14-117 69t-46 127q0 83 58.5 141.5T320-240h120v80H320Zm200-360v-280h360v280H520Zm0 360v-280h360v280H520Zm80-80h200v-120H600v120Z"
+                        />
+                      </svg>
+                      <p style="color: #1e1e1e">(Antar Departemen)</p>
+                    </router-link>
+                  </li>
+                </ul>
+              </li>
+              <!-- pengajuan -->
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <p class="white-all">
@@ -349,27 +445,6 @@
                   </li>
                   <li class="nav-item nav-style">
                     <router-link
-                      to="/pengajuanKomitmen"
-                      :class="
-                        NamePage == 'Pengajuan Komitmen' ? Active : notActive
-                      "
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        viewBox="0 -960 960 960"
-                        width="24"
-                        class="nav-icon"
-                      >
-                        <path
-                          d="m618.924-298.924 42.152-42.152-151.077-151.087V-680h-59.998v212.154l168.923 168.922ZM480.067-100.001q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-480Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"
-                        />
-                      </svg>
-                      <p style="color: #1e1e1e">Pengajuan Komitmen</p>
-                    </router-link>
-                  </li>
-                  <li class="nav-item nav-style">
-                    <router-link
                       to="/pengajuanRetur"
                       :class="
                         NamePage == 'Pengajuan Retur' ? Active : notActive
@@ -387,6 +462,27 @@
                         />
                       </svg>
                       <p style="color: #1e1e1e">Pengajuan Retur</p>
+                    </router-link>
+                  </li>
+                  <li class="nav-item nav-style">
+                    <router-link
+                      to="/pengajuanKomitmen"
+                      :class="
+                        NamePage == 'Pengajuan Komitmen' ? Active : notActive
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                        class="nav-icon"
+                      >
+                        <path
+                          d="m618.924-298.924 42.152-42.152-151.077-151.087V-680h-59.998v212.154l168.923 168.922ZM480.067-100.001q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-480Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"
+                        />
+                      </svg>
+                      <p style="color: #1e1e1e">Pengajuan Termin Pembayaran</p>
                     </router-link>
                   </li>
                 </ul>
@@ -420,6 +516,25 @@
                     />
                   </svg>
                   <p style="color: #1e1e1e">Anggaran</p>
+                </router-link>
+              </li>
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/topupanggaran"
+                  :class="NamePage == 'Top Up Anggaran' ? Active : notActive"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M549.999-451.539q-41.922 0-70.96-29.038-29.038-29.038-29.038-70.961 0-41.922 29.038-70.96 29.038-29.038 70.96-29.038 41.923 0 70.961 29.038 29.038 29.038 29.038 70.96 0 41.923-29.038 70.961-29.038 29.038-70.961 29.038ZM286.154-327.693q-29.826 0-51.067-21.24-21.24-21.24-21.24-51.067v-303.076q0-29.826 21.24-51.067 21.241-21.24 51.067-21.24h527.69q29.827 0 51.067 21.24 21.24 21.241 21.24 51.067V-400q0 29.827-21.24 51.067t-51.067 21.24h-527.69Zm59.999-59.998h407.693q0-29.923 21.24-51.115 21.24-21.193 51.067-21.193v-183.078q-29.923 0-51.115-21.24-21.192-21.241-21.192-51.067H346.153q0 29.923-21.24 51.115-21.241 21.192-51.067 21.192v183.078q29.923 0 51.115 21.241 21.192 21.24 21.192 51.067Zm420.768 199.997H146.156q-29.827 0-51.067-21.241-21.24-21.24-21.24-51.066v-396.151h59.998v396.151q0 4.615 3.847 8.462 3.846 3.846 8.462 3.846h620.765v59.999ZM286.154-387.691h-12.308V-715.384h12.308q-5 0-8.654 3.654t-3.654 8.654V-400q0 5 3.654 8.654 3.654 3.655 8.654 3.655Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">Validasi Top Up Anggaran</p>
                 </router-link>
               </li>
               <li class="nav-item nav-style">
@@ -486,6 +601,63 @@
                   </svg>
                   <p style="color: #1e1e1e">Validasi Komitmen</p>
                 </router-link>
+              </li>
+              <!-- switch anggaran -->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p class="white-all">
+                    SWITCH ANGGARAN
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item nav-style">
+                    <router-link
+                      to="/switchSubMataAnggaran"
+                      :class="
+                        NamePage == 'Switch Sub Mata Anggaran'
+                          ? Active
+                          : notActive
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                        class="nav-icon"
+                      >
+                        <path
+                          d="M320-160q-117 0-198.5-81.5T40-440q0-107 70.5-186.5T287-718l-63-66 56-56 160 160-160 160-56-57 59-59q-71 14-117 69t-46 127q0 83 58.5 141.5T320-240h120v80H320Zm200-360v-280h360v280H520Zm0 360v-280h360v280H520Zm80-80h200v-120H600v120Z"
+                        />
+                      </svg>
+                      <p style="color: #1e1e1e">(Sub Mata Anggaran)</p>
+                    </router-link>
+                  </li>
+                  <li class="nav-item nav-style">
+                    <router-link
+                      to="/switchDepartemen"
+                      :class="
+                        NamePage == 'Switch Anggaran Antar Departemen'
+                          ? Active
+                          : notActive
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                        class="nav-icon"
+                      >
+                        <path
+                          d="M320-160q-117 0-198.5-81.5T40-440q0-107 70.5-186.5T287-718l-63-66 56-56 160 160-160 160-56-57 59-59q-71 14-117 69t-46 127q0 83 58.5 141.5T320-240h120v80H320Zm200-360v-280h360v280H520Zm0 360v-280h360v280H520Zm80-80h200v-120H600v120Z"
+                        />
+                      </svg>
+                      <p style="color: #1e1e1e">(Antar Departemen)</p>
+                    </router-link>
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>
