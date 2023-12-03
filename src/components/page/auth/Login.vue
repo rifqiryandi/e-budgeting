@@ -134,6 +134,7 @@ export default {
             let token = respon.data.accessToken;
             sessionStorage.setItem("isLogin", true);
             sessionStorage.setItem("token", token);
+            sessionStorage.setItem("keypass", btoa(data.password))
             if (respon.data.data.leveluser == 1) {
               sessionStorage.setItem("namaAkes", "Superadmin");
             } else if (respon.data.data.leveluser == 2) {
