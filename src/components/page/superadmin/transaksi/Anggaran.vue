@@ -3,6 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          <h3 style="font-weight: 500;">Pencarian</h3>
+          <hr>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
             <div class="">
               <label
@@ -185,12 +187,47 @@
             </Column>
             <Column
               field=""
-              header="Nominal"
+              header="Nominal Awal"
               class="text-right"
               style="width: 20%"
             >
               <template #body="{ data }">
                 {{ data.nominal.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Sisa Anggaran"
+              class="text-right"
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                {{ data.sisa_anggaran.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+            
+
+            <Column field="" header="" style="width: 20%">
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  <button
+                    class="bg-transparent border-0"
+                    title="Top Up"
+                    @click="topupView(data)"
+                    v-show="data.status_anggaran == 2"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <path
+                        d="M480-40q-112 0-206-51T120-227v107H40v-240h240v80h-99q48 72 126.5 116T480-120q75 0 140.5-28.5t114-77q48.5-48.5 77-114T840-480h80q0 91-34.5 171T791-169q-60 60-140 94.5T480-40Zm-36-160v-52q-47-11-76.5-40.5T324-370l66-26q12 41 37.5 61.5T486-314q33 0 56.5-15.5T566-378q0-29-24.5-47T454-466q-59-21-86.5-50T340-592q0-41 28.5-74.5T446-710v-50h70v50q36 3 65.5 29t40.5 61l-64 26q-8-23-26-38.5T482-648q-35 0-53.5 15T410-592q0 26 23 41t83 35q72 26 96 61t24 77q0 29-10 51t-26.5 37.5Q583-274 561-264.5T514-250v50h-70ZM40-480q0-91 34.5-171T169-791q60-60 140-94.5T480-920q112 0 206 51t154 136v-107h80v240H680v-80h99q-48-72-126.5-116T480-840q-75 0-140.5 28.5t-114 77q-48.5 48.5-77 114T120-480H40Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </template>
             </Column>
           </DataTable>
@@ -432,6 +469,126 @@
       </div>
     </div>
   </div>
+  <!-- Modal Top up -->
+  <div
+    id="topup-modal"
+    tabindex="-1"
+    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative w-full max-w-4xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
+        >
+          <h3 class="text-xl font-medium" style="color: #fff">
+            Top Up Anggaran
+          </h3>
+          <button
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            @click="hideModal"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-6 space-y-2">
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Sisa Anggaran<span class="text-red-600">*</span>
+            </label>
+            <InputNumber
+              v-model="FormTopUp.nominalawal"
+              placeholder="Masukkan Nominal Awal"
+              class="w-full"
+              disabled
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormTopUp.nominalawal.$error"
+            >
+              Nominal Awal tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nominal Top Up<span class="text-red-600">*</span>
+            </label>
+            <InputNumber
+              v-model="FormTopUp.nominaltopup"
+              placeholder="Masukkan Nominal Awal"
+              class="w-full"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormTopUp.nominaltopup.$error"
+            >
+              Nominal Top Up tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Keterangan <span class="text-red-600">*</span>
+            </label>
+            <textarea
+              v-model="FormTopUp.keterangan"
+              cols="30"
+              rows="10"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            ></textarea>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.FormTopUp.keterangan.$error"
+            >
+              Keterangan tidak boleh kosong!
+            </p>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div
+          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+        >
+          <button
+            type="button"
+            @click="prosesInputTopUp"
+            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
+          >
+            SIMPAN
+          </button>
+          <button
+            @click="hideModal"
+            type="button"
+            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          >
+            TUTUP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import exportFromJSON from "export-from-json";
@@ -481,6 +638,13 @@ export default {
         status: 0,
         userid: "",
       },
+      FormTopUp: {
+        idanggaran: "",
+        nominalawal: "",
+        nominaltopup: "",
+        penanggungjwb: "",
+        keterangan: "",
+      },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
@@ -492,6 +656,13 @@ export default {
         kddepartemen: { required },
         tahun: { required },
         nominal: { required },
+        keterangan: { required },
+      },
+      FormTopUp: {
+        idanggaran: { required },
+        nominalawal: { required },
+        nominaltopup: { required },
+        penanggungjwb: { required },
         keterangan: { required },
       },
     };
@@ -522,6 +693,50 @@ export default {
       const exportType = exportFromJSON.types.csv;
 
       exportFromJSON({ data, fileName, exportType });
+    },
+    async prosesInputTopUp() {
+      let Forminput = this.FormTopUp;
+      console.log(Forminput);
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.FormTopUp.$error) {
+        try {
+          let respon = await serviceAnggaran.inputTopUp(Forminput, this.token);
+          console.log(respon);
+          this.modal.hide();
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: respon.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+          this.FormTopUp = {
+            idanggaran: "",
+            nominalawal: "",
+            nominaltopup: "",
+            penanggungjwb: "",
+            keterangan: "",
+          };
+          this.refreshListTable(1);
+        } catch (error) {
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+        }
+      }
+    },
+    topupView(data) {
+      
+      this.FormTopUp = {
+        nominalawal: data.sisa_anggaran,
+        idanggaran: data.id_anggaran,
+        penanggungjwb: this.userSession.username,
+      };
+      const $targetEl = document.getElementById("topup-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
     },
     cariData() {
       this.refreshListTable(1);
@@ -616,7 +831,7 @@ export default {
       Forminput.userid = this.userSession.username;
       Forminput.status = 0;
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
+      if (!this.v$.Form.$error) {
         try {
           let respon = await serviceAnggaran.inputAnggaran(
             Forminput,
@@ -656,8 +871,10 @@ export default {
       if (reset != 0) {
         this.pagination.first = 0;
         this.pagination.currentPage = 1;
+        this.getData();
+      } else {
+        this.getData();
       }
-      this.getData();
     },
   },
   mounted() {

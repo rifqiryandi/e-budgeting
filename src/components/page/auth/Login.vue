@@ -64,8 +64,10 @@
               </div>
               <div class="grid justify-center gap-3 mt-15">
                 <img src="../../../assets/bnilogo.png" class="img-style" />
-                <h4 class="text-info-style">E-BUDGETING</h4>
+                <h4 class="text-info-style">e-Budgeting</h4>
               </div>
+              <h4 class="text-info-style text-center">Corporate secretary division</h4>
+
             </div>
           </div>
         </div>
@@ -132,6 +134,7 @@ export default {
             let token = respon.data.accessToken;
             sessionStorage.setItem("isLogin", true);
             sessionStorage.setItem("token", token);
+            sessionStorage.setItem("keypass", btoa(data.password))
             if (respon.data.data.leveluser == 1) {
               sessionStorage.setItem("namaAkes", "Superadmin");
             } else if (respon.data.data.leveluser == 2) {
@@ -139,7 +142,7 @@ export default {
             } else if (respon.data.data.leveluser == 3) {
               sessionStorage.setItem("namaAkes", "Departemen Head");
             } else if (respon.data.data.leveluser == 4) {
-              sessionStorage.setItem("namaAkes", "Keuangan/Treasury");
+              sessionStorage.setItem("namaAkes", "BUM");
             } else if (respon.data.data.leveluser == 5) {
               sessionStorage.setItem("namaAkes", "General Manager");
             } else if (respon.data.data.leveluser == 6) {

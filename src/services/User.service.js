@@ -46,6 +46,15 @@ class UserService {
     return http.post("users/updatestatus", data, config);
   }
 
+  changePassword(data, token){
+    var config = {
+      headers: {
+        "x-access-token": token
+      }
+    }
+    return http.post("users/updatepass", data, config);
+  }
+
 }
 
 export default new UserService();

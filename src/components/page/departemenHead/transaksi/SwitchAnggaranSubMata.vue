@@ -5,25 +5,20 @@
         <div class="card-body">
           <h3 style="font-weight: 500">Pencarian</h3>
           <hr />
-          <div class="grid grid-cols-1 gap-2">
+          <div class="">
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
               >
-                Pengajuan Biaya
+                Status
               </label>
               <select
-                v-model="filters.idpengajuan"
+                v-model="filters.status"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option value="">-- Pilih Pengajuan Biaya --</option>
-                <option
-                  v-for="(item, index) in getPengajuanPK"
-                  :key="index"
-                  :value="item.id_pengajuan"
-                >
-                  {{ item.nama_sub_mata_anggaran }}
-                </option>
+                <option value="">-- Pilih Status--</option>
+                <option value="1">Request By Officer</option>
+                <option value="2">Validate By Departemen Head</option>
               </select>
             </div>
           </div>
@@ -37,14 +32,18 @@
               padding-top: 11px;
               padding-bottom: 11px;
             "
-            @click="cariData"
+            @click="filterShow"
           >
             Tampilkan
           </button>
+          <!-- <unduhExcel :data="getAllData" type="xlsx" name="filename.xlsx">
+              Unduh Data
+            </unduhExcel> -->
         </div>
       </div>
     </div>
   </div>
+
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -53,6 +52,7 @@
             :value="getAllData"
             lazy
             paginator
+            :first="pagination.first"
             :totalRecords="pagination.totaldata"
             :rows="pagination.perPage"
             :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -82,10 +82,10 @@
                 <div style="font-weight: 600">
                   <button
                     class="bg-transparent border-0"
-                    title="Validasi Pengajuan"
+                    title="Validasi Switch"
                     @click="showValidasi(data)"
                   >
-                    <div v-if="data.status_pengajuan == 0">
+                    <div v-if="data.status == 1">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         height="24"
@@ -113,45 +113,78 @@
                 </div>
               </template>
             </Column>
-            <Column field="uraian_pengajuan" header="Kegiatan">
+            <Column field="" header="Mata Anggaran" style="width: 20%">
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.uraian_pengajuan }}
+                  {{ data.nama_mata_anggaran_awal }}
                 </div>
               </template>
             </Column>
-            <Column field="nama_sub_mata_anggaran" header="Sub Mata Anggaran">
+            <Column field="" header="Sub Mata Anggaran Asal" style="width: 20%">
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
+                  {{ data.nama_sub_mata_anggaran_awal }}
                 </div>
               </template>
             </Column>
-            <Column field="status_pengajuan" header="Status">
+            <Column
+              field=""
+              header="Sub Mata Anggaran Tujuan"
+              style="width: 20%"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
-                    Belum diproses
-                  </div>
-                  <div
-                    class="label-Aktif"
-                    v-else-if="data.status_pengajuan == 1"
-                  >
-                    Tervalidasi
-                  </div>
-                  <div
-                    class="label-Retur"
-                    v-else-if="data.status_pengajuan == 2"
-                  >
-                    Retur
-                  </div>
+                  {{ data.nama_sub_mata_anggaran_final }}
                 </div>
               </template>
             </Column>
-            <Column field="nominal_realisasi" header="Nominal">
+            <Column
+              field="bsu_awal"
+              header="Nominal Asal"
+              class="text-right"
+              style="width: 20%"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nominal_realisasi.toLocaleString("de-DE") }}
+                  {{ data.bsu_awal.toLocaleString("de-DE") }}
+                </div>
+              </template>
+            </Column>
+
+            <Column
+              field="bsu_final"
+              header="Nominal Tujuan"
+              class="text-right"
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.bsu_final.toLocaleString("de-DE") }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="bsu_final"
+              header="Nominal Switch"
+              class="text-right"
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.bsu_inout.toLocaleString("de-DE") }}
+                </div>
+              </template>
+            </Column>
+            <Column field="" header="Status">
+              <template #body="{ data }">
+                <div class="label-nonAktifSwitch" v-if="data.status == 1">
+                  Request By Officer
+                </div>
+                <div class="label-AktifSwitch" v-else-if="data.status == 2">
+                  Validate By Departement Head
+                </div>
+                <div class="label-ReturSwitch" v-else-if="data.status == 3">
+                  Retur
                 </div>
               </template>
             </Column>
@@ -204,85 +237,65 @@
           <div class="grid grid-cols-2 gap-2 mb-2">
             <div class="">
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
-                <p class="text-base">{{ Detail.nama_sub_mata_anggaran }}</p>
+                <p class="text-lg font-semibold mb-0">Mata Anggaran</p>
+                <p class="text-base">{{ Detail.nama_mata_anggaran_awal }}</p>
               </div>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Jenis Pengajuan</p>
+                <p class="text-lg font-semibold mb-0">Sub Mata Anggaran Asal</p>
                 <p class="text-base">
-                  {{
-                    Detail.jenis_pengajuan == "PBI"
-                      ? "Pengajuan biasa"
-                      : Detail.jenis_pengajuan == "PB"
-                      ? "Pengajuan Baru"
-                      : Detail.jenis_pengajuan == "PK"
-                      ? "Pengajuan Komitmen"
-                      : ""
-                  }}
+                  {{ Detail.nama_sub_mata_anggaran_awal }}
                 </p>
               </div>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Nama Kegiatan</p>
-                <p class="text-base">
-                  {{ Detail.uraian_pengajuan }}
+                <p class="text-lg font-semibold mb-0">
+                  Sub Mata Anggaran Tujuan
                 </p>
-              </div>
-              <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Uraian Kegiatan</p>
                 <p class="text-base">
-                  {{ Detail.uraian_pengajuan }}
+                  {{ Detail.nama_sub_mata_anggaran_final }}
                 </p>
               </div>
             </div>
             <div class>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Komitmen Anggaran</p>
+                <p class="text-lg font-semibold mb-0">Nominal Asal</p>
                 <p class="text-base">
                   {{
-                    Detail.nominal_pengajuan != undefined
-                      ? "Rp." + Detail.nominal_pengajuan.toLocaleString("de-DE")
+                    Detail.bsu_awal != undefined
+                      ? "Rp." + Detail.bsu_awal.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
               </div>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">
-                  Nominal Pengajuan Komitmen
-                </p>
+                <p class="text-lg font-semibold mb-0">Nominal Tujuan</p>
                 <p class="text-base">
                   {{
-                    Detail.nominal_realisasi != undefined
-                      ? "Rp." + Detail.nominal_realisasi.toLocaleString("de-DE")
-                      : ""
-                  }}
-                </p>
-              </div>
-              <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Sisa Komitmen Anggaran</p>
-                <p class="text-base">
-                  {{
-                    Detail.sisa_realisasi != undefined
-                      ? "Rp." + Detail.sisa_realisasi.toLocaleString("de-DE")
+                    Detail.bsu_final != undefined
+                      ? "Rp." + Detail.bsu_final.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
               </div>
 
               <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Nominal Switch</p>
+                <p class="text-base">
+                  {{
+                    Detail.bsu_inout != undefined
+                      ? "Rp." + Detail.bsu_inout.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Status</p>
-                <div class="label-nonAktif" v-if="Detail.status_pengajuan == 0">
-                  Belum diproses
+                <div class="label-nonAktifSwitch" v-if="Detail.status == 1">
+                  Request By Officer
                 </div>
-                <div
-                  class="label-Aktif"
-                  v-else-if="Detail.status_pengajuan == 1"
-                >
-                  Tervalidasi
+                <div class="label-AktifSwitch" v-else-if="Detail.status == 2">
+                  Validate By Departement Head
                 </div>
-                <div
-                  class="label-Retur"
-                  v-else-if="Detail.status_pengajuan == 2"
-                >
+                <div class="label-ReturSwitch" v-else-if="Detail.status == 3">
                   Retur
                 </div>
               </div>
@@ -292,7 +305,7 @@
         <!-- Modal footer -->
         <div
           class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-          v-show="Detail.status_pengajuan == 0"
+          v-show="Detail.status == 1"
         >
           <button
             type="button"
@@ -302,11 +315,11 @@
             VALIDASI
           </button>
           <button
-            @click="prosesRetur"
+            @click="hideModal"
             type="button"
-            class="bg-retur text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
+            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
-            RETUR
+            TUTUP
           </button>
         </div>
       </div>
@@ -314,35 +327,37 @@
   </div>
 </template>
 <script>
+// import InputNumber from "primevue/inputnumber";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
-
 import { initFlowbite } from "flowbite";
+// import useValidate from "@vuelidate/core";
+// import { required } from "@vuelidate/validators";
+// import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
 
 import serviceAnggaran from "../../../../services/Transaction.service";
-
 export default {
-  name: "Validasi Pengajuan Komitmen",
+  name: "Switch Anggaran Sub Mata Anggaran",
   data() {
     return {
+      // v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      listPengajuanKomitmen: null,
+      ListSwitchAnggaran: null,
+      rowSMataAnggaran: null,
       rowDepartemen: null,
-      rowAnggaran: null,
-      rowPengajuanPK: null,
       filters: {
-        idpengajuan: "",
-        cari: "",
         status: "",
+        cari: "",
       },
       pagination: {
         perPage: 5,
         currentPage: 1,
         totaldata: 0,
+        first: 0,
       },
       Detail: {},
       loading: true,
@@ -353,17 +368,77 @@ export default {
     DataTable,
     Column,
     InputText,
+    // VueDatePicker,
+    // InputNumber,
   },
   computed: {
     getAllData() {
-      return this.listPengajuanKomitmen;
-    },
-
-    getPengajuanPK() {
-      return this.rowPengajuanPK;
+      return this.ListSwitchAnggaran;
     },
   },
   methods: {
+    async prosesValidasi() {
+      let payload = {
+        id_switchanggaran: this.Detail.id_switchanggaran,
+        status: 2,
+        nominal_awal: this.Detail.bsu_awal - this.Detail.bsu_inout,
+        nominal_final: this.Detail.bsu_final + this.Detail.bsu_inout,
+        id_anggaran_awal: this.Detail.id_anggaran_awal,
+        id_anggaran_final: this.Detail.id_anggaran_final,
+      };
+
+      this.$swal({
+        icon: "question",
+        title: "Validasi Switch Anggaran?",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonColor: "#008073",
+        cancelButtonColor: "grey",
+        confirmButtonText: "Validasi",
+        cancelButtonText: "Batal",
+        customClass: {
+          actions: "my-actions",
+          cancelButton: "order-2 right-gap",
+          confirmButton: "order-1",
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            let respon = await serviceAnggaran.validasiSwitchAnggaran(
+              payload,
+              this.token
+            );
+            this.responBerhasil(respon);
+            this.hideModal();
+            this.refreshListTable(1);
+          } catch (error) {
+            this.responError(error);
+          }
+        }
+      });
+    },
+    showValidasi(data) {
+      this.Detail = data;
+      const $targetEl = document.getElementById("validasi-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+    },
+    responBerhasil(respon) {
+      this.$swal({
+        icon: "success",
+        title: respon.data.Msg,
+        text: respon.data.kode_unik,
+        confirmButtonColor: "#e77817",
+      });
+    },
+    async responError(error) {
+      await this.$swal({
+        icon: "info",
+        title: "GAGAL",
+        text: error.response.data.Msg,
+        confirmButtonColor: "#e77817",
+      });
+    },
     cariData() {
       this.refreshListTable(1);
     },
@@ -382,153 +457,44 @@ export default {
       }
       this.refreshListTable();
     },
-    async getRowPengajuanPK() {
-      let payload = {
-        id_pengajuan: "",
+    showInput() {
+      this.Form = {
+        kdsubmatanggaran: "",
+        kddepartemen: "",
+        tahun: "",
+        nominal: "",
+        userid: "",
       };
-      try {
-        let res = await serviceAnggaran.getPengajuanPK(payload, this.token);
-        this.rowPengajuanPK = res.data.data;
-      } catch (error) {
-        this.rowPengajuanPK = null;
-        console.log(error);
-      }
+      const $targetEl = document.getElementById("input-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
     },
     async getData() {
       this.loading = true;
       let payload = {
-        idpengajuan: this.filters.idpengajuan,
+        status: "",
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        jenis_switchanggaran : 2
       };
       try {
-        let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);
-        this.pagination.totaldata = res.data.total_data;
-        this.listPengajuanKomitmen = res.data.data;
-        console.log(this.listPengajuanKomitmen);
+        let res = await serviceAnggaran.ListSwitchAnggaran(payload, this.token);
+        this.pagination.totaldata = res.data.data.total_data;
+        this.ListSwitchAnggaran = res.data.data.data;
         this.loading = false;
       } catch (error) {
-        this.listPengajuanKomitmen = null;
+        this.ListSwitchAnggaran = null;
         this.loading = false;
         console.log(error);
       }
-    },
-    async prosesRetur() {
-      let payload = {
-        id_pengajuan: this.Detail.id_pk,
-        status: 2,
-        rubrik: this.Detail.kode_departement,
-        kdsubmatanggaran: this.Detail.kode_sub_mata_anggaran,
-        nominal: this.Detail.nominal_realisasi,
-        alasan: "",
-      };
-      this.$swal({
-        icon: "question",
-        title: "Retur pengajuan biaya?",
-        input: "textarea",
-        inputLabel: "ALASAN",
-        inputPlaceholder: "Alasan di retur",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonColor: "#eb4034",
-        cancelButtonColor: "grey",
-        confirmButtonText: "Retur",
-        cancelButtonText: "Batal",
-        customClass: {
-          actions: "my-actions",
-          cancelButton: "order-2 right-gap",
-          confirmButton: "order-1",
-        },
-        inputValidator: (value) => {
-          if (!value) {
-            return "Alasan tidak boleh kosong!";
-          }
-        },
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            payload.alasan = result.value;
-            let respon = await serviceAnggaran.validasiPengajuanPK(
-              payload,
-              this.token
-            );
-            this.responBerhasil(respon);
-            this.hideModal();
-            this.refreshListTable(1);
-          } catch (error) {
-            this.responError(error);
-          }
-        }
-      });
-    },
-    async showValidasi(data) {
-      this.Detail = data;
-      console.log(this.Detail);
-      const $targetEl = document.getElementById("validasi-modal");
-      this.modal = new Modal($targetEl);
-      this.modal.show();
-    },
-    async prosesValidasi() {
-      let payload = {
-        id_pengajuan: this.Detail.id_pk,
-        status: 1,
-        rubrik: this.Detail.kode_departement,
-        kdsubmatanggaran: this.Detail.kode_sub_mata_anggaran,
-        nominal: this.Detail.nominal_realisasi,
-        alasan: "",
-      };
-      this.$swal({
-        icon: "question",
-        title: "Validasi pengajuan biaya?",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonColor: "#008073",
-        cancelButtonColor: "grey",
-        confirmButtonText: "Validasi",
-        cancelButtonText: "Batal",
-        customClass: {
-          actions: "my-actions",
-          cancelButton: "order-2 right-gap",
-          confirmButton: "order-1",
-        },
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            let respon = await serviceAnggaran.validasiPengajuanPK(
-              payload,
-              this.token
-            );
-            this.responBerhasil(respon);
-            this.hideModal();
-            this.refreshListTable(1);
-          } catch (error) {
-            this.responError(error);
-          }
-        }
-      });
-    },
-    responBerhasil(respon) {
-      this.$swal({
-        icon: "success",
-        title: respon.data.Msg,
-        text: respon.data.kode_unik,
-        confirmButtonColor: "#e77817",
-      });
-    },
-    async responError(error) {
-      await this.$swal({
-        icon: "info",
-        title: "GAGAL",
-        text: error.response.data.Msg,
-        confirmButtonColor: "#e77817",
-      });
     },
     hideModal() {
       this.modal.hide();
     },
     refreshListTable(reset = 0) {
       if (reset != 0) {
+        this.pagination.first = 0;
         this.pagination.currentPage = 1;
       }
       this.getData();
@@ -537,8 +503,53 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
-    this.getRowPengajuanPK();
   },
 };
 </script>
-<style></style>
+<style>
+/* Label */
+.label-nonAktifSwitch {
+  width: max-content;
+  height: 32px;
+  padding: 5px 10px 5px 10px;
+  border-left: #f66512 5px solid;
+  background: #ffe3c2;
+  color: #f66512;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.label-AktifSwitch {
+  width: max-content;
+  height: 32px;
+  padding: 5px 10px 5px 10px;
+  border-left: #5bb07f 5px solid;
+  background: #dcffeb;
+  color: #5bb07f;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.label-ReturSwitch {
+  width: max-content;
+  height: 32px;
+  padding: 5px 10px 5px 10px;
+  border-left: #eb4034 5px solid;
+  background: #e968685e;
+  color: #eb4034;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+</style>

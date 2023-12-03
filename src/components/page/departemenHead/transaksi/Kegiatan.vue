@@ -3,6 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          <h3 style="font-weight: 500;">Pencarian</h3>
+          <hr>
           <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
@@ -145,7 +147,7 @@
               </template>
             </Column>
 
-            <Column field="Waktu Kegiatan" header="Tahun" style="width: 20%">
+            <Column field="Waktu Kegiatan" header="Bulan" style="width: 20%">
               <template #body="{ data }">
                 {{ data.bulan + " - " + data.tahun }}
               </template>
@@ -160,7 +162,7 @@
                 {{ data.nonimal_anggaran.toLocaleString("de-DE") }}
               </template>
             </Column>
-            <Column
+            <!-- <Column
               field=""
               header="Nominal Anggaran"
               class="text-right"
@@ -169,7 +171,7 @@
               <template #body="{ data }">
                 {{ data.nominal_kegiatan.toLocaleString("de-DE") }}
               </template>
-            </Column>
+            </Column> -->
           </DataTable>
         </div>
       </div>

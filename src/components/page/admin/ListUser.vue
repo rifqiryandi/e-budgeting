@@ -94,7 +94,7 @@
                 <div v-if="data.leveluser == 1">Super Admin</div>
                 <div v-else-if="data.leveluser == 2">Officer</div>
                 <div v-else-if="data.leveluser == 3">Departemen Head</div>
-                <div v-else-if="data.leveluser == 4">Keuangan/Treasury</div>
+                <div v-else-if="data.leveluser == 4">BUM</div>
                 <div v-else-if="data.leveluser == 5">General Manager</div>
                 <div v-else-if="data.leveluser == 6">Admin Sistem</div>
               </template>
@@ -115,7 +115,6 @@
                   class="bg-transparent mr-2"
                   title="EDIT"
                   @click="editUser(data)"
-                  v-if="data.username != userSession.username"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -125,6 +124,22 @@
                   >
                     <path
                       d="M206.154-200h49.461l370.387-370.386-49.461-49.462-370.387 370.387V-200Zm548.152-413.77L619.309-747.537l52.154-52.153q17.615-17.615 42.845-17.615t42.845 17.615l48.692 48.691q17.615 17.615 18.23 42.23.615 24.615-17 42.23l-52.769 52.769Zm-43.383 43.999-429.77 429.77H146.156v-134.998l429.769-429.77 134.998 134.998Zm-109.844-25.538-24.538-24.539 49.461 49.462-24.923-24.923Z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  class="bg-transparent mr-2"
+                  title="EDIT"
+                  @click="ubahPassUser(data)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                  >
+                    <path
+                      d="M420-680q0-33 23.5-56.5T500-760q33 0 56.5 23.5T580-680q0 33-23.5 56.5T500-600q-33 0-56.5-23.5T420-680ZM500 0 320-180l60-80-60-80 60-85v-47q-54-32-87-86.5T260-680q0-100 70-170t170-70q100 0 170 70t70 170q0 67-33 121.5T620-472v352L500 0ZM340-680q0 56 34 98.5t86 56.5v125l-41 58 61 82-55 71 75 75 40-40v-371q52-14 86-56.5t34-98.5q0-66-47-113t-113-47q-66 0-113 47t-47 113Z"
                     />
                   </svg>
                 </button>
@@ -336,7 +351,7 @@
               <option value="1">Super Admin</option>
               <option value="2">Officer</option>
               <option value="3">Departemen Head</option>
-              <option value="4">Keuangan/Treasury</option>
+              <option value="4">BUM</option>
               <option value="5">General Manager</option>
               <option value="6">Admin Sistem</option>
             </select>
@@ -1019,6 +1034,226 @@
       </div>
     </div>
   </div>
+  <!-- Modal pass reset -->
+  <div
+    id="reset-pass-modal"
+    tabindex="-1"
+    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative w-full max-w-4xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
+        >
+          <h3 class="text-xl font-medium" style="color: #fff">
+            Reset Password
+          </h3>
+          <button
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            @click="hideModal()"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-6 space-y-2">
+          <div class="grid grid-cols-2 gap-3">
+            <div id="form-inputan">
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Password Baru <span class="text-red-600">*</span>
+                </label>
+                <Password
+                  v-model="passwordUser"
+                  toggleMask
+                  placeholder="Masukkan Password Baru"
+                  style="width: 100%"
+                />
+              </div>
+            </div>
+            <div id="text-syarat">
+              <p
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Syarat Password :
+              </p>
+              <div class="flex">
+                <p
+                  :class="
+                    this.v$.passwordUser.min.$invalid == false
+                      ? Style.customValidIcon.trueText
+                      : Style.customValidIcon.falseText
+                  "
+                >
+                  Minimal 8 karakter
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 -960 960 960"
+                  width="24"
+                  :class="
+                    this.v$.passwordUser.min.$invalid == false
+                      ? Style.customValidIcon.trueIcon
+                      : Style.customValidIcon.falseIcon
+                  "
+                >
+                  <path
+                    d="m423.231-309.847 268.922-268.922L650-620.922 423.231-394.153l-114-114L267.078-466l156.153 156.153Zm56.836 209.846q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-160q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+                  />
+                </svg>
+              </div>
+              <div class="flex">
+                <p
+                  :class="
+                    this.v$.passwordUser.specialChars.$invalid == false
+                      ? Style.customValidIcon.trueText
+                      : Style.customValidIcon.falseText
+                  "
+                >
+                  Minimal 1 spesial karakter
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 -960 960 960"
+                  width="24"
+                  :class="
+                    this.v$.passwordUser.specialChars.$invalid == false
+                      ? Style.customValidIcon.trueIcon
+                      : Style.customValidIcon.falseIcon
+                  "
+                >
+                  <path
+                    d="m423.231-309.847 268.922-268.922L650-620.922 423.231-394.153l-114-114L267.078-466l156.153 156.153Zm56.836 209.846q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-160q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+                  />
+                </svg>
+              </div>
+              <div class="flex">
+                <p
+                  :class="
+                    this.v$.passwordUser.requiredAndUpper.$invalid == false
+                      ? Style.customValidIcon.trueText
+                      : Style.customValidIcon.falseText
+                  "
+                >
+                  Minimal 1 uppercase karakter
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 -960 960 960"
+                  width="24"
+                  :class="
+                    this.v$.passwordUser.requiredAndUpper.$invalid == false
+                      ? Style.customValidIcon.trueIcon
+                      : Style.customValidIcon.falseIcon
+                  "
+                >
+                  <path
+                    d="m423.231-309.847 268.922-268.922L650-620.922 423.231-394.153l-114-114L267.078-466l156.153 156.153Zm56.836 209.846q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-160q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+                  />
+                </svg>
+              </div>
+              <div class="flex">
+                <p
+                  :class="
+                    this.v$.passwordUser.lowerCheck.$invalid == false
+                      ? Style.customValidIcon.trueText
+                      : Style.customValidIcon.falseText
+                  "
+                >
+                  Minimal 1 lowercase
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 -960 960 960"
+                  width="24"
+                  style="fill: #32a852"
+                  :class="
+                    this.v$.passwordUser.lowerCheck.$invalid == false
+                      ? Style.customValidIcon.trueIcon
+                      : Style.customValidIcon.falseIcon
+                  "
+                >
+                  <path
+                    d="m423.231-309.847 268.922-268.922L650-620.922 423.231-394.153l-114-114L267.078-466l156.153 156.153Zm56.836 209.846q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-160q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+                  />
+                </svg>
+              </div>
+              <div class="flex">
+                <p
+                  :class="
+                    this.v$.passwordUser.numberCheck.$invalid == false
+                      ? Style.customValidIcon.trueText
+                      : Style.customValidIcon.falseText
+                  "
+                  style=""
+                >
+                  Minimal 1 angka
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  viewBox="0 -960 960 960"
+                  width="24"
+                  :class="
+                    this.v$.passwordUser.numberCheck.$invalid == false
+                      ? Style.customValidIcon.trueIcon
+                      : Style.customValidIcon.falseIcon
+                  "
+                >
+                  <path
+                    d="m423.231-309.847 268.922-268.922L650-620.922 423.231-394.153l-114-114L267.078-466l156.153 156.153Zm56.836 209.846q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.92-148.204q29.92-69.369 81.21-120.682 51.291-51.314 120.629-81.247 69.337-29.933 148.173-29.933t148.204 29.92q69.369 29.92 120.682 81.21 51.314 51.291 81.247 120.629 29.933 69.337 29.933 148.173t-29.92 148.204q-29.92 69.369-81.21 120.682-51.291 51.314-120.629 81.247-69.337 29.933-148.173 29.933ZM480-160q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div
+          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+        >
+          <button
+            type="button"
+            @click="prosesUbahPassword()"
+            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
+          >
+            SIMPAN
+          </button>
+          <button
+            @click="hideModal()"
+            type="button"
+            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          >
+            TUTUP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import { FilterMatchMode } from "primevue/api";
@@ -1034,12 +1269,14 @@ import ToogleBtn from "../../utils/ToggleBtn.vue";
 
 import serviceUser from "../../../services/User.service";
 import serviceDepartemen from "../../../services/Departemen.service";
+import md5 from "md5";
 // import md5 from "md5";
 export default {
   name: "ListUser",
   data() {
     return {
       v$: useValidate(),
+      token: sessionStorage.getItem("token"),
       ListUser: null,
       rowDepartemen: null,
       detailUser: null,
@@ -1073,6 +1310,9 @@ export default {
       idKey: "",
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
       apiHit: "User",
+      passwordUser: "",
+      idUser: "",
+      usernameForChange: "",
     };
   },
   validations() {
@@ -1097,6 +1337,14 @@ export default {
         specialChars: this.checkSpesialChar,
         lowerCheck: this.checkLower,
         min: this.checkMinLength,
+      },
+      passwordUser: {
+        requiredAndUpper: this.validationPasswordChange,
+        numberCheck: this.checkNumberChange,
+        specialChars: this.checkSpesialCharChange,
+        lowerCheck: this.checkLowerChange,
+        min: this.checkMinLengthChange,
+        required,
       },
     };
   },
@@ -1151,6 +1399,47 @@ export default {
     },
     checkMinLength() {
       let pass = this.password;
+      if (pass.length <= 8) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    // Custom Password validation
+    validationPasswordChange() {
+      let pass = this.passwordUser;
+      if (pass == "" || /[A-Z]/.test(pass) == false) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    checkLowerChange() {
+      let pass = this.passwordUser;
+      if (/[a-z]/.test(pass) == false) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    checkNumberChange() {
+      let pass = this.passwordUser;
+      if (/\d/.test(pass) == false) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    checkSpesialCharChange() {
+      let pass = this.passwordUser;
+      if (/[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/.test(pass) == false) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    checkMinLengthChange() {
+      let pass = this.passwordUser;
       if (pass.length <= 8) {
         return false;
       } else {
@@ -1239,14 +1528,18 @@ export default {
       this.modal.show();
       this.idKey = data.id;
     },
+    ubahPassUser(data) {
+      const $targetEl = document.getElementById("reset-pass-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+      this.idUser = data.id;
+      this.usernameForChange = data.username;
+    },
     async prosesInput() {
       let token = sessionStorage.getItem("token");
       let Forminput = this.Form;
-      console.log(Forminput);
       this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
-        // let md5Password = Forminput.password;
-        // delete Forminput.password;
+      if (!this.v$.Form.$error && !this.v$.password.$error) {
         Forminput.password = this.password;
         try {
           let respon = await serviceUser.tambahDataUser(Forminput, token);
@@ -1333,6 +1626,35 @@ export default {
         });
       }
     },
+    async prosesUbahPassword() {
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.passwordUser.$error) {
+        let payload = {
+          username: this.usernameForChange,
+          password: md5(this.passwordUser),
+          id: this.idUser,
+        };
+        console.log(payload);
+        try {
+          let respon = await serviceUser.changePassword(payload, this.token);
+          this.modal.hide();
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: respon.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+          this.passwordUser = "";
+        } catch (error) {
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+        }
+      }
+    },
     hideModal() {
       this.modal.hide();
     },
@@ -1348,7 +1670,6 @@ export default {
 };
 </script>
 <style>
-
 .showIcon {
   fill: #32a852;
   display: block;

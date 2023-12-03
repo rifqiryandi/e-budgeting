@@ -3,6 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
@@ -155,6 +157,16 @@
             >
               <template #body="{ data }">
                 {{ data.nominal.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Sisa Anggaran"
+              class="text-right"
+              style="width: 20%"
+            >
+              <template #body="{ data }">
+                {{ data.sisa_anggaran.toLocaleString("de-DE") }}
               </template>
             </Column>
           </DataTable>

@@ -3,6 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
@@ -127,7 +129,7 @@
             <Column
               field="uraian_kegiatan"
               header="Nama Kegiatan"
-              style="width: 20%"
+              style="width: 25%"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -145,11 +147,11 @@
                 {{ data.nominal_pengajuan.toLocaleString("de-DE") }}
               </template>
             </Column>
-            <Column field="" header="Nominal Anggaran" class="text-right">
+            <!-- <Column field="" header="Nominal Anggaran" class="text-right">
               <template #body="{ data }">
                 {{ data.nominal.toLocaleString("de-DE") }}
               </template>
-            </Column>
+            </Column> -->
             <Column field="" header="Status">
               <template #body="{ data }">
                 <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
@@ -224,11 +226,11 @@
                 <p class="text-base">
                   {{
                     Detail.jenis_pengajuan == "PBI"
-                      ? "Pengajuan biasa"
+                      ? "Beban Reguler"
                       : Detail.jenis_pengajuan == "PB"
                       ? "Pengajuan Baru"
                       : Detail.jenis_pengajuan == "PK"
-                      ? "Pengajuan Komitmen"
+                      ? "Beban Komitmen"
                       : ""
                   }}
                 </p>
@@ -248,7 +250,7 @@
             </div>
             <div class>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Sisa Anggaran</p>
+                <p class="text-lg font-semibold mb-0">Nominal Anggaran FY</p>
                 <p class="text-base">
                   {{
                     Detail.nominal != undefined
@@ -258,7 +260,19 @@
                 </p>
               </div>
               <div class="mb-1">
-                <p class="text-lg font-semibold mb-0">Nominal yang di ajukan</p>
+                <p class="text-lg font-semibold mb-0">Sisa Anggaran Terhadap Total Pengajuan</p>
+                <p class="text-base">
+                  {{
+                    Detail.sisanominal_pengajuan != undefined
+                      ? "Rp." +
+                        Detail.sisanominal_pengajuan.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Nominal yang diajukan</p>
                 <p class="text-base">
                   {{
                     Detail.nominal_pengajuan != undefined
@@ -306,7 +320,10 @@
                 {{ listFile != null ? listFile[0].lampiran : "" }}
               </p>
             </div>
-            <button class="download-style w-full lg:w-1/4 lg:mt-1">
+            <button
+              class="download-style w-full lg:w-1/4 lg:mt-1"
+              @click="downloadLinkFile(listFile[0].link)"
+            >
               Download
             </button>
           </div>
@@ -401,6 +418,9 @@ export default {
     },
   },
   methods: {
+    downloadLinkFile(link) {
+      window.open(link, "_blank", "noreferrer");
+    },
     async prosesRetur() {
       let payload = {
         id_pengajuan: this.Detail.id,

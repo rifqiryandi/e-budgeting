@@ -168,6 +168,149 @@ class TransactionService {
         return http.post("transaksi/retur", data, config);
     }
 
+    inputReturPK(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/returpk", data, config);
+    }
+
+    inputRealisasi(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/realisasi", data, config);
+    }
+
+    getPengajuanRealisasi(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("pengajuan/getidpengajuan", data, config);
+
+    }
+
+    getListPengajuanPB(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("pengajuan/getidpengajuan", data, config);
+    }
+
+    inputPengajuanPB(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("pengajuan/inspengajuanpb", data, config);
+    }
+
+
+    listRealisasi(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/listrealisasi", data, config);
+    }
+
+    listTopUp(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/listopupanggaran", data, config);
+    }
+
+    inputTopUp(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/topupanggaran", data, config);
+    }
+    validasiTopUp(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasitopup", data, config);
+    }
+
+    ListSwitchAnggaran(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/listswitchanggaran", data, config);
+    }
+
+    inputSwitchAnggaran(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/switchanggaran", data, config);
+    }
+
+    validasiSwitchAnggaran(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasiswitchanggaran", data, config);
+    }
+
+    listPengajuanForRealisasi(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/getpengajuan", data, config);
+    }
+
+    validasiRealisasi(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasirealisasi", data, config);
+    }
+    uploadFileRealisasi(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("upload/realisasi", data, config);
+    }
+    
+    listFileRealisasi(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("upload/listfilerealisasi", data, config);
+    }
 }
 
 export default new TransactionService();

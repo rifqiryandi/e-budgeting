@@ -3,27 +3,24 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h3 style="font-weight: 500">Pencarian</h3>
-          <hr />
-          <div class="grid grid-cols-1 gap-2">
+          <h3 style="font-weight: 500;">Pencarian</h3>
+          <hr>
+          <div class="">
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
               >
-                Sub Mata Anggaran
+                Status
               </label>
               <select
-                v-model="filters.kdsubmatanggaran"
+                v-model="filters.status"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option value="">-- Pilih Sub Mata Anggaran --</option>
-                <option
-                  v-for="(item, index) in getSMataAnggaran"
-                  :key="index"
-                  :value="item.kode_sub_mata_anggaran"
-                >
-                  {{ item.nama_sub_mata_anggaran }}
-                </option>
+                <option value="">-- Pilih Status--</option>
+                <option value="0">Belum divalidasi</option>
+                <option value="1">Tervalidasi Level 1</option>
+                <option value="2">Tervalidasi Level 2</option>
+                <option value="3">Tervalidasi Level 3</option>
               </select>
             </div>
           </div>
@@ -37,31 +34,18 @@
               padding-top: 11px;
               padding-bottom: 11px;
             "
-            @click="cariData"
+            @click="filterShow"
           >
             Tampilkan
           </button>
+          <!-- <unduhExcel :data="getAllData" type="xlsx" name="filename.xlsx">
+              Unduh Data
+            </unduhExcel> -->
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 d-flex justify-content-end">
-      <button class="btn d-flex btn-add" @click="showInput">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24"
-          viewBox="0 -960 960 960"
-          width="24"
-        >
-          <path
-            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
-          />
-        </svg>
-        Tambah Data
-      </button>
-    </div>
-  </div>
+  
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -70,6 +54,7 @@
             :value="getAllData"
             lazy
             paginator
+            :first="pagination.first"
             :totalRecords="pagination.totaldata"
             :rows="pagination.perPage"
             :rowsPerPageOptions="[5, 10, 20, 50]"
@@ -94,14 +79,16 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="Status">
+            <Column field="" header="" style="width: 20%">
               <template #body="{ data }">
-                <div class="label-nonAktif" v-if="data.status_kegiatan == 0">
-                  Belum di validasi
-                </div>
-                <div class="label-Aktif" v-else>
-                  Tervalidasi
-                </div>
+                <ValidationBtn
+                  :nilaiStatus="data.status_topup"
+                  :keyid="data.id_anggaran"
+                  :num="0"
+                  :idtopUp="data.id_topup"
+                  :nominal="data.nominal_sisa_anggaran"
+                  :nominalTopup = "data.nominal_topup"
+                />
               </template>
             </Column>
             <Column field="nama_entitas" header="Entitas" style="width: 20%">
@@ -156,43 +143,32 @@
                 </div>
               </template>
             </Column>
-            <Column field="kegiatan" header="Kegiatan" style="width: 20%">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.kegiatan }}
-                </div>
-              </template>
-            </Column>
 
-            <Column field="Waktu Kegiatan" header="Bulan" style="width: 20%">
+            <Column field="tahun" header="Tahun" style="width: 20%">
               <template #body="{ data }">
-                {{ data.bulan + " - " + data.tahun }}
+                {{ data.tahun }}
               </template>
             </Column>
             <Column
               field=""
-              header="Nominal Kegiatan"
+              header="Sisa Anggaran"
               class="text-right"
               style="width: 20%"
             >
               <template #body="{ data }">
-                <div style="color: green">
-                  {{ data.nonimal_anggaran.toLocaleString("de-DE") }}
-                </div>
+                {{ data.nominal_sisa_anggaran.toLocaleString("de-DE") }}
               </template>
             </Column>
-            <!-- <Column
+            <Column
               field=""
-              header="Nominal Anggaran"
+              header="Top Up"
               class="text-right"
               style="width: 20%"
             >
               <template #body="{ data }">
-                <div style="color: green">
-                  {{ data.nominal_kegiatan.toLocaleString("de-DE") }}
-                </div>
+                {{ data.nominal_topup.toLocaleString("de-DE") }}
               </template>
-            </Column> -->
+            </Column>
           </DataTable>
         </div>
       </div>
@@ -212,7 +188,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Tambah Proyeksi Kegiatan
+            Tambah Anggaran
           </h3>
           <button
             type="button"
@@ -243,99 +219,82 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Sub Mata Anggaran <span class="text-red-600">*</span>
+              Anggaran <span class="text-red-600">*</span>
             </label>
             <select
-              v-model="Form.id_anggaran"
-              @change="setPreview"
+              v-model="Form.idanggaran"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">-- Pilih Anggaran --</option>
               <option
-                v-for="(item, index) in getAnggaran"
+                v-for="(item, index) in getSMataAnggaran"
                 :key="index"
-                :value="item"
+                :value="item.kode_sub_mata_anggaran"
               >
                 {{ item.nama_sub_mata_anggaran }}
               </option>
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.id_anggaran.$error"
+              v-if="this.v$.Form.idanggaran.$error"
             >
               Anggaran tidak boleh kosong!
             </p>
           </div>
+
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Sisa Anggaran
+              Nominal Awal<span class="text-red-600">*</span>
             </label>
             <InputNumber
-              v-model="preview.nominal_sisa"
-              placeholder="Masukkan Sisa anggaran"
+              v-model="Form.nominalawal"
+              placeholder="Masukkan Nominal Awal"
               class="w-full"
-              disabled
             />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nominalawal.$error"
+            >
+              Nominal Awal tidak boleh kosong!
+            </p>
           </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kegiatan <span class="text-red-600">*</span>
+              Nominal Top Up<span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
-              v-model="Form.kegiatan"
-              placeholder="Masukkan Kegiatan"
+            <InputNumber
+              v-model="Form.nominaltopup"
+              placeholder="Masukkan Nominal Awal"
+              class="w-full"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.nominaltopup.$error"
+            >
+              Nominal Top Up tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Keterangan <span class="text-red-600">*</span>
+            </label>
+            <textarea
+              v-model="Form.keterangan"
+              cols="30"
+              rows="10"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+            ></textarea>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.kegiatan.$error"
+              v-if="this.v$.Form.keterangan.$error"
             >
-              Kegiatan tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Bulan <span class="text-red-600">*</span>
-            </label>
-            <VueDatePicker
-              placeholder="Pilih Bulan"
-              v-model="Form.bulan"
-              format="MMMM/yyyy"
-              auto-apply
-              month-picker
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.bulan.$error"
-            >
-              Bulan tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nominal <span class="text-red-600">*</span>
-            </label>
-            <InputNumber
-              v-model="Form.nominal"
-              placeholder="Masukkan Nominal"
-              class="w-full"
-              @input="validationNominal"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nominal.$error"
-            >
-              Nominal tidak boleh kosong!
+              Keterangan tidak boleh kosong!
             </p>
           </div>
         </div>
@@ -370,44 +329,39 @@ import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import VueDatePicker from "@vuepic/vue-datepicker";
+// import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
+import ValidationBtn from "../../../utils/ValidationBtnTopUp.vue";
 
 import serviceAnggaran from "../../../../services/Transaction.service";
-import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
-import serviceDepartemen from "../../../../services/Departemen.service";
+
 export default {
-  name: "Kegiatan",
+  name: "Top Up Anggaran",
   data() {
     return {
       v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      ListKegiatan: null,
+      ListTopUp: null,
       rowSMataAnggaran: null,
       rowDepartemen: null,
-      rowAnggaran: null,
       filters: {
-        kdsubmatanggaran: "",
-        kddepartemen: "",
-        cari: "",
         status: "",
+        cari: "",
       },
       pagination: {
         perPage: 5,
         currentPage: 1,
         totaldata: 0,
+        first: 0,
       },
       Form: {
-        id_anggaran: "",
-        kegiatan: "",
-        nominal: "",
-        bulan: "",
-        userid: "",
-      },
-      preview: {
-        nominal_sisa: "",
+        idanggaran: "",
+        nominalawal: "",
+        nominaltopup: "",
+        penanggungjwb: "",
+        keterangan: "",
       },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
@@ -416,11 +370,11 @@ export default {
   validations() {
     return {
       Form: {
-        id_anggaran: { required },
-        kegiatan: { required },
-        nominal: { required },
-        bulan: { required },
-        userid: { required },
+        idanggaran: { required },
+        nominalawal: { required },
+        nominaltopup: { required },
+        penanggungjwb: { required },
+        keterangan: { required },
       },
     };
   },
@@ -428,109 +382,23 @@ export default {
     DataTable,
     Column,
     InputText,
+    // VueDatePicker,
     InputNumber,
-    VueDatePicker,
+    ValidationBtn,
   },
   computed: {
     getAllData() {
-      return this.ListKegiatan;
-    },
-    getSMataAnggaran() {
-      return this.rowSMataAnggaran;
-    },
-    getDepartemen() {
-      return this.rowDepartemen;
-    },
-    getAnggaran() {
-      return this.rowAnggaran;
+      return this.ListTopUp;
     },
   },
   methods: {
-    cariData() {
-      this.refreshListTable(1);
-    },
-    setPreview() {
-      this.preview.nominal_sisa = this.Form.id_anggaran.sisa_nominal_pengajaun;
-    },
-    validationNominal(evt) {
-      if (evt.value > this.preview.nominal_sisa) {
-        this.$swal({
-          icon: "info",
-          title: "INFO",
-          text: "Nominal tidak boleh lebih dari sisa anggaran",
-          confirmButtonColor: "#e77817",
-        });
-      }
-    },
-    filterShow() {
-      this.pagination.currentPage = 1;
-      this.refreshListTable();
-    },
-    paginationTable(evt) {
-      this.pagination.perPage = evt.rows;
-      if (this.pagination.currentPage == evt.page) {
-        this.pagination.currentPage++;
-      } else if (this.pagination.currentPage - evt.page == 1) {
-        this.pagination.currentPage--;
-      } else {
-        this.pagination.currentPage = evt.page + 1;
-      }
-      this.refreshListTable();
-    },
-    async getAllAnggaran() {
-      let payload = {
-        idanggaran: "",
-        status: 2,
-        kddepartemen: this.userSession.departemen,
-        idanggaranawal: "",
-        kdmatanggaran: "",
-      };
-      try {
-        let res = await serviceAnggaran.getIdAnggaran(payload, this.token);
-        this.rowAnggaran = res.data.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getAllDepartemen() {
-      let payload = {};
-      try {
-        let respon = await serviceDepartemen.getDataDepartemen(
-          payload,
-          this.token
-        );
-        this.rowDepartemen = respon.data.data;
-      } catch (error) {
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
-      }
-    },
-    async getSubMataAnggaran() {
-      let payload = {};
-      try {
-        let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
-          payload,
-          this.token
-        );
-        this.rowSMataAnggaran = res.data.data;
-      } catch (error) {
-        this.rowSMataAnggaran = null;
-        console.log(error);
-      }
-    },
     showInput() {
       this.Form = {
-        id_anggaran: "",
-        kegiatan: "",
-        nominal: "",
-        userid: "",
-      };
-      this.preview = {
-        nominal_sisa: "",
+        idanggaran: "",
+        nominalawal: "",
+        nominaltopup: "",
+        penanggungjwb: "",
+        keterangan: "",
       };
       const $targetEl = document.getElementById("input-modal");
       this.modal = new Modal($targetEl);
@@ -539,74 +407,20 @@ export default {
     async getData() {
       this.loading = true;
       let payload = {
-        kdsubmatanggaran: this.filters.kdsubmatanggaran,
-        kddepartemen: this.userSession.departemen,
-        status: "",
+        status: this.filters.status,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
       };
       try {
-        let res = await serviceAnggaran.listKegiatan(payload, this.token);
+        let res = await serviceAnggaran.listTopUp(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
-        this.ListKegiatan = res.data.data.data;
-
+        this.ListTopUp = res.data.data.data;
         this.loading = false;
       } catch (error) {
-        this.ListKegiatan = null;
+        this.ListTopUp = null;
         this.loading = false;
         console.log(error);
-      }
-    },
-    async prosesInput() {
-      let Forminput = this.Form;
-      if (Forminput.nominal > this.preview.nominal_sisa) {
-        return this.$swal({
-          icon: "info",
-          title: "INFO",
-          text: "Nominal tidak boleh lebih dari sisa anggaran",
-          confirmButtonColor: "#e77817",
-        });
-      }
-      Forminput.userid = this.userSession.username;
-
-      this.v$.$validate(); // checks all inputs
-      if (!this.v$.$error) {
-        Forminput.id_anggaran = this.Form.id_anggaran.id;
-        let addMonth = this.Form.bulan.month + 1;
-        if (addMonth >= 10) {
-          Forminput.bulan = addMonth.toString();
-        } else {
-          Forminput.bulan = "0" + addMonth.toString();
-        }
-        try {
-          let respon = await serviceAnggaran.inputKegiatan(
-            Forminput,
-            this.token
-          );
-          this.modal.hide();
-          this.$swal({
-            icon: "success",
-            title: "Berhasil",
-            text: respon.data.Msg,
-            confirmButtonColor: "#e77817",
-          });
-          this.Form = {
-            id_anggaran: "",
-            kegiatan: "",
-            nominal: "",
-            userid: "",
-          };
-          this.refreshListTable();
-          this.getAllAnggaran();
-        } catch (error) {
-          this.$swal({
-            icon: "error",
-            title: "Gagal",
-            text: error.response.data.Msg,
-            confirmButtonColor: "#e77817",
-          });
-        }
       }
     },
     hideModal() {
@@ -614,6 +428,7 @@ export default {
     },
     refreshListTable(reset = 0) {
       if (reset != 0) {
+        this.pagination.first = 0;
         this.pagination.currentPage = 1;
       }
       this.getData();
@@ -622,26 +437,7 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
-    this.getAllDepartemen();
-    this.getSubMataAnggaran();
-    this.getAllAnggaran();
   },
 };
 </script>
-<style>
-.dp__input_wrap input {
-  color: black !important;
-  background-color: rgba(249, 250, 251) !important;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  width: 100% !important;
-  height: 46px;
-}
-.dp__input_wrap input:hover {
-  border-color: rgb(219, 222, 225) !important;
-}
-.dp__input_wrap input:focus {
-  border-color: #006699 !important;
-  box-shadow: none !important;
-}
-</style>
+<style></style>
