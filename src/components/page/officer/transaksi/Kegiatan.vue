@@ -3,6 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
@@ -92,6 +94,16 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
+            <Column field="" header="Status">
+              <template #body="{ data }">
+                <div class="label-nonAktif" v-if="data.status_kegiatan == 0">
+                  Belum di validasi
+                </div>
+                <div class="label-Aktif" v-else>
+                  Tervalidasi
+                </div>
+              </template>
+            </Column>
             <Column field="nama_entitas" header="Entitas" style="width: 20%">
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -152,7 +164,7 @@
               </template>
             </Column>
 
-            <Column field="Waktu Kegiatan" header="Tahun" style="width: 20%">
+            <Column field="Waktu Kegiatan" header="Bulan" style="width: 20%">
               <template #body="{ data }">
                 {{ data.bulan + " - " + data.tahun }}
               </template>
@@ -169,7 +181,7 @@
                 </div>
               </template>
             </Column>
-            <Column
+            <!-- <Column
               field=""
               header="Nominal Anggaran"
               class="text-right"
@@ -180,7 +192,7 @@
                   {{ data.nominal_kegiatan.toLocaleString("de-DE") }}
                 </div>
               </template>
-            </Column>
+            </Column> -->
           </DataTable>
         </div>
       </div>
@@ -470,6 +482,8 @@ export default {
         idanggaran: "",
         status: 2,
         kddepartemen: this.userSession.departemen,
+        idanggaranawal: "",
+        kdmatanggaran: "",
       };
       try {
         let res = await serviceAnggaran.getIdAnggaran(payload, this.token);

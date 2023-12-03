@@ -499,6 +499,7 @@ export default {
         rubrik: "",
         userid: "",
         status: "",
+        kode_depart : ""
       },
       idKey: "",
       loading: true,
@@ -588,7 +589,7 @@ export default {
       this.modal = new Modal($targetEl);
       this.modal.show();
       this.Form.entitas = data.kode_entitas;
-      this.Form.rubrik = data.kode_departement;
+      this.Form.rubrik = data.kode_departement.slice(0, 3);
       this.Form.nama_depart = data.nama_departement;
       this.Form.status = data.status;
       this.idKey = data.id;
@@ -603,6 +604,7 @@ export default {
       let Forminput = this.Form;
       Forminput.userid = this.userSession.username;
       Forminput.status = 1;
+      Forminput.kode_depart = Forminput.rubrik + Forminput.entitas
       this.v$.$validate(); // checks all inputs
 
       if (!this.v$.$error) {
@@ -671,6 +673,7 @@ export default {
       if (!this.v$.$error) {
         Forminput.id = this.idKey;
         Forminput.userid = this.userSession.username;
+        Forminput.kddepart = Forminput.rubrik + Forminput.entitas
         try {
           let respon = await serviceDepartemen.updateDepartemen(
             Forminput,

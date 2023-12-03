@@ -55,28 +55,28 @@ export default {
     getLabelTrue() {
       if (this.namaAkses == "Superadmin") {
         return this.nilaiStatus == 1
-          ? "Tervalidasi Level 1"
+          ? "Validate By Superadmin"
           : this.nilaiStatus == 9
-          ? "Tervalidasi Level 2"
+          ? "Validate By Officer"
           : this.nilaiStatus == 0
-          ? "Tervalidasi Level 1"
-          : "Tervalidasi Level 3";
-      } else if(this.namaAkses == "Officer"){
+          ? "Validate By Superadmin"
+          : "Validate By Departemen Head";
+      } else if (this.namaAkses == "Officer") {
         return this.nilaiStatus == 1
-          ? "Tervalidasi Level 2"
+          ? "Validate By Officer"
           : this.nilaiStatus == 9
-          ? "Tervalidasi Level 2"
+          ? "Validate By Officer"
           : this.nilaiStatus == 0
           ? "Belum di proses level 1"
-          : "Tervalidasi Level 3";
-      }else{
+          : "Validate By Departemen Head";
+      } else {
         return this.nilaiStatus == 1
-          ? "Belum di proses level 2"
+          ? "On Progress By Officer"
           : this.nilaiStatus == 2
-          ? "Tervalidasi Level 3"
+          ? "Validate By Departemen Head"
           : this.nilaiStatus == 0
-          ? "Belum di proses level 1"
-          : "Tervalidasi Level 3";
+          ? "On Progress By Superadmin"
+          : "Validate By Departemen Head";
       }
     },
     getLabelFalse() {

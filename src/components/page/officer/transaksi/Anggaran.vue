@@ -3,6 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
@@ -739,12 +741,40 @@
                 <label
                   class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
                 >
+                  Departemen <span class="text-red-600">*</span>
+                </label>
+                <select
+                  v-model="switchDetail.idDepartemen"
+                  @change="getSubByDep"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">-- Pilih Departemen --</option>
+                  <option
+                    v-for="(item, index) in getDepartemen"
+                    :key="index"
+                    :value="item.kode_departement"
+                  >
+                    {{ item.nama_departement }}
+                  </option>
+                </select>
+                <p
+                  class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                  v-if="this.v$.switchForm.idanggaran_final.$error"
+                >
+                  Sub Mata Anggaran tidak boleh kosong!
+                </p>
+              </div>
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
                   Sub Mata Anggaran <span class="text-red-600">*</span>
                 </label>
                 <select
                   v-model="switchForm.idanggaran_final"
                   @change="getDataSubMata"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  :disabled="getAnggaran == null"
                 >
                   <option value="">-- Pilih Sub Mata Anggaran --</option>
                   <option
@@ -879,12 +909,14 @@ export default {
         keterangan: "",
         status: "",
         userid: "",
+        jenis_switchanggaran: "",
       },
       switchDetail: {
         mataAnggaran: "",
         subMataAnggaran: "",
         nominalTujuan: "",
         idMataAnggaran: "",
+        idDepartemen: "",
       },
       loading: true,
       dropdown: "",
@@ -943,6 +975,22 @@ export default {
 
       exportFromJSON({ data, fileName, exportType });
     },
+    async getSubByDep() {
+      let payload = {
+        idanggaran: "",
+        status: 2,
+        kddepartemen: this.switchDetail.idDepartemen,
+        kdmatanggaran: this.switchDetail.idMataAnggaran,
+        idanggaranawal: this.switchForm.idanggaran_awal,
+      };
+      try {
+        let res = await serviceAnggaran.getIdAnggaran(payload, this.token);
+        this.rowAnggaran = res.data.data;
+      } catch (error) {
+        this.rowAnggaran = null;
+        console.log(error);
+      }
+    },
     validationNominalTF(evt) {
       if (evt.value > this.switchForm.nominalawal) {
         this.$swal({
@@ -954,23 +1002,21 @@ export default {
       }
     },
     getDataSubMata() {
-      console.log(this.switchForm.idanggaran_final);
       let data = this.switchForm.idanggaran_final;
       this.switchForm.nominalfinal = data.sisa_nominal_pengajaun;
     },
     showSwitchAnggaranSub(data) {
-      console.log(data);
       this.switchForm = {
         idanggaran_awal: data.id_anggaran,
         nominalawal: data.sisa_anggaran,
         status: 1,
         userid: this.userSession.username,
+        jenis_switchanggaran: 2,
       };
       this.switchDetail = {
         mataAnggaran: data.nama_mata_anggaran,
         subMataAnggaran: data.nama_sub_mata_anggaran,
-        idMataAnggaran : data.kode_mata_anggaran
-
+        idMataAnggaran: data.kode_mata_anggaran,
       };
       const $targetEl = document.getElementById("switch-sub-modal");
       this.modal = new Modal($targetEl);
@@ -979,24 +1025,25 @@ export default {
     },
     showSwitchAnggaranDep(data) {
       console.log(data);
+      this.rowAnggaran = null;
       this.switchForm = {
         idanggaran_awal: data.id_anggaran,
         nominalawal: data.sisa_anggaran,
-        status: 1,
+        status: 0,
         userid: this.userSession.username,
         penanggungjwb: this.userSession.username,
+        jenis_switchanggaran: 1,
       };
 
       this.switchDetail = {
         mataAnggaran: data.nama_mata_anggaran,
         subMataAnggaran: data.nama_sub_mata_anggaran,
-        // idMataAnggaran : data.
+        idMataAnggaran: data.kode_mata_anggaran,
       };
       const $targetEl = document.getElementById("switch-depart-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
-      this.getIdAnggaran();
-
+      // this.getIdAnggaran();
     },
     cariData() {
       this.refreshListTable(1);
@@ -1053,6 +1100,7 @@ export default {
         status: 2,
         kddepartemen: this.userSession.departemen,
         kdmatanggaran: this.switchDetail.idMataAnggaran,
+        idanggaranawal: this.switchForm.idanggaran_awal,
       };
       try {
         let res = await serviceAnggaran.getIdAnggaran(payload, this.token);
@@ -1113,7 +1161,53 @@ export default {
         });
       }
 
-      console.log(FormSwitch);
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.switchForm.$error) {
+        FormSwitch.idanggaran_final = FormSwitch.idanggaran_final.id;
+        try {
+          let res = await serviceAnggaran.inputSwitchAnggaran(
+            FormSwitch,
+            this.token
+          );
+          this.modal.hide();
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: res.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+          this.switchForm = {
+            idanggaran_awal: "",
+            idanggaran_final: "",
+            nominalawal: "",
+            nominalfinal: "",
+            nominalinout: "",
+            penanggungjwb: "",
+            keterangan: "",
+            status: "",
+            userid: "",
+          };
+        } catch (error) {
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+        }
+      }
+    },
+    async prosesSwitchPerDep() {
+      let FormSwitch = this.switchForm;
+      if (FormSwitch.nominalinout > this.switchForm.nominalawal) {
+        return this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal transfer tidak boleh lebih dari nominal asal",
+          confirmButtonColor: "#e77817",
+        });
+      }
+
       this.v$.$validate(); // checks all inputs
       if (!this.v$.switchForm.$error) {
         FormSwitch.idanggaran_final = FormSwitch.idanggaran_final.id;

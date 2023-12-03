@@ -80,7 +80,7 @@
                     title="Detail Realisasi"
                     @click="detailView(data)"
                   >
-                    <div v-if="data.status_realisasi == 1">
+                    <div v-if="data.status_realisasi == 0">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         height="24"
@@ -171,11 +171,8 @@
                 <div class="label-nonAktif" v-if="data.status_realisasi == 0">
                   Request By Officer
                 </div>
-                <div
-                  class="label-nonAktif"
-                  v-else-if="data.status_realisasi == 1"
-                >
-                  Request By Departemen Head
+                <div class="label-Aktif" v-else-if="data.status_realisasi == 1">
+                  Validate By Departemen Head
                 </div>
                 <div class="label-Aktif" v-else-if="data.status_realisasi == 2">
                   Validate By BUM
@@ -293,10 +290,10 @@
                   Request By Officer
                 </div>
                 <div
-                  class="label-nonAktif"
+                  class="label-Aktif"
                   v-else-if="detail.status_realisasi == 1"
                 >
-                  Request By Departemen Head
+                  Validate By Departemen Head
                 </div>
                 <div
                   class="label-Aktif"
@@ -313,7 +310,7 @@
               class="col-12 pt-6"
               v-if="detail.pkp == 1"
               v-show="
-                listFileRealisasi == null ||
+                (listFileRealisasi == null) ||
                 jenisPengajuan.Invoice == '' ||
                 jenisPengajuan.Faktur == ''
               "
@@ -327,7 +324,7 @@
               class="col-12 pt-6"
               v-else
               v-show="
-                listFileRealisasi == null ||
+                (listFileRealisasi == null) ||
                 jenisPengajuan.Invoice == '' ||
                 jenisPengajuan.FileLampiran == ''
               "
@@ -381,7 +378,7 @@
         <!-- Modal footer -->
         <div
           class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-          v-show="detail.status_realisasi == 1"
+          v-show="detail.status_realisasi == 0"
         >
           <button
             type="button"
@@ -397,9 +394,7 @@
             @click="prosesValidasi"
             class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
             v-else
-            v-show="
-              jenisPengajuan.FileLampiran != '' && jenisPengajuan.Invoice != ''
-            "
+            v-show="jenisPengajuan.FileLampiran != '' && jenisPengajuan.Invoice != ''"
           >
             VALIDASI
           </button>
@@ -540,14 +535,14 @@ export default {
     async prosesValidasi() {
       let payload = {
         id_realisasi: this.detail.id_realisasi,
-        status: 2,
+        status: 1,
         tanggal_pengajuan:
           this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
           "-" +
           this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
           "-" +
           this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
-        kode_buku: this.detail.kode_buku,
+        kode_buku: "",
         userid: this.userSession.username,
         tanggal_realisasi: "1900-01-01",
       };

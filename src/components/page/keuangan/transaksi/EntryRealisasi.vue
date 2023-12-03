@@ -293,10 +293,10 @@
                   Request By Officer
                 </div>
                 <div
-                  class="label-nonAktif"
+                  class="label-Aktif"
                   v-else-if="detail.status_realisasi == 1"
                 >
-                  Request By Departemen Head
+                  Validate By Departemen Head
                 </div>
                 <div
                   class="label-Aktif"
@@ -305,37 +305,72 @@
                   Validate By BUM
                 </div>
               </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">
+                  Kode Buku <span class="text-red-600">*</span>
+                </p>
+                <input
+                  v-model="Form.kode_buku"
+                  placeholder="Masukkan kode buku"
+                  class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  style="height: 50px"
+                />
+                <p
+                  class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                  v-if="this.v$.Form.kode_buku.$error"
+                >
+                  Kode buku tidak boleh kosong!
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">
+                  Tanggal Realisasi <span class="text-red-600">*</span>
+                </p>
+                <VueDatePicker
+                  placeholder="Pilih Tanggal"
+                  v-model="Form.tanggal_realisasi"
+                  format="dd/MMMM/yyyy"
+                  auto-apply
+                />
+                <p
+                  class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                  v-if="this.v$.Form.tanggal_realisasi.$error"
+                >
+                  Tanggal Realiasi tidak boleh kosong!
+                </p>
+              </div>
             </div>
           </div>
           <hr class="bg-gray-400" />
           <div class="row">
-            <div
-              class="col-12 pt-6"
-              v-if="detail.pkp == 1"
-              v-show="
-                listFileRealisasi == null ||
-                jenisPengajuan.Invoice == '' ||
-                jenisPengajuan.Faktur == ''
-              "
-            >
-              <p class="text-yellow-400 text-base">
-                Untuk melanjutkan proses validasi, officer harus mengupload file
-                <b>Faktur Pajak</b> dan <b>Invoice</b> terlebih dahulu.
-              </p>
+            <div class="col-12">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Jenis Dokumen
+              </label>
+              <select
+                v-model="Upload.jnsdokumen"
+                @change="cekButtonUpload"
+                class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Jenis Dokumen --</option>
+                <option value="5" v-show="jenisPengajuan.Pajak == ''">
+                  Lampiran Pajak
+                </option>
+              </select>
             </div>
-            <div
-              class="col-12 pt-6"
-              v-else
-              v-show="
-                listFileRealisasi == null ||
-                jenisPengajuan.Invoice == '' ||
-                jenisPengajuan.FileLampiran == ''
-              "
-            >
-              <p class="text-yellow-400 text-base">
-                Untuk melanjutkan proses validasi, officer harus mengupload file
-                <b>Lampiran</b> dan <b>Invoice</b> terlebih dahulu.
-              </p>
+            <div class="col-12 pt-8">
+              <FileUpload
+                mode="advanced"
+                chooseLabel="Browse"
+                :maxFileSize="1000000"
+                @uploader="prosesUpload($event)"
+                :customUpload="true"
+                :fileLimit="4"
+                :disabled="buttonActive"
+                accept="application/pdf,zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
+              />
             </div>
             <div class="col-12 pt-6" v-show="listFileRealisasi != null">
               <label
@@ -381,27 +416,14 @@
         <!-- Modal footer -->
         <div
           class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-          v-show="detail.status_realisasi == 1"
         >
           <button
             type="button"
             @click="prosesValidasi"
             class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
-            v-if="detail.pkp == 1"
-            v-show="jenisPengajuan.Faktur != '' && jenisPengajuan.Invoice != ''"
+            v-show="jenisPengajuan.Pajak"
           >
-            VALIDASI
-          </button>
-          <button
-            type="button"
-            @click="prosesValidasi"
-            class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
-            v-else
-            v-show="
-              jenisPengajuan.FileLampiran != '' && jenisPengajuan.Invoice != ''
-            "
-          >
-            VALIDASI
+            SIMPAN
           </button>
           <button
             @click="hideModal"
@@ -416,7 +438,7 @@
   </div>
 </template>
 <script>
-// import FileUpload from "primevue/fileupload";
+import FileUpload from "primevue/fileupload";
 
 // import InputNumber from "primevue/inputnumber";
 import DataTable from "primevue/datatable";
@@ -425,7 +447,7 @@ import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-// import VueDatePicker from "@vuepic/vue-datepicker";
+import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
 
@@ -462,6 +484,7 @@ export default {
         id_realisasi: "",
         kode_pengajuan: "",
         jnsdokumen: "",
+        Pajak: "",
       },
       Form: {
         id_pengajuan: "",
@@ -471,12 +494,14 @@ export default {
         nominal: "",
         keterangan: "",
         user_id: "",
+        tanggal_realisasi: "",
       },
       jenisPengajuan: {
         SPK: "",
         Faktur: "",
         Invoice: "",
         FileLampiran: "",
+        Pajak : ""
       },
       preview: {
         kode_pengajuan: "",
@@ -492,12 +517,8 @@ export default {
   validations() {
     return {
       Form: {
-        id_pengajuan: { required },
-        tanggal: { required },
-        kode_pengajuan: { required },
         kode_buku: { required },
-        nominal: { required },
-        keterangan: { required },
+        tanggal_realisasi: { required },
       },
     };
   },
@@ -506,8 +527,8 @@ export default {
     Column,
     InputText,
     // InputNumber,
-    // VueDatePicker,
-    // FileUpload,
+    VueDatePicker,
+    FileUpload,
   },
   computed: {
     getAllData() {
@@ -521,6 +542,79 @@ export default {
     },
   },
   methods: {
+    cekButtonUpload(evt) {
+      if (evt.target.value == "") {
+        this.buttonActive = true;
+      } else {
+        this.buttonActive = false;
+      }
+    },
+    async prosesUpload(evt) {
+      this.Upload.myFile = evt.files[0];
+      let formData = new FormData();
+      let files = this.Upload;
+      formData.append("myFile", files.myFile);
+      formData.append("id_realisasi", files.id_realisasi);
+      formData.append("kode_pengajuan", files.kode_pengajuan);
+      formData.append("jnsdokumen", files.jnsdokumen);
+      try {
+        serviceTransaksi
+          .uploadFileRealisasi(formData, this.token)
+          .then((respon) => {
+            this.$swal({
+              icon: "success",
+              title: "Berhasil",
+              text: respon.data.Msg,
+              confirmButtonColor: "#e77817",
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                this.jenisPengajuan = {
+                  SPK: "",
+                  Faktur: "",
+                  Invoice: "",
+                  FileLampiran: "",
+                };
+                files.jnsdokumen = "";
+                let payload = {
+                  id_realisasi: this.detail.id_realisasi,
+                };
+                this.loadFileRealiasi(payload);
+              }
+            });
+          });
+      } catch (error) {
+        this.$swal({
+          icon: "error",
+          title: "Gagal",
+          text: error.response.data.Msg,
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
+    async loadFileRealiasi(payload) {
+      try {
+        let res = await serviceTransaksi.listFileRealisasi(payload, this.token);
+        this.listFileRealisasi = res.data.data;
+        for (let i = 0; i < this.listFileRealisasi.length; i++) {
+          if (this.listFileRealisasi[i].jenis_dokumen == 1) {
+            this.jenisPengajuan.SPK = this.listFileRealisasi[i].jenis_dokumen;
+          } else if (this.listFileRealisasi[i].jenis_dokumen == 2) {
+            this.jenisPengajuan.Faktur =
+              this.listFileRealisasi[i].jenis_dokumen;
+          } else if (this.listFileRealisasi[i].jenis_dokumen == 3) {
+            this.jenisPengajuan.Invoice =
+              this.listFileRealisasi[i].jenis_dokumen;
+          } else if (this.listFileRealisasi[i].jenis_dokumen == 4) {
+            this.jenisPengajuan.FileLampiran =
+              this.listFileRealisasi[i].jenis_dokumen;
+          } else if (this.listFileRealisasi[i].jenis_dokumen == 5) {
+            this.jenisPengajuan.Pajak = this.listFileRealisasi[i].jenis_dokumen;
+          }
+        }
+      } catch (error) {
+        this.listFileRealisasi = null;
+      }
+    },
     downloadLinkFile(link) {
       window.open(link, "_blank", "noreferrer");
     },
@@ -538,54 +632,70 @@ export default {
       }
     },
     async prosesValidasi() {
-      let payload = {
-        id_realisasi: this.detail.id_realisasi,
-        status: 2,
-        tanggal_pengajuan:
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
-          "-" +
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
-          "-" +
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
-        kode_buku: this.detail.kode_buku,
-        userid: this.userSession.username,
-        tanggal_realisasi: "1900-01-01",
-      };
-
-      this.$swal({
-        icon: "question",
-        title: "Validasi pengajuan realisasi?",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonColor: "#008073",
-        cancelButtonColor: "grey",
-        confirmButtonText: "Validasi",
-        cancelButtonText: "Batal",
-        customClass: {
-          actions: "my-actions",
-          cancelButton: "order-2 right-gap",
-          confirmButton: "order-1",
-        },
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            let respon = await serviceTransaksi.validasiRealisasi(
-              payload,
-              this.token
-            );
-            this.responBerhasil(respon);
-            this.hideModal();
-            this.refreshListTable(1);
-          } catch (error) {
-            this.responError(error);
-          }
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.Form.$error) {
+        let Forminput = this.Form;
+        let tanggal = new Date(Forminput.tanggal_realisasi);
+        let year = tanggal.getFullYear();
+        let day = tanggal.getDate();
+        let month;
+        let addMonth = tanggal.getMonth() + 1;
+        if (addMonth >= 10) {
+          month = addMonth.toString();
+        } else {
+          month = "0" + addMonth.toString();
         }
-      });
+        Forminput.tanggal_realisasi = year + "-" + month + "-" + day;
+        let payload = {
+          id_realisasi: this.detail.id_realisasi,
+          status: 2,
+          tanggal_pengajuan:
+            this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
+            "-" +
+            this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
+            "-" +
+            this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
+          kode_buku: this.detail.kode_buku,
+          userid: this.userSession.username,
+          tanggal_realisasi: this.Form.tanggal_realisasi,
+        };
+        console.log(payload);
+
+        this.$swal({
+          icon: "question",
+          title: "Simpan realisasi?",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonColor: "#008073",
+          cancelButtonColor: "grey",
+          confirmButtonText: "Simpan",
+          cancelButtonText: "Batal",
+          customClass: {
+            actions: "my-actions",
+            cancelButton: "order-2 right-gap",
+            confirmButton: "order-1",
+          },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              await serviceTransaksi.validasiRealisasi(
+                payload,
+                this.token
+              );
+              this.responBerhasil();
+              this.hideModal();
+              this.refreshListTable(1);
+            } catch (error) {
+              this.responError(error);
+            }
+          }
+        });
+      }
     },
-    responBerhasil(respon) {
+    responBerhasil() {
       this.$swal({
         icon: "success",
-        title: respon.data.Msg,
+        title: "Berhasil",
         confirmButtonColor: "#e77817",
       });
     },
@@ -604,6 +714,7 @@ export default {
         Faktur: "",
         Invoice: "",
         FileLampiran: "",
+        Pajak: "",
       };
       this.detail = data;
       this.Upload.id_realisasi = data.id_realisasi;
@@ -626,6 +737,8 @@ export default {
           } else if (this.listFileRealisasi[i].jenis_dokumen == 4) {
             this.jenisPengajuan.FileLampiran =
               this.listFileRealisasi[i].jenis_dokumen;
+          } else if (this.listFileRealisasi[i].jenis_dokumen == 5) {
+            this.jenisPengajuan.Pajak = this.listFileRealisasi[i].jenis_dokumen;
           }
         }
       } catch (error) {
@@ -745,47 +858,47 @@ export default {
 </script>
 <style>
 /* .p-fileupload-choose {
-  box-shadow: none;
-  border: none;
-  border-radius: 6px;
-  background: #ff3300;
-  color: #ffff;
-  height: 48px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  box-shadow: inset 0 0 0 0 #ffff;
-  -webkit-transition: ease-out 0.4s;
-  -moz-transition: ease-out 0.4s;
-  transition: ease-out 0.4s;
-}
-.p-fileupload-choose:hover {
-  border-color: #ff3300 !important;
-  color: #ff3300 !important;
-  box-shadow: inset 0 0 0 50px #ffff;
-}
-.p-fileupload-choose:focus {
-  border-color: #ff3300 !important;
-  color: #ff3300 !important;
-  box-shadow: inset 0 0 0 50px #ffff;
-}
-
-.p-focus {
-  box-shadow: none;
-  border: none;
-  border-radius: 6px;
-  background: #ff3300;
-  color: #ffff;
-  height: 48px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  box-shadow: inset 0 0 0 0 #ffff;
-  -webkit-transition: ease-out 0.4s;
-  -moz-transition: ease-out 0.4s;
-  transition: ease-out 0.4s;
-}
-.p-focus:hover {
-  border-color: #ff3300 !important;
-  color: #ff3300 !important;
-  box-shadow: inset 0 0 0 50px #ffff;
-} */
+    box-shadow: none;
+    border: none;
+    border-radius: 6px;
+    background: #ff3300;
+    color: #ffff;
+    height: 48px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    box-shadow: inset 0 0 0 0 #ffff;
+    -webkit-transition: ease-out 0.4s;
+    -moz-transition: ease-out 0.4s;
+    transition: ease-out 0.4s;
+  }
+  .p-fileupload-choose:hover {
+    border-color: #ff3300 !important;
+    color: #ff3300 !important;
+    box-shadow: inset 0 0 0 50px #ffff;
+  }
+  .p-fileupload-choose:focus {
+    border-color: #ff3300 !important;
+    color: #ff3300 !important;
+    box-shadow: inset 0 0 0 50px #ffff;
+  }
+  
+  .p-focus {
+    box-shadow: none;
+    border: none;
+    border-radius: 6px;
+    background: #ff3300;
+    color: #ffff;
+    height: 48px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    box-shadow: inset 0 0 0 0 #ffff;
+    -webkit-transition: ease-out 0.4s;
+    -moz-transition: ease-out 0.4s;
+    transition: ease-out 0.4s;
+  }
+  .p-focus:hover {
+    border-color: #ff3300 !important;
+    color: #ff3300 !important;
+    box-shadow: inset 0 0 0 50px #ffff;
+  } */
 </style>

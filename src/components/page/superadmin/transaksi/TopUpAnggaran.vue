@@ -3,6 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="">
             <div class="">
               <label
@@ -43,7 +45,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -85,7 +87,7 @@
                   :num="0"
                   :idtopUp="data.id_topup"
                   :nominal="data.nominal_sisa_anggaran"
-                  :nominalTopup = "data.nominal_topup"
+                  :nominalTopup="data.nominal_topup"
                 />
               </template>
             </Column>

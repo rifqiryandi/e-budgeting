@@ -17,7 +17,7 @@
     <ul class="navbar-nav ml-auto">
       <!-- Notifications Dropdown Menu -->
       <!-- v-show="namaAkses == 'Departemen Head'" -->
-      <li class="nav-item dropdown" v-show="false">
+      <li class="nav-item dropdown" v-show="true">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -163,7 +163,7 @@ export default {
   },
   mounted() {
     this.countDownTimer();
-    // this.toastNotifikasi();
+    this.toastNotifikasi();
   },
 };
 </script>

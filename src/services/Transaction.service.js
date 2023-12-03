@@ -268,6 +268,49 @@ class TransactionService {
         return http.post("transaksi/switchanggaran", data, config);
     }
 
+    validasiSwitchAnggaran(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasiswitchanggaran", data, config);
+    }
+
+    listPengajuanForRealisasi(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/getpengajuan", data, config);
+    }
+
+    validasiRealisasi(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("transaksi/validasirealisasi", data, config);
+    }
+    uploadFileRealisasi(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("upload/realisasi", data, config);
+    }
+    
+    listFileRealisasi(data, token){
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("upload/listfilerealisasi", data, config);
+    }
 }
 
 export default new TransactionService();

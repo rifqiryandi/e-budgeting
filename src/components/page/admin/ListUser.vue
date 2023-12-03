@@ -115,7 +115,6 @@
                   class="bg-transparent mr-2"
                   title="EDIT"
                   @click="editUser(data)"
-                  v-if="data.username != userSession.username"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -60,7 +60,7 @@
 
 /* Label */
 .label-nonAktif {
-    width: 136px;
+    width: max-content;
     height: 32px;
     padding: 5px 10px 5px 10px;
     border-left: #f66512 5px solid;
@@ -75,7 +75,7 @@
 }
 
 .label-Aktif {
-    width: 136px;
+    width: max-content;
     height: 32px;
     padding: 5px 10px 5px 10px;
     border-left: #5bb07f 5px solid;
@@ -90,7 +90,7 @@
 }
 
 .label-Retur {
-    width: 136px;
+    width: max-content;
     height: 32px;
     padding: 5px 10px 5px 10px;
     border-left: #eb4034 5px solid;

@@ -40,6 +40,23 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-12 d-flex justify-content-end">
+      <button class="btn d-flex btn-add" @click="showInput">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 -960 960 960"
+          width="24"
+        >
+          <path
+            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
+          />
+        </svg>
+        Tambah Data
+      </button>
+    </div>
+  </div>
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -80,30 +97,16 @@
                     title="Detail Realisasi"
                     @click="detailView(data)"
                   >
-                    <div v-if="data.status_realisasi == 1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        viewBox="0 -960 960 960"
-                        width="24"
-                      >
-                        <path
-                          d="M480.067-100.001q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.925-148.204q29.925-69.369 81.225-120.682 51.3-51.314 120.65-81.247Q401.15-859.999 480-859.999q63.204 0 119.602 19t103.474 53l-43.383 44.384q-38.769-26.692-83.991-41.539Q530.48-800 480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-21.077-2.769-41.69-2.77-20.612-8.308-40.08l48.46-48.845q11 30.846 16.808 63.463 5.808 32.617 5.808 67.152 0 78.85-29.92 148.199-29.92 69.35-81.21 120.65-51.291 51.3-120.629 81.225-69.337 29.925-148.173 29.925Zm-56.836-209.846L267.078-466l42.153-42.153 114 114 394.615-395.23 42.153 42.153-436.768 437.383Z"
-                        />
-                      </svg>
-                    </div>
-                    <div v-else>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        viewBox="0 -960 960 960"
-                        width="24"
-                      >
-                        <path
-                          d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
-                        />
-                      </svg>
-                    </div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <path
+                        d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
+                      />
+                    </svg>
                   </button>
                 </div>
               </template>
@@ -136,7 +139,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="tanggal_pengajuan" header="Tanggal Pengajuan">
+            <Column field="tanggal" header="Tanggal Pengajuan">
               <template #body="{ data }">
                 <div>
                   {{
@@ -171,11 +174,8 @@
                 <div class="label-nonAktif" v-if="data.status_realisasi == 0">
                   Request By Officer
                 </div>
-                <div
-                  class="label-nonAktif"
-                  v-else-if="data.status_realisasi == 1"
-                >
-                  Request By Departemen Head
+                <div class="label-Aktif" v-else-if="data.status_realisasi == 1">
+                  Validate By Departemen Head
                 </div>
                 <div class="label-Aktif" v-else-if="data.status_realisasi == 2">
                   Validate By BUM
@@ -187,7 +187,223 @@
       </div>
     </div>
   </div>
-
+  <!-- Modal Insert -->
+  <div
+    id="input-modal"
+    tabindex="-1"
+    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative w-full max-w-4xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
+        >
+          <h3 class="text-xl font-medium" style="color: #fff">
+            Pengajuan Realisasi Anggaran
+          </h3>
+          <button
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            @click="hideModal"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-6 space-y-2">
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Pengajuan Biaya <span class="text-red-600">*</span>
+            </label>
+            <select
+              v-model="Form.id_pengajuan"
+              @change="setPreview"
+              class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Pengajuan Biaya --</option>
+              <option
+                v-for="(item, index) in getRowPengajuan"
+                :key="index"
+                :value="item"
+              >
+                {{
+                  item.kode_sub_mata_anggaran +
+                  " - " +
+                  item.prefix_kegiatan +
+                  " - " +
+                  item.uraian_kegiatan
+                }}
+              </option>
+            </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.id_pengajuan.$error"
+            >
+              Pengajuan biaya tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              PKP <span class="text-red-600">*</span>
+            </label>
+            <select
+              v-model="Form.pkp"
+              @change="setPreview"
+              class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih PKP --</option>
+              <option value="1">Ya</option>
+              <option value="0">Tidak</option>
+            </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.pkp.$error"
+            >
+              PKP tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Tanggal Pengajuan<span class="text-red-600">*</span>
+            </label>
+            <VueDatePicker
+              placeholder="Pilih Tanggal"
+              v-model="Form.tanggal_pengajuan"
+              format="dd/MMMM/yyyy"
+              auto-apply
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.tanggal_pengajuan.$error"
+            >
+              Tanggal tidak boleh kosong!
+            </p>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nominal Pengajuan
+            </label>
+            <InputNumber
+              v-model="preview.nominal"
+              placeholder=""
+              class="w-full"
+              disabled
+            />
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nominal Realisasi
+            </label>
+            <InputNumber
+              v-model="Form.nominal"
+              @input="validationNominal"
+              placeholder=""
+              class="w-full"
+              :disabled="preview.nominal <= 0"
+            />
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Kode Pengajuan
+            </label>
+            <input
+              v-model="preview.kode_pengajuan"
+              placeholder="Masukkan kode pengajuan"
+              class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              style="height: 50px"
+              disabled
+            />
+          </div>
+          <!-- <div class="" >
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Kode buku <span class="text-red-600">*</span>
+            </label>
+            <input
+              v-model="Form.kode_buku"
+              placeholder="Masukkan kode buku"
+              class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              style="height: 50px"
+            />
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.kode_buku.$error"
+            >
+              Kode buku tidak boleh kosong!
+            </p>
+          </div> -->
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Keterangan <span class="text-red-600">*</span>
+            </label>
+            <textarea
+              v-model="Form.keterangan"
+              cols="30"
+              rows="10"
+              class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            ></textarea>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.keterangan.$error"
+            >
+              Keterangan tidak boleh kosong!
+            </p>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div
+          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+        >
+          <button
+            type="button"
+            @click="prosesInput"
+            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
+          >
+            SIMPAN
+          </button>
+          <button
+            @click="hideModal"
+            type="button"
+            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          >
+            TUTUP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Modal detail -->
   <div
     id="detail-modal"
@@ -293,10 +509,10 @@
                   Request By Officer
                 </div>
                 <div
-                  class="label-nonAktif"
+                  class="label-Aktif"
                   v-else-if="detail.status_realisasi == 1"
                 >
-                  Request By Departemen Head
+                  Validate By Departemen Head
                 </div>
                 <div
                   class="label-Aktif"
@@ -309,33 +525,49 @@
           </div>
           <hr class="bg-gray-400" />
           <div class="row">
-            <div
-              class="col-12 pt-6"
-              v-if="detail.pkp == 1"
-              v-show="
-                listFileRealisasi == null ||
-                jenisPengajuan.Invoice == '' ||
-                jenisPengajuan.Faktur == ''
-              "
-            >
-              <p class="text-yellow-400 text-base">
-                Untuk melanjutkan proses validasi, officer harus mengupload file
-                <b>Faktur Pajak</b> dan <b>Invoice</b> terlebih dahulu.
-              </p>
+            <div class="col-12">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Jenis Dokumen
+              </label>
+              <select
+                v-model="Upload.jnsdokumen"
+                @change="cekButtonUpload"
+                class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Jenis Dokumen --</option>
+                <option value="1" v-show="jenisPengajuan.SPK == ''">SPK</option>
+                <option value="3" v-show="jenisPengajuan.Invoice == ''">
+                  Invoice
+                </option>
+                <option
+                  value="2"
+                  v-if="detail.pkp == 1"
+                  v-show="jenisPengajuan.Faktur == ''"
+                >
+                  Faktur Pajak
+                </option>
+                <option
+                  value="4"
+                  v-if="detail.pkp == 0"
+                  v-show="jenisPengajuan.FileLampiran == ''"
+                >
+                  Lampiran
+                </option>
+              </select>
             </div>
-            <div
-              class="col-12 pt-6"
-              v-else
-              v-show="
-                listFileRealisasi == null ||
-                jenisPengajuan.Invoice == '' ||
-                jenisPengajuan.FileLampiran == ''
-              "
-            >
-              <p class="text-yellow-400 text-base">
-                Untuk melanjutkan proses validasi, officer harus mengupload file
-                <b>Lampiran</b> dan <b>Invoice</b> terlebih dahulu.
-              </p>
+            <div class="col-12 pt-8">
+              <FileUpload
+                mode="advanced"
+                chooseLabel="Browse"
+                :maxFileSize="1000000"
+                @uploader="prosesUpload($event)"
+                :customUpload="true"
+                :fileLimit="4"
+                :disabled="buttonActive"
+                accept="application/pdf,zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
+              />
             </div>
             <div class="col-12 pt-6" v-show="listFileRealisasi != null">
               <label
@@ -378,54 +610,21 @@
             </div>
           </div>
         </div>
-        <!-- Modal footer -->
-        <div
-          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-          v-show="detail.status_realisasi == 1"
-        >
-          <button
-            type="button"
-            @click="prosesValidasi"
-            class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
-            v-if="detail.pkp == 1"
-            v-show="jenisPengajuan.Faktur != '' && jenisPengajuan.Invoice != ''"
-          >
-            VALIDASI
-          </button>
-          <button
-            type="button"
-            @click="prosesValidasi"
-            class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
-            v-else
-            v-show="
-              jenisPengajuan.FileLampiran != '' && jenisPengajuan.Invoice != ''
-            "
-          >
-            VALIDASI
-          </button>
-          <button
-            @click="hideModal"
-            type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-          >
-            TUTUP
-          </button>
-        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-// import FileUpload from "primevue/fileupload";
+import FileUpload from "primevue/fileupload";
 
-// import InputNumber from "primevue/inputnumber";
+import InputNumber from "primevue/inputnumber";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-// import VueDatePicker from "@vuepic/vue-datepicker";
+import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
 
@@ -465,12 +664,14 @@ export default {
       },
       Form: {
         id_pengajuan: "",
-        tanggal: "",
+        tanggal_realisasi: "",
         kode_pengajuan: "",
         kode_buku: "",
         nominal: "",
         keterangan: "",
         user_id: "",
+        tanggal_pengajuan: "",
+        pkp: "",
       },
       jenisPengajuan: {
         SPK: "",
@@ -493,11 +694,11 @@ export default {
     return {
       Form: {
         id_pengajuan: { required },
-        tanggal: { required },
+        tanggal_pengajuan: { required },
         kode_pengajuan: { required },
-        kode_buku: { required },
         nominal: { required },
         keterangan: { required },
+        pkp: { required },
       },
     };
   },
@@ -505,9 +706,9 @@ export default {
     DataTable,
     Column,
     InputText,
-    // InputNumber,
-    // VueDatePicker,
-    // FileUpload,
+    InputNumber,
+    VueDatePicker,
+    FileUpload,
   },
   computed: {
     getAllData() {
@@ -537,65 +738,12 @@ export default {
         });
       }
     },
-    async prosesValidasi() {
-      let payload = {
-        id_realisasi: this.detail.id_realisasi,
-        status: 2,
-        tanggal_pengajuan:
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
-          "-" +
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
-          "-" +
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
-        kode_buku: this.detail.kode_buku,
-        userid: this.userSession.username,
-        tanggal_realisasi: "1900-01-01",
-      };
-
-      this.$swal({
-        icon: "question",
-        title: "Validasi pengajuan realisasi?",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonColor: "#008073",
-        cancelButtonColor: "grey",
-        confirmButtonText: "Validasi",
-        cancelButtonText: "Batal",
-        customClass: {
-          actions: "my-actions",
-          cancelButton: "order-2 right-gap",
-          confirmButton: "order-1",
-        },
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            let respon = await serviceTransaksi.validasiRealisasi(
-              payload,
-              this.token
-            );
-            this.responBerhasil(respon);
-            this.hideModal();
-            this.refreshListTable(1);
-          } catch (error) {
-            this.responError(error);
-          }
-        }
-      });
-    },
-    responBerhasil(respon) {
-      this.$swal({
-        icon: "success",
-        title: respon.data.Msg,
-        confirmButtonColor: "#e77817",
-      });
-    },
-    async responError(error) {
-      await this.$swal({
-        icon: "info",
-        title: "GAGAL",
-        text: error.response.data.Msg,
-        confirmButtonColor: "#e77817",
-      });
+    cekButtonUpload(evt) {
+      if (evt.target.value == "") {
+        this.buttonActive = true;
+      } else {
+        this.buttonActive = false;
+      }
     },
     async detailView(data) {
       this.listFileRealisasi = null;
@@ -630,12 +778,6 @@ export default {
         }
       } catch (error) {
         this.listFileRealisasi = null;
-        this.jenisPengajuan = {
-          SPK: "",
-          Faktur: "",
-          Invoice: "",
-          FileLampiran: "",
-        };
         // this.$swal({
         //   icon: "error",
         //   title: "Gagal",
@@ -724,6 +866,156 @@ export default {
         this.listRealisasi = null;
         this.loading = false;
         console.log(error);
+      }
+    },
+    async prosesInput() {
+      if (this.Form.nominal > this.preview.nominal) {
+        return this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal realisasi tidak boleh lebih dari nominal pengajuan",
+          confirmButtonColor: "#e77817",
+        });
+      }
+      let Forminput = this.Form;
+
+      // Forminput.kode_buku = this.preview.kode_buku;
+      Forminput.kode_pengajuan = this.preview.kode_pengajuan;
+      Forminput.user_id = this.userSession.username;
+      Forminput.id_pengajuan = Forminput.id_pengajuan.id;
+
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.Form.$error) {
+        let tanggal = new Date(Forminput.tanggal_pengajuan);
+        let year = tanggal.getFullYear();
+        let day = tanggal.getDate();
+        let month;
+        let addMonth = tanggal.getMonth() + 1;
+        if (addMonth >= 10) {
+          month = addMonth.toString();
+        } else {
+          month = "0" + addMonth.toString();
+        }
+        Forminput.tanggal_pengajuan = year + "-" + month + "-" + day;
+        try {
+          let respon = await serviceTransaksi.inputRealisasi(
+            Forminput,
+            this.token
+          );
+          this.modal.hide();
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: respon.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+          this.Form = {
+            id_pengajuan: "",
+            tanggal: "",
+            kode_pengajuan: "",
+            kode_buku: "",
+            nominal: "",
+            keterangan: "",
+            user_id: "",
+          };
+          this.preview = {
+            kode_pengajuan: "",
+            kode_buku: "",
+            nominal: "",
+          };
+          this.UploadSPK = {
+            myFile: null,
+            id_realisasi: "",
+            kode_pengajuan: "",
+            jnsdokumen: "SPK",
+          };
+          this.UploadFaktur = {
+            myFile: null,
+            id_realisasi: "",
+            kode_pengajuan: "",
+            jnsdokumen: "Faktur Pajak",
+          };
+          this.UploadInovice = {
+            myFile: null,
+            id_realisasi: "",
+            kode_pengajuan: "",
+            jnsdokumen: "Inovice",
+          };
+          this.refreshListTable();
+          this.getPengajuan();
+        } catch (error) {
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+        }
+      }
+    },
+    async prosesUpload(evt) {
+      this.Upload.myFile = evt.files[0];
+      let formData = new FormData();
+      let files = this.Upload;
+      // SPK
+      formData.append("myFile", files.myFile);
+      formData.append("id_realisasi", files.id_realisasi);
+      formData.append("kode_pengajuan", files.kode_pengajuan);
+      formData.append("jnsdokumen", files.jnsdokumen);
+      try {
+        serviceTransaksi
+          .uploadFileRealisasi(formData, this.token)
+          .then((respon) => {
+            this.$swal({
+              icon: "success",
+              title: "Berhasil",
+              text: respon.data.Msg,
+              confirmButtonColor: "#e77817",
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                this.jenisPengajuan = {
+                  SPK: "",
+                  Faktur: "",
+                  Invoice: "",
+                  FileLampiran: "",
+                };
+                files.jnsdokumen = "";
+                let payload = {
+                  id_realisasi: this.detail.id_realisasi,
+                };
+                this.loadFileRealiasi(payload);
+              }
+            });
+          });
+      } catch (error) {
+        this.$swal({
+          icon: "error",
+          title: "Gagal",
+          text: error.response.data.Msg,
+          confirmButtonColor: "#e77817",
+        });
+      }
+    },
+    async loadFileRealiasi(payload) {
+      try {
+        let res = await serviceTransaksi.listFileRealisasi(payload, this.token);
+        this.listFileRealisasi = res.data.data;
+        for (let i = 0; i < this.listFileRealisasi.length; i++) {
+          if (this.listFileRealisasi[i].jenis_dokumen == 1) {
+            this.jenisPengajuan.SPK = this.listFileRealisasi[i].jenis_dokumen;
+          } else if (this.listFileRealisasi[i].jenis_dokumen == 2) {
+            this.jenisPengajuan.Faktur =
+              this.listFileRealisasi[i].jenis_dokumen;
+          } else if (this.listFileRealisasi[i].jenis_dokumen == 3) {
+            this.jenisPengajuan.Invoice =
+              this.listFileRealisasi[i].jenis_dokumen;
+          } else if (this.listFileRealisasi[i].jenis_dokumen == 4) {
+            this.jenisPengajuan.FileLampiran =
+              this.listFileRealisasi[i].jenis_dokumen;
+          }
+        }
+      } catch (error) {
+        this.listFileRealisasi = null;
       }
     },
     hideModal() {
