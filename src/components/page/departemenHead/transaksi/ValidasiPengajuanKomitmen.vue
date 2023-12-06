@@ -77,6 +77,50 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
+            <Column field="status_pengajuan" header="Status">
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
+                    Belum diproses
+                  </div>
+                  <div
+                    class="label-Aktif"
+                    v-else-if="data.status_pengajuan == 1"
+                  >
+                    Tervalidasi
+                  </div>
+                  <div
+                    class="label-Retur"
+                    v-else-if="data.status_pengajuan == 2"
+                  >
+                    Retur
+                  </div>
+                </div>
+              </template>
+            </Column>
+
+            <Column field="uraian_pengajuan" header="Kegiatan">
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.uraian_pengajuan }}
+                </div>
+              </template>
+            </Column>
+            <Column field="nama_sub_mata_anggaran" header="Sub Mata Anggaran">
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nama_sub_mata_anggaran }}
+                </div>
+              </template>
+            </Column>
+
+            <Column field="nominal_realisasi" header="Nominal">
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nominal_realisasi.toLocaleString("de-DE") }}
+                </div>
+              </template>
+            </Column>
             <Column field="" header="" style="width: 5%">
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -110,48 +154,6 @@
                       </svg>
                     </div>
                   </button>
-                </div>
-              </template>
-            </Column>
-            <Column field="uraian_pengajuan" header="Kegiatan">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.uraian_pengajuan }}
-                </div>
-              </template>
-            </Column>
-            <Column field="nama_sub_mata_anggaran" header="Sub Mata Anggaran">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-            <Column field="status_pengajuan" header="Status">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
-                    Belum diproses
-                  </div>
-                  <div
-                    class="label-Aktif"
-                    v-else-if="data.status_pengajuan == 1"
-                  >
-                    Tervalidasi
-                  </div>
-                  <div
-                    class="label-Retur"
-                    v-else-if="data.status_pengajuan == 2"
-                  >
-                    Retur
-                  </div>
-                </div>
-              </template>
-            </Column>
-            <Column field="nominal_realisasi" header="Nominal">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nominal_realisasi.toLocaleString("de-DE") }}
                 </div>
               </template>
             </Column>
@@ -240,7 +242,7 @@
                 <p class="text-base">
                   {{
                     Detail.nominal_pengajuan != undefined
-                      ? "Rp." + Detail.nominal_pengajuan.toLocaleString("de-DE")
+                      ? "Rp " + Detail.nominal_pengajuan.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
@@ -252,7 +254,7 @@
                 <p class="text-base">
                   {{
                     Detail.nominal_realisasi != undefined
-                      ? "Rp." + Detail.nominal_realisasi.toLocaleString("de-DE")
+                      ? "Rp " + Detail.nominal_realisasi.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
@@ -262,7 +264,7 @@
                 <p class="text-base">
                   {{
                     Detail.sisa_realisasi != undefined
-                      ? "Rp." + Detail.sisa_realisasi.toLocaleString("de-DE")
+                      ? "Rp " + Detail.sisa_realisasi.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>

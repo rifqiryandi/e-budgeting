@@ -3,8 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h3 style="font-weight: 500;">Pencarian</h3>
-          <hr>
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
             <div class="">
               <label
@@ -36,7 +36,7 @@
                 v-model="filters.kddepartemen"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option value="">-- Pilih departemen --</option>
+                <option value="">-- Pilih Departemen --</option>
                 <option
                   v-for="(item, index) in getDepartemen"
                   :key="index"
@@ -118,7 +118,11 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="width: 20%">
+            <Column
+              field=""
+              header="Status"
+              style="min-width: 140px !important"
+            >
               <template #body="{ data }">
                 <ValidationBtn
                   :nilaiStatus="data.status_anggaran"
@@ -127,7 +131,11 @@
                 />
               </template>
             </Column>
-            <Column field="nama_entitas" header="Entitas" style="width: 20%">
+            <Column
+              field="nama_entitas"
+              header="Entitas"
+              style="min-width: 140px !important"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.nama_entitas }}
@@ -137,7 +145,7 @@
             <Column
               field="nama_departement"
               header="Departemen"
-              style="width: 20%"
+              style="min-width: 140px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -148,7 +156,7 @@
             <Column
               field="nama_kelompok_mata_anggaran"
               header="Kelompok Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 240px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -159,7 +167,7 @@
             <Column
               field="nama_mata_anggaran"
               header="Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -171,7 +179,7 @@
             <Column
               field="nama_sub_mata_anggaran"
               header="Sub Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -180,7 +188,7 @@
               </template>
             </Column>
 
-            <Column field="tahun" header="Tahun" style="width: 20%">
+            <Column field="tahun" header="Tahun">
               <template #body="{ data }">
                 {{ data.tahun }}
               </template>
@@ -189,7 +197,7 @@
               field=""
               header="Nominal Awal"
               class="text-right"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 {{ data.nominal.toLocaleString("de-DE") }}
@@ -199,35 +207,61 @@
               field=""
               header="Sisa Anggaran"
               class="text-right"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 {{ data.sisa_anggaran.toLocaleString("de-DE") }}
               </template>
             </Column>
-            
-
-            <Column field="" header="" style="width: 20%">
+            <Column field="" header="Aksi" class="text-right">
               <template #body="{ data }">
-                <div style="font-weight: 600">
+                <div class="dropdown">
                   <button
-                    class="bg-transparent border-0"
-                    title="Top Up"
-                    @click="topupView(data)"
-                    v-show="data.status_anggaran == 2"
+                    class="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    :disabled="data.status_anggaran != 2"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24"
-                      viewBox="0 -960 960 960"
-                      width="24"
-                    >
-                      <path
-                        d="M480-40q-112 0-206-51T120-227v107H40v-240h240v80h-99q48 72 126.5 116T480-120q75 0 140.5-28.5t114-77q48.5-48.5 77-114T840-480h80q0 91-34.5 171T791-169q-60 60-140 94.5T480-40Zm-36-160v-52q-47-11-76.5-40.5T324-370l66-26q12 41 37.5 61.5T486-314q33 0 56.5-15.5T566-378q0-29-24.5-47T454-466q-59-21-86.5-50T340-592q0-41 28.5-74.5T446-710v-50h70v50q36 3 65.5 29t40.5 61l-64 26q-8-23-26-38.5T482-648q-35 0-53.5 15T410-592q0 26 23 41t83 35q72 26 96 61t24 77q0 29-10 51t-26.5 37.5Q583-274 561-264.5T514-250v50h-70ZM40-480q0-91 34.5-171T169-791q60-60 140-94.5T480-920q112 0 206 51t154 136v-107h80v240H680v-80h99q-48-72-126.5-116T480-840q-75 0-140.5 28.5t-114 77q-48.5 48.5-77 114T120-480H40Z"
-                      />
-                    </svg>
+                    Menu
                   </button>
+                  <div
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <button
+                      class="dropdown-item"
+                      @click="showSwitchAnggaranDep(data)"
+                    >
+                      Switch Antar departemen
+                    </button>
+                  </div>
                 </div>
+              </template>
+            </Column>
+            <Column field="" header="">
+              <template #body="{ data }">
+                <button
+                  class="bg-transparent border-0"
+                  style="cursor: pointer"
+                  title="Top Up"
+                  @click="topupView(data)"
+                  :disabled="data.status_anggaran != 2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :style="data.status_anggaran != 2 ? 'fill : grey' : ''"
+                  >
+                    <path
+                      d="M480-40q-112 0-206-51T120-227v107H40v-240h240v80h-99q48 72 126.5 116T480-120q75 0 140.5-28.5t114-77q48.5-48.5 77-114T840-480h80q0 91-34.5 171T791-169q-60 60-140 94.5T480-40Zm-36-160v-52q-47-11-76.5-40.5T324-370l66-26q12 41 37.5 61.5T486-314q33 0 56.5-15.5T566-378q0-29-24.5-47T454-466q-59-21-86.5-50T340-592q0-41 28.5-74.5T446-710v-50h70v50q36 3 65.5 29t40.5 61l-64 26q-8-23-26-38.5T482-648q-35 0-53.5 15T410-592q0 26 23 41t83 35q72 26 96 61t24 77q0 29-10 51t-26.5 37.5Q583-274 561-264.5T514-250v50h-70ZM40-480q0-91 34.5-171T169-791q60-60 140-94.5T480-920q112 0 206 51t154 136v-107h80v240H680v-80h99q-48-72-126.5-116T480-840q-75 0-140.5 28.5t-114 77q-48.5 48.5-77 114T120-480H40Z"
+                    />
+                  </svg>
+                </button>
               </template>
             </Column>
           </DataTable>
@@ -312,7 +346,7 @@
               v-model="Form.kddepartemen"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option value="">-- Pilih departemen --</option>
+              <option value="">-- Pilih Departemen --</option>
               <option
                 v-for="(item, index) in getDepartemen"
                 :key="index"
@@ -589,6 +623,254 @@
       </div>
     </div>
   </div>
+  <!-- Modal Switch per departemen -->
+  <div
+    id="switch-depart-modal"
+    tabindex="-1"
+    class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative w-full max-w-6xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
+        >
+          <h3 class="text-xl font-medium" style="color: #fff">
+            Switch Antar Departemen
+          </h3>
+          <button
+            type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            @click="hideModal"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-6 space-y-2">
+          <div class="row">
+            <div class="col-12">
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Departemen <span class="text-red-600">*</span>
+                </label>
+                <select
+                  v-model="switchDetail.idDepartemen"
+                  @change="getSubByDep"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">-- Pilih Departemen --</option>
+                  <option
+                    v-for="(item, index) in getDepartemen"
+                    :key="index"
+                    :value="item.kode_departement"
+                  >
+                    {{ item.nama_departement }}
+                  </option>
+                </select>
+              </div>
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Kelompok Mata Anggaran<span class="text-red-600">*</span>
+                </label>
+                <select
+                  v-model="filterForm.kdkelmatanggaran"
+                  @change="rowDataMataAnggaran"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+                  <option
+                    v-for="(item, index) in getKelompokMataAnggaran"
+                    :key="index"
+                    :value="item.kode_kelompok_mata_anggaran"
+                  >
+                    {{
+                      item.kode_kelompok_mata_anggaran +
+                      " - " +
+                      item.nama_kelompok_mata_anggaran
+                    }}
+                  </option>
+                </select>
+              </div>
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Mata Anggaran<span class="text-red-600">*</span>
+                </label>
+                <select
+                  v-model="switchDetail.idMataAnggaran"
+                  @change="getSubByDep"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  :disabled="filterForm.kdkelmatanggaran == ''"
+                >
+                  <option value="">-- Pilih Mata Anggaran --</option>
+                  <option
+                    v-for="(item, index) in getMataAnggaran"
+                    :key="index"
+                    :value="item.kode_mata_anggaran"
+                  >
+                    {{
+                      item.kode_mata_anggaran + " - " + item.nama_mata_anggaran
+                    }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6 col-md-6">
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Sub Mata Anggaran
+                </label>
+                <input
+                  type="text"
+                  id="base-input"
+                  v-model="switchDetail.subMataAnggaran"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  disabled
+                />
+              </div>
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Nominal Asal
+                </label>
+                <InputNumber
+                  v-model="switchForm.nominalawal"
+                  placeholder="Masukkan Nominal"
+                  class="w-full"
+                  disabled
+                />
+              </div>
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Nominal Transfer <span class="text-red-600">*</span>
+                </label>
+                <InputNumber
+                  v-model="switchForm.nominalinout"
+                  placeholder="Masukkan Nominal"
+                  class="w-full"
+                  @input="validationNominalTF"
+                />
+                <p
+                  class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                  v-if="this.v$.switchForm.nominalinout.$error"
+                >
+                  Nominal transfer tidak boleh kosong!
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6 col-md-6">
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Sub Mata Anggaran <span class="text-red-600">*</span>
+                </label>
+                <select
+                  v-model="switchForm.idanggaran_final"
+                  @change="getDataSubMata"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  :disabled="getAnggaran == null"
+                >
+                  <option value="">-- Pilih Sub Mata Anggaran --</option>
+                  <option
+                    v-for="(item, index) in getAnggaran"
+                    :key="index"
+                    :value="item"
+                  >
+                    {{ item.nama_sub_mata_anggaran }}
+                  </option>
+                </select>
+                <p
+                  class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                  v-if="this.v$.switchForm.idanggaran_final.$error"
+                >
+                  Sub Mata Anggaran tidak boleh kosong!
+                </p>
+              </div>
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Nominal Tujuan
+                </label>
+                <InputNumber
+                  v-model="switchForm.nominalfinal"
+                  placeholder="Masukkan Nominal"
+                  class="w-full"
+                  disabled
+                />
+              </div>
+              <div class="">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Keterangan <span class="text-red-600">*</span>
+                </label>
+                <textarea
+                  v-model="switchForm.keterangan"
+                  cols="30"
+                  rows="10"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                ></textarea>
+                <p
+                  class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                  v-if="this.v$.switchForm.keterangan.$error"
+                >
+                  Keterangan tidak boleh kosong!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal footer -->
+        <div
+          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+        >
+          <button
+            type="button"
+            @click="prosesSwitchPerDep"
+            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
+          >
+            SIMPAN
+          </button>
+          <button
+            @click="hideModal"
+            type="button"
+            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+          >
+            TUTUP
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import exportFromJSON from "export-from-json";
@@ -607,7 +889,8 @@ import ValidationBtn from "../../../utils/ValidationBtn.vue";
 import serviceAnggaran from "../../../../services/Transaction.service";
 import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
 import serviceDepartemen from "../../../../services/Departemen.service";
-
+import serviceKMataAnggaran from "../../../../services/KelompokMataAnggaran.service";
+import serviceMataAnggaran from "../../../../services/MataAnggaran.service";
 export default {
   name: "Anggaran",
   data() {
@@ -618,6 +901,10 @@ export default {
       ListTransaksi: null,
       rowSMataAnggaran: null,
       rowDepartemen: null,
+      rowKMataAnggaran: null,
+      rowMataAnggaran: null,
+      rowAnggaran: null,
+
       filters: {
         kdsubmatanggaran: "",
         kddepartemen: "",
@@ -645,6 +932,28 @@ export default {
         penanggungjwb: "",
         keterangan: "",
       },
+      switchForm: {
+        idanggaran_awal: "",
+        idanggaran_final: "",
+        nominalawal: "",
+        nominalfinal: "",
+        nominalinout: "",
+        penanggungjwb: "",
+        keterangan: "",
+        status: "",
+        userid: "",
+        jenis_switchanggaran: "",
+      },
+      switchDetail: {
+        mataAnggaran: "",
+        subMataAnggaran: "",
+        nominalTujuan: "",
+        idMataAnggaran: "",
+        idDepartemen: "",
+      },
+      filterForm: {
+        kdkelmatanggaran: "",
+      },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
@@ -664,6 +973,16 @@ export default {
         nominaltopup: { required },
         penanggungjwb: { required },
         keterangan: { required },
+      },
+      switchForm: {
+        idanggaran_awal: { required },
+        idanggaran_final: { required },
+        nominalawal: { required },
+        nominalfinal: { required },
+        nominalinout: { required },
+        keterangan: { required },
+        status: { required },
+        userid: { required },
       },
     };
   },
@@ -685,6 +1004,15 @@ export default {
     getDepartemen() {
       return this.rowDepartemen;
     },
+    getAnggaran() {
+      return this.rowAnggaran;
+    },
+    getKelompokMataAnggaran() {
+      return this.rowKMataAnggaran;
+    },
+    getMataAnggaran() {
+      return this.rowMataAnggaran;
+    },
   },
   methods: {
     tes() {
@@ -693,6 +1021,117 @@ export default {
       const exportType = exportFromJSON.types.csv;
 
       exportFromJSON({ data, fileName, exportType });
+    },
+    async rowDataKMataAnggaran() {
+      try {
+        let res = await serviceKMataAnggaran.getDataKMataAnggaran(this.token);
+        this.rowKMataAnggaran = res.data.data;
+      } catch (error) {
+        this.rowKMataAnggaran = null;
+        console.log(error);
+      }
+    },
+    async rowDataMataAnggaran() {
+      let payload = {
+        kdkelmatanggaran: this.filterForm.kdkelmatanggaran,
+      };
+      try {
+        let res = await serviceMataAnggaran.getDataMataAnggaran(
+          payload,
+          this.token
+        );
+        this.rowMataAnggaran = res.data.data;
+      } catch (error) {
+        this.rowMataAnggaran = null;
+        console.log(error);
+      }
+    },
+    async getSubByDep() {
+      let payload = {
+        idanggaran: "",
+        status: 2,
+        kddepartemen: this.switchDetail.idDepartemen,
+        kdmatanggaran: this.switchDetail.idMataAnggaran,
+        idanggaranawal: this.switchForm.idanggaran_awal,
+      };
+      try {
+        let res = await serviceAnggaran.getIdAnggaran(payload, this.token);
+        this.rowAnggaran = res.data.data;
+      } catch (error) {
+        this.rowAnggaran = null;
+      }
+    },
+    getDataSubMata() {
+      let data = this.switchForm.idanggaran_final;
+      this.switchForm.nominalfinal = data.sisa_nominal_pengajaun;
+    },
+    showSwitchAnggaranDep(data) {
+      this.rowAnggaran = null;
+      this.switchForm = {
+        idanggaran_awal: data.id_anggaran,
+        nominalawal: data.sisa_anggaran,
+        status: 0,
+        userid: this.userSession.username,
+        penanggungjwb: this.userSession.username,
+        jenis_switchanggaran: 1,
+      };
+
+      this.switchDetail = {
+        mataAnggaran: data.nama_mata_anggaran,
+        subMataAnggaran: data.nama_sub_mata_anggaran,
+        idMataAnggaran: data.kode_mata_anggaran,
+      };
+      const $targetEl = document.getElementById("switch-depart-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+      // this.getIdAnggaran();
+    },
+    async prosesSwitchPerDep() {
+      let FormSwitch = this.switchForm;
+      if (FormSwitch.nominalinout > this.switchForm.nominalawal) {
+        return this.$swal({
+          icon: "info",
+          title: "INFO",
+          text: "Nominal transfer tidak boleh lebih dari nominal asal",
+          confirmButtonColor: "#e77817",
+        });
+      }
+
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.switchForm.$error) {
+        FormSwitch.idanggaran_final = FormSwitch.idanggaran_final.id;
+        try {
+          let res = await serviceAnggaran.inputSwitchAnggaran(
+            FormSwitch,
+            this.token
+          );
+          this.modal.hide();
+          this.$swal({
+            icon: "success",
+            title: "Berhasil",
+            text: res.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+          this.switchForm = {
+            idanggaran_awal: "",
+            idanggaran_final: "",
+            nominalawal: "",
+            nominalfinal: "",
+            nominalinout: "",
+            penanggungjwb: "",
+            keterangan: "",
+            status: "",
+            userid: "",
+          };
+        } catch (error) {
+          this.$swal({
+            icon: "error",
+            title: "Gagal",
+            text: error.response.data.Msg,
+            confirmButtonColor: "#e77817",
+          });
+        }
+      }
     },
     async prosesInputTopUp() {
       let Forminput = this.FormTopUp;
@@ -728,7 +1167,6 @@ export default {
       }
     },
     topupView(data) {
-      
       this.FormTopUp = {
         nominalawal: data.sisa_anggaran,
         idanggaran: data.id_anggaran,
@@ -882,6 +1320,7 @@ export default {
     this.getData();
     this.getSubMataAnggaran();
     this.getAllDepartemen();
+    this.rowDataKMataAnggaran();
   },
 };
 </script>

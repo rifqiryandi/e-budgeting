@@ -3,8 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h3 style="font-weight: 500;">Pencarian</h3>
-          <hr>
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
@@ -45,7 +45,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -78,7 +78,7 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="width: 20%">
+            <Column field="" header="" style="min-width: 220px !important">
               <template #body="{ data }">
                 <ValidationBtnEvn
                   :nilaiStatus="data.status_kegiatan"
@@ -87,7 +87,7 @@
                 />
               </template>
             </Column>
-            <Column field="nama_entitas" header="Entitas" style="width: 20%">
+            <!-- <Column field="nama_entitas" header="Entitas" style="min-width: 140px !important">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.nama_entitas }}
@@ -97,18 +97,18 @@
             <Column
               field="nama_departement"
               header="Departemen"
-              style="width: 20%"
+              style="min-width: 140px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.nama_departement }}
                 </div>
               </template>
-            </Column>
+            </Column> -->
             <Column
               field="nama_kelompok_mata_anggaran"
               header="Kelompok Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 240px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -119,7 +119,7 @@
             <Column
               field="nama_mata_anggaran"
               header="Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -131,7 +131,7 @@
             <Column
               field="nama_sub_mata_anggaran"
               header="Sub Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -139,7 +139,11 @@
                 </div>
               </template>
             </Column>
-            <Column field="kegiatan" header="Kegiatan" style="width: 20%">
+            <Column
+              field="kegiatan"
+              header="Kegiatan"
+              style="min-width: 220px !important"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.kegiatan }}
@@ -147,7 +151,11 @@
               </template>
             </Column>
 
-            <Column field="Waktu Kegiatan" header="Bulan" style="width: 20%">
+            <Column
+              field="Waktu Kegiatan"
+              header="Bulan"
+              style="min-width: 180px !important"
+            >
               <template #body="{ data }">
                 {{ data.bulan + " - " + data.tahun }}
               </template>
@@ -156,7 +164,7 @@
               field=""
               header="Nominal Kegiatan"
               class="text-right"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 {{ data.nonimal_anggaran.toLocaleString("de-DE") }}
@@ -416,7 +424,7 @@ export default {
     InputText,
     InputNumber,
     VueDatePicker,
-    ValidationBtnEvn
+    ValidationBtnEvn,
   },
   computed: {
     getAllData() {

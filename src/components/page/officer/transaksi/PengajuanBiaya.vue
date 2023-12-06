@@ -3,8 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h3 style="font-weight: 500;">Pencarian</h3>
-          <hr>
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
@@ -124,42 +124,11 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-
             <Column
-              field="nama_sub_mata_anggaran"
-              header="Sub Mata Anggaran"
-              style="width: 20%"
+              field=""
+              header="Status"
+              style="min-width: 140px !important"
             >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-            <Column
-              field="uraian_kegiatan"
-              header="Nama Kegiatan"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.uraian_kegiatan }}
-                </div>
-              </template>
-            </Column>
-            <Column field="" header="Tahun" style="width: 20%">
-              <template #body="{ data }">
-                {{ data.tahun }}
-              </template>
-            </Column>
-            <Column field="" header="Jenis Pengajuan" style="width: 20%">
-              <template #body="{ data }">
-                {{ data.jenis_pengajuan }}
-              </template>
-            </Column>
-            
-
-            <Column field="" header="Status" style="width: 20%">
               <template #body="{ data }">
                 <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
                   Belum diproses
@@ -173,10 +142,50 @@
               </template>
             </Column>
             <Column
+              field="nama_sub_mata_anggaran"
+              header="Sub Mata Anggaran"
+              style="min-width: 180px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nama_sub_mata_anggaran }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="uraian_kegiatan"
+              header="Nama Kegiatan"
+              style="min-width: 180px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.uraian_kegiatan }}
+                </div>
+              </template>
+            </Column>
+            <Column field="" header="Tahun">
+              <template #body="{ data }">
+                {{ data.tahun }}
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Jenis Pengajuan"
+              style="min-width: 120px !important"
+            >
+              <template #body="{ data }">
+                {{
+                  data.jenis_pengajuan == "PBI"
+                    ? "Beban Reguler"
+                    : "Beban Komitmen"
+                }}
+              </template>
+            </Column>
+            <Column
               field=""
               header="Nominal Pengajuan"
               class="text-right"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 {{ data.nominal_pengajuan.toLocaleString("de-DE") }}
@@ -786,7 +795,7 @@ export default {
       }
     },
     setPreview() {
-      this.Form.sisa_nominal = 
+      this.Form.sisa_nominal =
         this.Form.id_kegiatan.sisa_nominal_pengajuan == null
           ? this.Form.id_kegiatan.nominal_anggaran
           : this.Form.id_kegiatan.sisa_nominal_pengajuan;

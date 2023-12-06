@@ -7,6 +7,12 @@
 .p-datatable-thead tr th {
     background-color: #006699 !important;
     color: #fff !important;
+    border-left: 1px solid white !important;
+}
+.p-column-title{
+    width: 100% !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
 }
 
 /* Button Add */
@@ -60,7 +66,7 @@
 
 /* Label */
 .label-nonAktif {
-    width: max-content;
+    width: max-content !important;
     height: 32px;
     padding: 5px 10px 5px 10px;
     border-left: #f66512 5px solid;
@@ -75,7 +81,7 @@
 }
 
 .label-Aktif {
-    width: max-content;
+    width: max-content !important;
     height: 32px;
     padding: 5px 10px 5px 10px;
     border-left: #5bb07f 5px solid;
@@ -90,7 +96,7 @@
 }
 
 .label-Retur {
-    width: max-content;
+    width: max-content !important;
     height: 32px;
     padding: 5px 10px 5px 10px;
     border-left: #eb4034 5px solid;

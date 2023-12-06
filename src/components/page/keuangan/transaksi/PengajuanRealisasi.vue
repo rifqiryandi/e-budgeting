@@ -72,12 +72,119 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
+            <Column
+              field=""
+              header="Status"
+              style="min-width: 180px !important"
+            >
+              <template #body="{ data }">
+                <div class="label-nonAktif" v-if="data.status_realisasi == 0">
+                  Request By Officer
+                </div>
+                <div
+                  class="label-nonAktif"
+                  v-else-if="data.status_realisasi == 1"
+                >
+                  Request By Departemen Head
+                </div>
+                <div class="label-Aktif" v-else-if="data.status_realisasi == 2">
+                  Validate By BUM
+                </div>
+              </template>
+            </Column>
+
+            <Column
+              field="uraian_kegiatan"
+              header="Kegiatan"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.uraian_kegiatan }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="nama_sub_mata_anggaran"
+              header="Sub Mata Anggaran"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div>
+                  {{ data.nama_sub_mata_anggaran }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="kode_pengajuan"
+              header="Kode Pengajuan"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.kode_pengajuan }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="nominal"
+              header="Nominal"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div>
+                  {{ data.nominal.toLocaleString("de-DE") }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="tanggal_pengajuan"
+              header="Tanggal Pengajuan"
+              style="min-width: 180px !important"
+            >
+              <template #body="{ data }">
+                <div>
+                  {{
+                    data.tanggal_pengajuan.split("T")[0].split("-")[2] +
+                    "-" +
+                    data.tanggal_pengajuan.split("T")[0].split("-")[1] +
+                    "-" +
+                    data.tanggal_pengajuan.split("T")[0].split("-")[0]
+                  }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Jenis Pengajuan"
+              style="min-width: 160px !important"
+            >
+              <template #body="{ data }">
+                <div>
+                  <p class="text-base">
+                    {{
+                      data.jenis_pengajuan == "PBI"
+                        ? "Beban Reguler"
+                        : data.jenis_pengajuan == "PB"
+                        ? "Pengajuan Baru"
+                        : data.jenis_pengajuan == "PK"
+                        ? "Beban Komitmen"
+                        : ""
+                    }}
+                  </p>
+                </div>
+              </template>
+            </Column>
             <Column field="" header="">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
                     class="bg-transparent border-0"
-                    title="Detail Realisasi"
+                    :title="
+                      data.status_realisasi == 1
+                        ? 'Validasi Realisasi'
+                        : 'Detail Realisasi'
+                    "
                     @click="detailView(data)"
                   >
                     <div v-if="data.status_realisasi == 1">
@@ -105,80 +212,6 @@
                       </svg>
                     </div>
                   </button>
-                </div>
-              </template>
-            </Column>
-            <Column field="uraian_kegiatan" header="Kegiatan">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.uraian_kegiatan }}
-                </div>
-              </template>
-            </Column>
-            <Column field="nama_sub_mata_anggaran" header="Sub Mata Anggaran">
-              <template #body="{ data }">
-                <div>
-                  {{ data.nama_sub_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-            <Column field="kode_pengajuan" header="Kode Pengajuan">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.kode_pengajuan }}
-                </div>
-              </template>
-            </Column>
-            <Column field="nominal" header="Nominal">
-              <template #body="{ data }">
-                <div>
-                  {{ data.nominal.toLocaleString("de-DE") }}
-                </div>
-              </template>
-            </Column>
-            <Column field="tanggal_pengajuan" header="Tanggal Pengajuan">
-              <template #body="{ data }">
-                <div>
-                  {{
-                    data.tanggal_pengajuan.split("T")[0].split("-")[2] +
-                    "-" +
-                    data.tanggal_pengajuan.split("T")[0].split("-")[1] +
-                    "-" +
-                    data.tanggal_pengajuan.split("T")[0].split("-")[0]
-                  }}
-                </div>
-              </template>
-            </Column>
-            <Column field="" header="Jenis Pengajuan">
-              <template #body="{ data }">
-                <div>
-                  <p class="text-base">
-                    {{
-                      data.jenis_pengajuan == "PBI"
-                        ? "Beban Reguler"
-                        : data.jenis_pengajuan == "PB"
-                        ? "Pengajuan Baru"
-                        : data.jenis_pengajuan == "PK"
-                        ? "Beban Komitmen"
-                        : ""
-                    }}
-                  </p>
-                </div>
-              </template>
-            </Column>
-            <Column field="" header="Status">
-              <template #body="{ data }">
-                <div class="label-nonAktif" v-if="data.status_realisasi == 0">
-                  Request By Officer
-                </div>
-                <div
-                  class="label-nonAktif"
-                  v-else-if="data.status_realisasi == 1"
-                >
-                  Request By Departemen Head
-                </div>
-                <div class="label-Aktif" v-else-if="data.status_realisasi == 2">
-                  Validate By BUM
                 </div>
               </template>
             </Column>
@@ -282,7 +315,7 @@
                 <p class="text-base">
                   {{
                     detail.nominal != undefined
-                      ? "Rp." + detail.nominal.toLocaleString("de-DE")
+                      ? "Rp " + detail.nominal.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
@@ -550,6 +583,7 @@ export default {
         kode_buku: this.detail.kode_buku,
         userid: this.userSession.username,
         tanggal_realisasi: "1900-01-01",
+        status_validasi: 1,
       };
 
       this.$swal({
@@ -709,7 +743,7 @@ export default {
       this.loading = true;
       let payload = {
         kdsubmatanggaran: this.filters.kdsubmatanggaran,
-        kddepartemen: this.userSession.departemen,
+        kddepartemen: "",
         jenis_pengajuan: this.filters.jenis_pengajuan,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,

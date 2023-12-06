@@ -89,57 +89,73 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="">
+            <Column
+              field=""
+              header="Status"
+              style="min-width: 220px !important"
+            >
               <template #body="{ data }">
-                <div style="font-weight: 600">
-                  <button
-                    class="bg-transparent border-0"
-                    title="Detail Realisasi"
-                    @click="detailView(data)"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24"
-                      viewBox="0 -960 960 960"
-                      width="24"
-                    >
-                      <path
-                        d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
-                      />
-                    </svg>
-                  </button>
+                <div class="label-nonAktif" v-if="data.status_realisasi == 0">
+                  Request By Officer
+                </div>
+                <div class="label-Aktif" v-else-if="data.status_realisasi == 1">
+                  Validate By Departemen Head
+                </div>
+                <div class="label-Aktif" v-else-if="data.status_realisasi == 2">
+                  Validate By BUM
                 </div>
               </template>
             </Column>
-            <Column field="uraian_kegiatan" header="Kegiatan">
+
+            <Column
+              field="uraian_kegiatan"
+              header="Kegiatan"
+              style="min-width: 180px !important"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.uraian_kegiatan }}
                 </div>
               </template>
             </Column>
-            <Column field="nama_sub_mata_anggaran" header="Sub Mata Anggaran">
+            <Column
+              field="nama_sub_mata_anggaran"
+              header="Sub Mata Anggaran"
+              style="min-width: 200px !important"
+            >
               <template #body="{ data }">
                 <div>
                   {{ data.nama_sub_mata_anggaran }}
                 </div>
               </template>
             </Column>
-            <Column field="kode_pengajuan" header="Kode Pengajuan">
+            <Column
+              field="kode_pengajuan"
+              header="Kode Pengajuan"
+              style="min-width: 200px !important"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.kode_pengajuan }}
                 </div>
               </template>
             </Column>
-            <Column field="nominal" header="Nominal">
+            <Column
+              field="nominal"
+              header="Nominal"
+              style="min-width: 220px !important"
+            >
               <template #body="{ data }">
-                <div>
+                <div class="text-right">
                   {{ data.nominal.toLocaleString("de-DE") }}
                 </div>
               </template>
             </Column>
-            <Column field="tanggal" header="Tanggal Pengajuan">
+            <Column
+              field="tanggal"
+              header="Tanggal Pengajuan"
+              style="min-width: 180px !important"
+            >
               <template #body="{ data }">
                 <div>
                   {{
@@ -152,7 +168,11 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="Jenis Pengajuan">
+            <Column
+              field=""
+              header="Jenis Pengajuan"
+              style="min-width: 160px !important"
+            >
               <template #body="{ data }">
                 <div>
                   <p class="text-base">
@@ -169,16 +189,25 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="Status">
+            <Column field="" header="">
               <template #body="{ data }">
-                <div class="label-nonAktif" v-if="data.status_realisasi == 0">
-                  Request By Officer
-                </div>
-                <div class="label-Aktif" v-else-if="data.status_realisasi == 1">
-                  Validate By Departemen Head
-                </div>
-                <div class="label-Aktif" v-else-if="data.status_realisasi == 2">
-                  Validate By BUM
+                <div style="font-weight: 600">
+                  <button
+                    class="bg-transparent border-0"
+                    title="Detail Realisasi"
+                    @click="detailView(data)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24"
+                      viewBox="0 -960 960 960"
+                      width="24"
+                    >
+                      <path
+                        d="M206.154-200h49.461l370.387-370.386-49.461-49.462-370.387 370.387V-200Zm548.152-413.77L619.309-747.537l52.154-52.153q17.615-17.615 42.845-17.615t42.845 17.615l48.692 48.691q17.615 17.615 18.23 42.23.615 24.615-17 42.23l-52.769 52.769Zm-43.383 43.999-429.77 429.77H146.156v-134.998l429.769-429.77 134.998 134.998Zm-109.844-25.538-24.538-24.539 49.461 49.462-24.923-24.923Z"
+                      />
+                    </svg>
+                  </button>
                 </div>
               </template>
             </Column>
@@ -232,12 +261,29 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
+              Jenis Beban <span class="text-red-600">*</span>
+            </label>
+            <select
+              v-model="preview.jenisPengajuan"
+              @change="getPengajuan"
+              class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Jenis Beban --</option>
+              <option value="PBI">Beban Reguler</option>
+              <option value="PK">Beban Komitmen</option>
+            </select>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
               Pengajuan Biaya <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.id_pengajuan"
               @change="setPreview"
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              :disabled="preview.jenisPengajuan == ''"
             >
               <option value="">-- Pilih Pengajuan Biaya --</option>
               <option
@@ -498,7 +544,7 @@
                 <p class="text-base">
                   {{
                     detail.nominal != undefined
-                      ? "Rp." + detail.nominal.toLocaleString("de-DE")
+                      ? "Rp " + detail.nominal.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
@@ -683,6 +729,7 @@ export default {
         kode_pengajuan: "",
         kode_buku: "",
         nominal: "",
+        jenisPengajuan: "",
       },
       buttonActive: true,
       detail: {},
@@ -792,9 +839,10 @@ export default {
     setPreview() {
       this.preview = {
         kode_pengajuan: this.Form.id_pengajuan.prefix_kegiatan,
-        // kode_buku: this.Form.id_pengajuan.prefix_kegiatan,
         nominal: this.Form.id_pengajuan.nominal_pengajuan,
+        jenisPengajuan: this.preview.jenisPengajuan,
       };
+
       this.Form.nominal = this.preview.nominal;
     },
     async getPengajuan() {
@@ -802,7 +850,7 @@ export default {
         idpengajuan: "",
         kddepartemen: this.userSession.departemen,
         status_pengajuan: 1,
-        jenis_pengajuan: "",
+        jenis_pengajuan: this.preview.jenisPengajuan,
       };
       try {
         let res = await serviceTransaksi.getPengajuanRealisasi(
@@ -810,6 +858,17 @@ export default {
           this.token
         );
         this.rowPengajuan = res.data.data;
+        this.Form = {
+          id_pengajuan: "",
+          tanggal: "",
+          kode_pengajuan: "",
+          kode_buku: "",
+          nominal: "",
+          keterangan: "",
+          user_id: "",
+        };
+        this.preview.kode_pengajuan = "";
+        this.preview.nominal = "";
       } catch (error) {
         this.rowPengajuan = null;
         console.log(error);
@@ -922,6 +981,7 @@ export default {
             kode_pengajuan: "",
             kode_buku: "",
             nominal: "",
+            jenisPengajuan: "",
           };
           this.UploadSPK = {
             myFile: null,
@@ -1019,6 +1079,8 @@ export default {
       }
     },
     hideModal() {
+      this.rowPengajuan = null;
+      this.preview.jenisPengajuan = "";
       this.modal.hide();
     },
     refreshListTable(reset = 0) {
@@ -1031,7 +1093,6 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
-    this.getPengajuan();
   },
 };
 </script>

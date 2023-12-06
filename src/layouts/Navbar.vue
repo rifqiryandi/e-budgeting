@@ -17,7 +17,7 @@
     <ul class="navbar-nav ml-auto">
       <!-- Notifications Dropdown Menu -->
       <!-- v-show="namaAkses == 'Departemen Head'" -->
-      <li class="nav-item dropdown" v-show="namaAkses == 'Deparemen Head'">
+      <li class="nav-item dropdown" v-show="namaAkses == 'Departemen Head'">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +29,11 @@
               d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"
             />
           </svg>
-          <span class="badge badge-warning navbar-badge">5</span>
+          <span
+            class="badge badge-warning navbar-badge"
+            v-show="totalNewNotif != 0"
+            >{{ totalNewNotif }}</span
+          >
         </a>
         <div
           class="dropdown-menu dropdown-menu-lg dropdown-menu-right cursor-pointer p-0 m-0"
@@ -38,11 +42,26 @@
           <div
             class="dropdown-item d-flex justify-content-center cursor-pointer"
           >
-            (5) Notifikasi
+            ({{ totalNewNotif }}) Notifikasi
           </div>
           <div class="dropdown-divider"></div>
-          <div class="dropdown-item d-flex cursor-pointer">
-            ---Pesan notifikasi---
+          <div
+            class="dropdown-item d-flex cursor-pointer"
+            v-for="(item, index) in getAllNotif"
+            :key="index"
+          >
+            <a @click="directPage(item.jenis_switchanggaran, item.id)">
+              <div class="grid grid-cols-1">
+                <b>{{
+                  item != undefined
+                    ? item.jenis_switchanggaran == 2
+                      ? "(Switch Sub Mata Anggaran)"
+                      : "(Switch Antar Departemen)"
+                    : ""
+                }}</b>
+                <p>{{ item.keterangan }}</p>
+              </div>
+            </a>
           </div>
           <div class="dropdown-divider"></div>
         </div>
@@ -156,7 +175,6 @@
                   placeholder="Masukkan Password Baru"
                   style="width: 100%"
                 />
-                
               </div>
               <div class="">
                 <label
@@ -353,7 +371,7 @@ import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 var md5 = require("md5");
 import serviceUser from "../services/User.service";
-
+import serviceNotif from "../services/Notif.service";
 export default {
   data() {
     return {
@@ -378,6 +396,10 @@ export default {
           falseText: "text-syarat",
         },
       },
+      notif: {
+        total: 0,
+        ListData: null,
+      },
     };
   },
   validations() {
@@ -390,14 +412,92 @@ export default {
         specialChars: this.checkSpesialChar,
         lowerCheck: this.checkLower,
         min: this.checkMinLength,
-        required
+        required,
       },
     };
   },
   components: {
     Password,
   },
+  computed: {
+    totalNewNotif() {
+      return this.notif.total;
+    },
+    getAllNotif() {
+      return this.notif.ListData;
+    },
+  },
   methods: {
+    async directPage(findpage, idnotif) {
+      let payload = {
+        id: idnotif,
+      };
+      try {
+        await serviceNotif.updateNotif(payload, this.token);
+        if (findpage == 2) {
+          window.location.href = "/switchSubMataAnggaran";
+          // this.$router.push("/switchSubMataAnggaran");
+        } else {
+          window.location.href = "/switchDepartemen";
+          // this.$router.push("/switchDepartemen");
+        }
+      } catch (error) {
+        console.log(error.response.data.Msg);
+      }
+    },
+    // Notif
+    async toastNotifikasi() {
+      await this.totalNotif();
+      const Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = this.$swal.stopTimer;
+          toast.onmouseleave = this.$swal.resumeTimer;
+        },
+      });
+      if (this.namaAkses == "Departemen Head" && this.notif.total != 0) {
+        return Toast.fire({
+          icon: "info",
+          title:
+            "Terdapat " +
+            this.notif.total +
+            " notifikasi baru, jangan lupa di lihat :)",
+        });
+      }
+    },
+    async totalNotif() {
+      let payload = {
+        departemen: this.userSession.departemen,
+      };
+      try {
+        let res = await serviceNotif.countNotif(payload, this.token);
+        this.notif = {
+          total: res.data.data[0].count,
+        };
+      } catch (error) {
+        console.log(error.response.data.Msg);
+        this.notif = {
+          total: 0,
+        };
+      }
+    },
+    async listNotif() {
+      let payload = {
+        departemen: this.userSession.departemen,
+      };
+      try {
+        let res = await serviceNotif.listNotif(payload, this.token);
+        this.notif.ListData = res.data.data;
+      } catch (error) {
+        console.log(error.response.data.Msg);
+        this.notif.ListData = null;
+      }
+    },
+
     // Custom Password validation
     validationPassword() {
       let pass = this.passwordUser;
@@ -488,25 +588,7 @@ export default {
         }, 1000);
       }
     },
-    toastNotifikasi() {
-      const Toast = this.$swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = this.$swal.stopTimer;
-          toast.onmouseleave = this.$swal.resumeTimer;
-        },
-      });
-      if (this.namaAkses == "Departemen Head") {
-        return Toast.fire({
-          icon: "info",
-          title: "Terdapat 5 notifikasi baru, jangan lupa di lihat :)",
-        });
-      }
-    },
+
     showModalPassword() {
       const $targetEl = document.getElementById("pass-modal");
       this.modalPassword = new Modal($targetEl);
@@ -538,12 +620,10 @@ export default {
           });
         }
         let payload = {
-          username : this.userSession.username,
-          password : md5(passwordBaru),
-          id : this.userSession.id
-        }
-        console.log(payload);
-        console.log(this.userSession);
+          username: this.userSession.username,
+          password: md5(passwordBaru),
+          id: this.userSession.id,
+        };
         try {
           let respon = await serviceUser.changePassword(payload, this.token);
           this.modalPassword.hide();
@@ -553,9 +633,9 @@ export default {
             text: respon.data.Msg,
             confirmButtonColor: "#e77817",
           });
-          this.passwordUser = ""
-          this.passwordUserLama = ""
-          this.rePassword = ""
+          this.passwordUser = "";
+          this.passwordUserLama = "";
+          this.rePassword = "";
         } catch (error) {
           this.$swal({
             icon: "error",
@@ -565,15 +645,15 @@ export default {
           });
         }
       }
-
-      
     },
   },
   mounted() {
     initFlowbite();
-
     this.countDownTimer();
     this.toastNotifikasi();
+    if (this.namaAkses == "Departemen Head") {
+      this.listNotif();
+    }
   },
 };
 </script>

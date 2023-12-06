@@ -77,6 +77,7 @@
               <p style="color: #1e1e1e">Dashboard</p>
             </router-link>
           </li>
+
           <!-- Admin Sistem -->
           <li class="nav-item" v-show="namaAkses == 'Admin Sistem'">
             <a href="#" class="nav-link">
@@ -283,6 +284,31 @@
                     />
                   </svg>
                   <p style="color: #1e1e1e">Persentasi Anggaran</p>
+                </router-link>
+              </li>
+              <li class="nav-item nav-style">
+                <router-link
+                  to="/switchDepartemen"
+                  :class="
+                    NamePage == 'Switch Anggaran Antar Departemen'
+                      ? Active
+                      : notActive
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    class="nav-icon"
+                  >
+                    <path
+                      d="M320-160q-117 0-198.5-81.5T40-440q0-107 70.5-186.5T287-718l-63-66 56-56 160 160-160 160-56-57 59-59q-71 14-117 69t-46 127q0 83 58.5 141.5T320-240h120v80H320Zm200-360v-280h360v280H520Zm0 360v-280h360v280H520Zm80-80h200v-120H600v120Z"
+                    />
+                  </svg>
+                  <p style="color: #1e1e1e">
+                    History Switch Anggaran (Antar Departemen)
+                  </p>
                 </router-link>
               </li>
             </ul>
@@ -712,7 +738,11 @@
               <li class="nav-item nav-style">
                 <router-link
                   to="/realisasianggaran"
-                  :class="NamePage == 'Validasi Realisasi Anggaran' ? Active : notActive"
+                  :class="
+                    NamePage == 'Validasi Realisasi Anggaran'
+                      ? Active
+                      : notActive
+                  "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -731,7 +761,9 @@
               <li class="nav-item nav-style">
                 <router-link
                   to="/entryrealisasianggaran"
-                  :class="NamePage == 'Entry Realisasi Anggaran' ? Active : notActive"
+                  :class="
+                    NamePage == 'Entry Realisasi Anggaran' ? Active : notActive
+                  "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -741,13 +773,34 @@
                     class="nav-icon"
                   >
                     <path
-                      d="M549.999-451.539q-41.922 0-70.96-29.038-29.038-29.038-29.038-70.961 0-41.922 29.038-70.96 29.038-29.038 70.96-29.038 41.923 0 70.961 29.038 29.038 29.038 29.038 70.96 0 41.923-29.038 70.961-29.038 29.038-70.961 29.038ZM286.154-327.693q-29.826 0-51.067-21.24-21.24-21.24-21.24-51.067v-303.076q0-29.826 21.24-51.067 21.241-21.24 51.067-21.24h527.69q29.827 0 51.067 21.24 21.24 21.241 21.24 51.067V-400q0 29.827-21.24 51.067t-51.067 21.24h-527.69Zm59.999-59.998h407.693q0-29.923 21.24-51.115 21.24-21.193 51.067-21.193v-183.078q-29.923 0-51.115-21.24-21.192-21.241-21.192-51.067H346.153q0 29.923-21.24 51.115-21.241 21.192-51.067 21.192v183.078q29.923 0 51.115 21.241 21.192 21.24 21.192 51.067Zm420.768 199.997H146.156q-29.827 0-51.067-21.241-21.24-21.24-21.24-51.066v-396.151h59.998v396.151q0 4.615 3.847 8.462 3.846 3.846 8.462 3.846h620.765v59.999ZM286.154-387.691h-12.308V-715.384h12.308q-5 0-8.654 3.654t-3.654 8.654V-400q0 5 3.654 8.654 3.654 3.655 8.654 3.655Z"
+                      d="M160-160q-33 0-56.5-23.5T80-240v-120h80v120h640v-480H160v120H80v-120q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm300-140-56-58 83-82H80v-80h407l-83-82 56-58 180 180-180 180Z"
                     />
                   </svg>
                   <p style="color: #1e1e1e">Entry Realisasi</p>
                 </router-link>
               </li>
             </ul>
+          </li>
+
+          <!-- Laporan Realisasi Super admin -->
+          <li class="nav-item nav-style" v-show="namaAkses == 'Superadmin'">
+            <router-link
+              to="/laporanRealisasi"
+              :class="NamePage == 'Laporan Realisasi' ? Active : notActive"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+                class="nav-icon"
+              >
+                <path
+                  d="M320-600q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm0 160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0 160q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h440l200 200v440q0 33-23.5 56.5T760-120H200Zm0-80h560v-400H600v-160H200v560Zm0-560v160-160 560-560Z"
+                />
+              </svg>
+              <p style="color: #1e1e1e">Laporan Realisasi</p>
+            </router-link>
           </li>
         </ul>
       </nav>
