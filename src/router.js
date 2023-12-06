@@ -37,7 +37,18 @@ switch (namaAkses) {
         name: "Top Up Anggaran",
         component: () => import("./components/page/superadmin/transaksi/TopUpAnggaran.vue"),
       },
-
+      {
+        path: "/laporanRealisasi",
+        alias: "/laporanRealisasi",
+        name: "Laporan Realisasi",
+        component: () => import("./components/page/superadmin/laporan/LaporanRealisasi.vue"),
+      },
+      {
+        path: "/switchDepartemen",
+        alias: "/switchDepartemen",
+        name: "Switch Anggaran Antar Departemen",
+        component: () => import("./components/page/superadmin/transaksi/SwitchAnggaranDepartemen.vue"),
+      },
     ];
     break;
   case 'Admin Sistem':
@@ -154,9 +165,9 @@ switch (namaAkses) {
         component: () => import("./components/page/officer/transaksi/TopUpAnggaran.vue"),
       },
       {
-        path:"/realisasianggaran",
-        alias : "/realisasianggaran",
-        name:"Realisasi Anggaran",
+        path: "/realisasianggaran",
+        alias: "/realisasianggaran",
+        name: "Realisasi Anggaran",
         component: () => import("./components/page/officer/transaksi/PengajuanRealisasi.vue"),
       }
 
@@ -219,16 +230,15 @@ switch (namaAkses) {
         component: () => import("./components/page/departemenHead/transaksi/SwitchAnggaranDepartemen.vue"),
       },
       {
-        path:"/realisasianggaran",
-        alias : "/realisasianggaran",
-        name:"Realisasi Anggaran",
+        path: "/realisasianggaran",
+        alias: "/realisasianggaran",
+        name: "Realisasi Anggaran",
         component: () => import("./components/page/departemenHead/transaksi/PengajuanRealisasi.vue"),
       }
 
     ];
     break;
-
-    case "BUM":
+  case "BUM":
     routes = [{
         path: "/",
         alias: "/login",
@@ -242,19 +252,19 @@ switch (namaAkses) {
         component: () => import("./components/page/admin/Dashboard.vue"),
       },
       {
-        path:"/realisasianggaran",
-        alias : "/realisasianggaran",
-        name:"Validasi Realisasi Anggaran",
+        path: "/realisasianggaran",
+        alias: "/realisasianggaran",
+        name: "Validasi Realisasi Anggaran",
         component: () => import("./components/page/keuangan/transaksi/PengajuanRealisasi.vue"),
-        
+
       },
       {
-        path:"/entryrealisasianggaran",
-        alias : "/entryrealisasianggaran",
-        name:"Entry Realisasi Anggaran",
+        path: "/entryrealisasianggaran",
+        alias: "/entryrealisasianggaran",
+        name: "Entry Realisasi Anggaran",
         component: () => import("./components/page/keuangan/transaksi/EntryRealisasi.vue"),
       }
-      
+
 
     ];
     break;

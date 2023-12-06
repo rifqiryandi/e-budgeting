@@ -3,8 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h3 style="font-weight: 500;">Pencarian</h3>
-          <hr>
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="">
             <div class="">
               <label
@@ -17,10 +17,9 @@
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="">-- Pilih Status--</option>
-                <option value="0">Belum divalidasi</option>
-                <option value="1">Tervalidasi Level 1</option>
-                <option value="2">Tervalidasi Level 2</option>
-                <option value="3">Tervalidasi Level 3</option>
+                <option value="0">On Progress By Superadmin</option>
+                <option value="1">Validate By Superadmin</option>
+                <option value="2">Validate by Departemen Head</option>
               </select>
             </div>
           </div>
@@ -79,7 +78,11 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="width: 20%">
+            <Column
+              field=""
+              header="Status"
+              style="min-width: 120px !important"
+            >
               <template #body="{ data }">
                 <ValidationBtn
                   :nilaiStatus="data.status_topup"
@@ -91,7 +94,11 @@
                 />
               </template>
             </Column>
-            <Column field="nama_entitas" header="Entitas" style="width: 20%">
+            <!-- <Column
+              field="nama_entitas"
+              header="Entitas"
+              style="min-width: 180px !important"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.nama_entitas }}
@@ -101,18 +108,18 @@
             <Column
               field="nama_departement"
               header="Departemen"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.nama_departement }}
                 </div>
               </template>
-            </Column>
+            </Column> -->
             <Column
               field="nama_kelompok_mata_anggaran"
               header="Kelompok Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 240px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -123,7 +130,7 @@
             <Column
               field="nama_mata_anggaran"
               header="Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -135,7 +142,7 @@
             <Column
               field="nama_sub_mata_anggaran"
               header="Sub Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 200px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -144,7 +151,7 @@
               </template>
             </Column>
 
-            <Column field="tahun" header="Tahun" style="width: 20%">
+            <Column field="tahun" header="Tahun">
               <template #body="{ data }">
                 {{ data.tahun }}
               </template>
@@ -153,7 +160,7 @@
               field=""
               header="Sisa Anggaran"
               class="text-right"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 {{ data.nominal_sisa_anggaran.toLocaleString("de-DE") }}
@@ -163,7 +170,7 @@
               field=""
               header="Top Up"
               class="text-right"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 {{ data.nominal_topup.toLocaleString("de-DE") }}
@@ -392,6 +399,22 @@ export default {
     },
   },
   methods: {
+    filterShow() {
+      this.pagination.currentPage = 1;
+      this.refreshListTable();
+    },
+    paginationTable(evt) {
+      this.pagination.first = evt.first;
+      this.pagination.perPage = evt.rows;
+      if (this.pagination.currentPage == evt.page) {
+        this.pagination.currentPage++;
+      } else if (this.pagination.currentPage - evt.page == 1) {
+        this.pagination.currentPage--;
+      } else {
+        this.pagination.currentPage = evt.page + 1;
+      }
+      this.refreshListTable();
+    },
     showInput() {
       this.Form = {
         idanggaran: "",
@@ -411,6 +434,7 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        kddepartemen: this.userSession.departemen,
       };
       try {
         let res = await serviceAnggaran.listTopUp(payload, this.token);

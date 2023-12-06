@@ -17,9 +17,9 @@
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="">-- Pilih Status--</option>
-                <option value="0">On Progress By Superadmin</option>
-                <option value="1">Validate By Superadmin</option>
-                <option value="2">Validate by Departemen Head</option>
+                <option value="0">Request By Superadmin</option>
+                <option value="1">Validate By Departemen Head Asal</option>
+                <option value="2">Validate By Departemen Head Tujuan</option>
               </select>
             </div>
           </div>
@@ -38,8 +38,8 @@
             Tampilkan
           </button>
           <!-- <unduhExcel :data="getAllData" type="xlsx" name="filename.xlsx">
-            Unduh Data
-          </unduhExcel> -->
+              Unduh Data
+            </unduhExcel> -->
         </div>
       </div>
     </div>
@@ -78,98 +78,112 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="min-width: 140px !important">
-              <template #body="{ data }">
-                <ValidationBtn
-                  :nilaiStatus="data.status_topup"
-                  :keyid="data.id_anggaran"
-                  :num="0"
-                  :idtopUp="data.id_topup"
-                  :nominal="data.nominal_sisa_anggaran"
-                  :nominalTopup="data.nominal_topup"
-                />
-              </template>
-            </Column>
             <Column
-              field="nama_entitas"
-              header="Entitas"
+              field=""
+              header="Status"
               style="min-width: 160px !important"
             >
               <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_entitas }}
+                <div class="label-nonAktif" v-if="data.status_anggaran == 0">
+                  Request By Officer
+                </div>
+                <div class="label-Aktif" v-else-if="data.status_anggaran == 1">
+                  Validate By Departemen Head Asal
+                </div>
+                <div class="label-Aktif" v-else-if="data.status_anggaran == 2">
+                  Validate By Departemen Head Tujuan
                 </div>
               </template>
             </Column>
             <Column
-              field="nama_departement"
-              header="Departemen"
-              style="min-width: 180px !important"
+              field=""
+              header="Mata Anggaran"
+              style="min-width: 200px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_departement }}
+                  {{ data.nama_mata_anggaran_awal }}
                 </div>
               </template>
             </Column>
             <Column
-              field="nama_kelompok_mata_anggaran"
-              header="Kelompok Mata Anggaran"
+              field=""
+              header="Sub Mata Anggaran Asal"
               style="min-width: 220px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_kelompok_mata_anggaran }}
+                  {{ data.nama_sub_mata_anggaran_awal }}
                 </div>
               </template>
             </Column>
             <Column
-              field="nama_mata_anggaran"
-              header="Mata Anggaran"
-              style="min-width: 180px !important"
+              field=""
+              header="Sub Mata Anggaran Tujuan"
+              style="min-width: 220px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_mata_anggaran }}
+                  {{ data.nama_sub_mata_anggaran_final }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="bsu_awal"
+              header="Nominal Asal"
+              class="text-right"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.bsu_awal.toLocaleString("de-DE") }}
                 </div>
               </template>
             </Column>
 
             <Column
-              field="nama_sub_mata_anggaran"
-              header="Sub Mata Anggaran"
-              style="min-width: 180px !important"
+              field="bsu_final"
+              header="Nominal Tujuan"
+              class="text-right"
+              style="min-width: 200px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
+                  {{ data.bsu_final.toLocaleString("de-DE") }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="bsu_final"
+              header="Nominal Switch"
+              class="text-right"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.bsu_inout.toLocaleString("de-DE") }}
                 </div>
               </template>
             </Column>
 
-            <Column field="tahun" header="Tahun">
+            <Column field="" header="">
               <template #body="{ data }">
-                {{ data.tahun }}
-              </template>
-            </Column>
-            <Column
-              field=""
-              header="Sisa Anggaran"
-              class="text-right"
-              style="min-width: 180px !important"
-            >
-              <template #body="{ data }">
-                {{ data.nominal_sisa_anggaran.toLocaleString("de-DE") }}
-              </template>
-            </Column>
-            <Column
-              field=""
-              header="Top Up"
-              class="text-right"
-              style="min-width: 180px !important"
-            >
-              <template #body="{ data }">
-                {{ data.nominal_topup.toLocaleString("de-DE") }}
+                <button
+                  class="bg-transparent border-0"
+                  title="Validasi Switch"
+                  @click="showValidasi(data)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                  >
+                    <path
+                      d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
+                    />
+                  </svg>
+                </button>
               </template>
             </Column>
           </DataTable>
@@ -177,9 +191,9 @@
       </div>
     </div>
   </div>
-  <!-- Modal Insert -->
+  <!-- Modal Validasi -->
   <div
-    id="input-modal"
+    id="validasi-modal"
     tabindex="-1"
     class="fixed top-0 left-0 right-0 mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
   >
@@ -191,7 +205,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Tambah Anggaran
+            Detail Switch Anggaran
           </h3>
           <button
             type="button"
@@ -217,107 +231,102 @@
           </button>
         </div>
         <!-- Modal body -->
-        <div class="p-6 space-y-2">
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Anggaran <span class="text-red-600">*</span>
-            </label>
-            <select
-              v-model="Form.idanggaran"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="">-- Pilih Anggaran --</option>
-              <option
-                v-for="(item, index) in getSMataAnggaran"
-                :key="index"
-                :value="item.kode_sub_mata_anggaran"
-              >
-                {{ item.nama_sub_mata_anggaran }}
-              </option>
-            </select>
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.idanggaran.$error"
-            >
-              Anggaran tidak boleh kosong!
-            </p>
-          </div>
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-2 mb-2">
+            <div class="">
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Mata Anggaran</p>
+                <p class="text-base">{{ Detail.nama_mata_anggaran_awal }}</p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Sub Mata Anggaran Asal</p>
+                <p class="text-base">
+                  {{ Detail.nama_sub_mata_anggaran_awal }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">
+                  Sub Mata Anggaran Tujuan
+                </p>
+                <p class="text-base">
+                  {{ Detail.nama_sub_mata_anggaran_final }}
+                </p>
+              </div>
+            </div>
+            <div class>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Nominal Asal</p>
+                <p class="text-base">
+                  {{
+                    Detail.bsu_awal != undefined
+                      ? "Rp " + Detail.bsu_awal.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Nominal Tujuan</p>
+                <p class="text-base">
+                  {{
+                    Detail.bsu_final != undefined
+                      ? "Rp " + Detail.bsu_final.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
 
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nominal Awal<span class="text-red-600">*</span>
-            </label>
-            <InputNumber
-              v-model="Form.nominalawal"
-              placeholder="Masukkan Nominal Awal"
-              class="w-full"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nominalawal.$error"
-            >
-              Nominal Awal tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nominal Top Up<span class="text-red-600">*</span>
-            </label>
-            <InputNumber
-              v-model="Form.nominaltopup"
-              placeholder="Masukkan Nominal Awal"
-              class="w-full"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.nominaltopup.$error"
-            >
-              Nominal Top Up tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Keterangan <span class="text-red-600">*</span>
-            </label>
-            <textarea
-              v-model="Form.keterangan"
-              cols="30"
-              rows="10"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            ></textarea>
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Form.keterangan.$error"
-            >
-              Keterangan tidak boleh kosong!
-            </p>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Nominal Switch</p>
+                <p class="text-base">
+                  {{
+                    Detail.bsu_inout != undefined
+                      ? "Rp " + Detail.bsu_inout.toLocaleString("de-DE")
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Status</p>
+                <div
+                  class="label-nonAktifSwitch"
+                  v-if="Detail.status_anggaran == 0"
+                >
+                  Request By Officer
+                </div>
+                <div
+                  class="label-AktifSwitch"
+                  v-else-if="Detail.status_anggaran == 1"
+                >
+                  Validate By Departement Head Asal
+                </div>
+                <div
+                  class="label-AktifSwitch"
+                  v-else-if="Detail.status_anggaran == 2"
+                >
+                  Validate By Departement Head Tujuan
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <!-- Modal footer -->
         <div
           class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+          v-show="false"
         >
           <button
             type="button"
-            @click="prosesInput"
-            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
+            @click="prosesValidasi"
+            class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
-            SIMPAN
+            VALIDASI
           </button>
           <button
-            @click="hideModal"
+            @click="prosesRetur"
             type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            class="bg-retur text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
-            TUTUP
+            RETUR
           </button>
         </div>
       </div>
@@ -325,28 +334,26 @@
   </div>
 </template>
 <script>
-import InputNumber from "primevue/inputnumber";
+// import InputNumber from "primevue/inputnumber";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
-import useValidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+// import useValidate from "@vuelidate/core";
+// import { required } from "@vuelidate/validators";
 // import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
-import ValidationBtn from "../../../utils/ValidationBtnTopUp.vue";
 
 import serviceAnggaran from "../../../../services/Transaction.service";
-
 export default {
-  name: "Top Up Anggaran",
+  name: "Switch Anggaran Sub Mata Anggaran",
   data() {
     return {
-      v$: useValidate(),
+      // v$: useValidate(),
       token: sessionStorage.getItem("token"),
       modal: null,
-      ListTopUp: null,
+      ListSwitchAnggaran: null,
       rowSMataAnggaran: null,
       rowDepartemen: null,
       filters: {
@@ -359,26 +366,9 @@ export default {
         totaldata: 0,
         first: 0,
       },
-      Form: {
-        idanggaran: "",
-        nominalawal: "",
-        nominaltopup: "",
-        penanggungjwb: "",
-        keterangan: "",
-      },
+      Detail: {},
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-    };
-  },
-  validations() {
-    return {
-      Form: {
-        idanggaran: { required },
-        nominalawal: { required },
-        nominaltopup: { required },
-        penanggungjwb: { required },
-        keterangan: { required },
-      },
     };
   },
   components: {
@@ -386,21 +376,22 @@ export default {
     Column,
     InputText,
     // VueDatePicker,
-    InputNumber,
-    ValidationBtn,
+    // InputNumber,
   },
   computed: {
     getAllData() {
-      return this.ListTopUp;
+      return this.ListSwitchAnggaran;
     },
   },
   methods: {
+    cariData() {
+      this.refreshListTable(1);
+    },
     filterShow() {
       this.pagination.currentPage = 1;
       this.refreshListTable();
     },
     paginationTable(evt) {
-      this.pagination.first = evt.first;
       this.pagination.perPage = evt.rows;
       if (this.pagination.currentPage == evt.page) {
         this.pagination.currentPage++;
@@ -411,13 +402,19 @@ export default {
       }
       this.refreshListTable();
     },
+    showValidasi(data) {
+      this.Detail = data;
+      const $targetEl = document.getElementById("validasi-modal");
+      this.modal = new Modal($targetEl);
+      this.modal.show();
+    },
     showInput() {
       this.Form = {
-        idanggaran: "",
-        nominalawal: "",
-        nominaltopup: "",
-        penanggungjwb: "",
-        keterangan: "",
+        kdsubmatanggaran: "",
+        kddepartemen: "",
+        tahun: "",
+        nominal: "",
+        userid: "",
       };
       const $targetEl = document.getElementById("input-modal");
       this.modal = new Modal($targetEl);
@@ -430,15 +427,16 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
-        kddepartemen: this.userSession.departemen,
+        jenis_switchanggaran: 1,
+        kddepartemen : ""
       };
       try {
-        let res = await serviceAnggaran.listTopUp(payload, this.token);
+        let res = await serviceAnggaran.ListSwitchAnggaran(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
-        this.ListTopUp = res.data.data.data;
+        this.ListSwitchAnggaran = res.data.data.data;
         this.loading = false;
       } catch (error) {
-        this.ListTopUp = null;
+        this.ListSwitchAnggaran = null;
         this.loading = false;
         console.log(error);
       }
@@ -460,4 +458,50 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+/* Label */
+.label-nonAktifSwitch {
+  width: max-content;
+  height: 32px;
+  padding: 5px 10px 5px 10px;
+  border-left: #f66512 5px solid;
+  background: #ffe3c2;
+  color: #f66512;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.label-AktifSwitch {
+  width: max-content;
+  height: 32px;
+  padding: 5px 10px 5px 10px;
+  border-left: #5bb07f 5px solid;
+  background: #dcffeb;
+  color: #5bb07f;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.label-ReturSwitch {
+  width: max-content;
+  height: 32px;
+  padding: 5px 10px 5px 10px;
+  border-left: #eb4034 5px solid;
+  background: #e968685e;
+  color: #eb4034;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+</style>

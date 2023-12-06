@@ -66,7 +66,7 @@
                 <img src="../../../assets/bnilogo.png" class="img-style" />
                 <h4 class="text-info-style">e-Budgeting</h4>
               </div>
-              <h4 class="text-info-style text-center">Corporate secretary division</h4>
+              <h4 class="text-info-style text-center">Corporate Secretary Division</h4>
 
             </div>
           </div>
@@ -153,7 +153,7 @@ export default {
               "dataUser",
               btoa(JSON.stringify(respon.data.data))
             );
-            window.location.href = "/dashboard";
+            window.location.href = "/";
           }
         } catch (error) {
           this.$swal({

@@ -82,7 +82,7 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="width: 20%">
+            <Column field="" header="" style="min-width: 140px !important">
               <template #body="{ data }">
                 <ValidationBtn
                   :nilaiStatus="data.status_anggaran.toString()"
@@ -91,28 +91,24 @@
                 />
               </template>
             </Column>
-            <Column field="nama_entitas" header="Entitas" style="width: 20%">
+            <!-- <Column field="nama_entitas" header="Entitas">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.nama_entitas }}
                 </div>
               </template>
             </Column>
-            <Column
-              field="nama_departement"
-              header="Departemen"
-              style="width: 20%"
-            >
+            <Column field="nama_departement" header="Departemen">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.nama_departement }}
                 </div>
               </template>
-            </Column>
+            </Column> -->
             <Column
               field="nama_kelompok_mata_anggaran"
               header="Kelompok Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 220px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -123,7 +119,7 @@
             <Column
               field="nama_mata_anggaran"
               header="Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -135,7 +131,7 @@
             <Column
               field="nama_sub_mata_anggaran"
               header="Sub Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -144,7 +140,7 @@
               </template>
             </Column>
 
-            <Column field="tahun" header="Tahun" style="width: 20%">
+            <Column field="tahun" header="Tahun">
               <template #body="{ data }">
                 {{ data.tahun }}
               </template>
@@ -153,7 +149,7 @@
               field=""
               header="Nominal"
               class="text-right"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 {{ data.nominal.toLocaleString("de-DE") }}
@@ -163,7 +159,7 @@
               field=""
               header="Sisa Anggaran"
               class="text-right"
-              style="width: 20%"
+              style="min-width: 180px !important"
             >
               <template #body="{ data }">
                 {{ data.sisa_anggaran.toLocaleString("de-DE") }}

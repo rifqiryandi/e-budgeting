@@ -3,8 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h3 style="font-weight: 500;">Pencarian</h3>
-          <hr>
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="grid grid-cols-1 gap-2">
             <div class="">
               <label
@@ -77,7 +77,78 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="width: 5%">
+            <Column
+              field=""
+              header="Status"
+              style="min-width: 120px !important"
+            >
+              <template #body="{ data }">
+                <div class="label-Retur" v-if="data.status_pengajuan == 2">
+                  Retur
+                </div>
+              </template>
+            </Column>
+
+            <!-- <Column
+              field="nama_entitas"
+              header="Entitas"
+              style="min-width: 120px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nama_entitas }}
+                </div>
+              </template>
+            </Column> -->
+            <Column
+              field="nama_sub_mata_anggaran"
+              header="Sub Mata Anggaran"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nama_sub_mata_anggaran }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field="uraian_kegiatan"
+              header="Uraian Kegiatan"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.uraian_kegiatan }}
+                </div>
+              </template>
+            </Column>
+            <Column field="" header="Tahun">
+              <template #body="{ data }">
+                {{ data.tahun }}
+              </template>
+            </Column>
+
+            <Column
+              field=""
+              header="Nominal Pengajuan"
+              class="text-right"
+              style="min-width: 180px !important"
+            >
+              <template #body="{ data }">
+                {{ data.nominal_pengajuan.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Nominal Anggaran"
+              class="text-right"
+              style="min-width: 180px !important"
+            >
+              <template #body="{ data }">
+                {{ data.nominal.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+            <Column field="" header="">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -97,67 +168,6 @@
                     </svg>
                   </button>
                 </div>
-              </template>
-            </Column>
-            <Column field="nama_entitas" header="Entitas" style="width: 20%">
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_entitas }}
-                </div>
-              </template>
-            </Column>
-            <Column
-              field="nama_sub_mata_anggaran"
-              header="Sub Mata Anggaran"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
-                </div>
-              </template>
-            </Column>
-            <Column
-              field="uraian_kegiatan"
-              header="Uraian Kegiatan"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  {{ data.uraian_kegiatan }}
-                </div>
-              </template>
-            </Column>
-            <Column field="" header="Tahun" style="width: 20%">
-              <template #body="{ data }">
-                {{ data.tahun }}
-              </template>
-            </Column>
-            <Column field="" header="Status" style="width: 20%">
-              <template #body="{ data }">
-                <div class="label-Retur" v-if="data.status_pengajuan == 2">
-                  Retur
-                </div>
-              </template>
-            </Column>
-            <Column
-              field=""
-              header="Nominal Pengajuan"
-              class="text-right"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                {{ data.nominal_pengajuan.toLocaleString("de-DE") }}
-              </template>
-            </Column>
-            <Column
-              field=""
-              header="Nominal Anggaran"
-              class="text-right"
-              style="width: 20%"
-            >
-              <template #body="{ data }">
-                {{ data.nominal.toLocaleString("de-DE") }}
               </template>
             </Column>
           </DataTable>
@@ -210,10 +220,9 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Alasan 
+              Alasan
             </label>
-            {{Detail.alasan}}
-            
+            {{ Detail.alasan }}
           </div>
           <div class="">
             <label
@@ -392,8 +401,8 @@ export default {
         sisa_nominal: "",
         id: "",
       },
-      Detail:{
-        alasan : ""
+      Detail: {
+        alasan: "",
       },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
@@ -432,7 +441,7 @@ export default {
       } else {
         let asArr = Object.entries(this.rowKegiatan);
         asArr.filter((value) => {
-          console.log(value[1].id)
+          console.log(value[1].id);
           if (value[1].id == this.Form.id_kegiatan) {
             this.Form.id_kegiatan = [];
             this.Form.id_kegiatan = value[1];
@@ -514,8 +523,8 @@ export default {
         id: data.id,
       };
       this.Detail = {
-        alasan : data.alasan
-      }
+        alasan: data.alasan,
+      };
       const $targetEl = document.getElementById("detail-modal");
       this.modal = new Modal($targetEl);
       this.modal.show();
@@ -560,10 +569,7 @@ export default {
           this.Form.id_kegiatan.id_anggaran.toLocaleString();
         Forminput.id_kegiatan = this.Form.id_kegiatan.id.toLocaleString();
         try {
-          let respon = await serviceAnggaran.inputRetur(
-            Forminput,
-            this.token
-          );
+          let respon = await serviceAnggaran.inputRetur(Forminput, this.token);
           this.modal.hide();
           this.$swal({
             icon: "success",

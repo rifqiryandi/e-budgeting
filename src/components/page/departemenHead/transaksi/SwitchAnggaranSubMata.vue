@@ -77,39 +77,19 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="width: 5%">
+            <Column field="" header="Status">
               <template #body="{ data }">
-                <div style="font-weight: 600">
-                  <button
-                    class="bg-transparent border-0"
-                    title="Validasi Switch"
-                    @click="showValidasi(data)"
-                  >
-                    <div v-if="data.status == 1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        viewBox="0 -960 960 960"
-                        width="24"
-                      >
-                        <path
-                          d="M480.067-100.001q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.925-148.204q29.925-69.369 81.225-120.682 51.3-51.314 120.65-81.247Q401.15-859.999 480-859.999q63.204 0 119.602 19t103.474 53l-43.383 44.384q-38.769-26.692-83.991-41.539Q530.48-800 480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-21.077-2.769-41.69-2.77-20.612-8.308-40.08l48.46-48.845q11 30.846 16.808 63.463 5.808 32.617 5.808 67.152 0 78.85-29.92 148.199-29.92 69.35-81.21 120.65-51.291 51.3-120.629 81.225-69.337 29.925-148.173 29.925Zm-56.836-209.846L267.078-466l42.153-42.153 114 114 394.615-395.23 42.153 42.153-436.768 437.383Z"
-                        />
-                      </svg>
-                    </div>
-                    <div v-else>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        viewBox="0 -960 960 960"
-                        width="24"
-                      >
-                        <path
-                          d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
-                        />
-                      </svg>
-                    </div>
-                  </button>
+                <div
+                  class="label-nonAktifSwitch"
+                  v-if="data.status_anggaran == 1"
+                >
+                  Request By Officer
+                </div>
+                <div
+                  class="label-AktifSwitch"
+                  v-else-if="data.status_anggaran == 2"
+                >
+                  Validate By Departement Head
                 </div>
               </template>
             </Column>
@@ -175,16 +155,40 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="Status">
+
+            <Column field="" header="" style="width: 5%">
               <template #body="{ data }">
-                <div class="label-nonAktifSwitch" v-if="data.status == 1">
-                  Request By Officer
-                </div>
-                <div class="label-AktifSwitch" v-else-if="data.status == 2">
-                  Validate By Departement Head
-                </div>
-                <div class="label-ReturSwitch" v-else-if="data.status == 3">
-                  Retur
+                <div style="font-weight: 600">
+                  <button
+                    class="bg-transparent border-0"
+                    title="Validasi Switch"
+                    @click="showValidasi(data)"
+                  >
+                    <div v-if="data.status_anggaran == 1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                      >
+                        <path
+                          d="M480.067-100.001q-78.836 0-148.204-29.92-69.369-29.92-120.682-81.21-51.314-51.291-81.247-120.629-29.933-69.337-29.933-148.173t29.925-148.204q29.925-69.369 81.225-120.682 51.3-51.314 120.65-81.247Q401.15-859.999 480-859.999q63.204 0 119.602 19t103.474 53l-43.383 44.384q-38.769-26.692-83.991-41.539Q530.48-800 480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-21.077-2.769-41.69-2.77-20.612-8.308-40.08l48.46-48.845q11 30.846 16.808 63.463 5.808 32.617 5.808 67.152 0 78.85-29.92 148.199-29.92 69.35-81.21 120.65-51.291 51.3-120.629 81.225-69.337 29.925-148.173 29.925Zm-56.836-209.846L267.078-466l42.153-42.153 114 114 394.615-395.23 42.153 42.153-436.768 437.383Z"
+                        />
+                      </svg>
+                    </div>
+                    <div v-else>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 -960 960 960"
+                        width="24"
+                      >
+                        <path
+                          d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
+                        />
+                      </svg>
+                    </div>
+                  </button>
                 </div>
               </template>
             </Column>
@@ -261,7 +265,7 @@
                 <p class="text-base">
                   {{
                     Detail.bsu_awal != undefined
-                      ? "Rp." + Detail.bsu_awal.toLocaleString("de-DE")
+                      ? "Rp " + Detail.bsu_awal.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
@@ -271,7 +275,7 @@
                 <p class="text-base">
                   {{
                     Detail.bsu_final != undefined
-                      ? "Rp." + Detail.bsu_final.toLocaleString("de-DE")
+                      ? "Rp " + Detail.bsu_final.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
@@ -282,21 +286,24 @@
                 <p class="text-base">
                   {{
                     Detail.bsu_inout != undefined
-                      ? "Rp." + Detail.bsu_inout.toLocaleString("de-DE")
+                      ? "Rp " + Detail.bsu_inout.toLocaleString("de-DE")
                       : ""
                   }}
                 </p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Status</p>
-                <div class="label-nonAktifSwitch" v-if="Detail.status == 1">
+                <div
+                  class="label-nonAktifSwitch"
+                  v-if="Detail.status_anggaran == 1"
+                >
                   Request By Officer
                 </div>
-                <div class="label-AktifSwitch" v-else-if="Detail.status == 2">
+                <div
+                  class="label-AktifSwitch"
+                  v-else-if="Detail.status_anggaran == 2"
+                >
                   Validate By Departement Head
-                </div>
-                <div class="label-ReturSwitch" v-else-if="Detail.status == 3">
-                  Retur
                 </div>
               </div>
             </div>
@@ -472,11 +479,12 @@ export default {
     async getData() {
       this.loading = true;
       let payload = {
-        status: "",
+        status: this.filters.status,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
-        jenis_switchanggaran : 2
+        jenis_switchanggaran: 2,
+        kddepartemen : this.userSession.departemen
       };
       try {
         let res = await serviceAnggaran.ListSwitchAnggaran(payload, this.token);
