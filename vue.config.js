@@ -5,10 +5,11 @@ module.exports = {
             maxEntrypointSize: 114857600, // int (in bytes)
         },
     },
+    
     chainWebpack: config => {
         // remove the prefetch plugin
         config.plugins.delete('prefetch')
-
+        config.optimization.usedExports(true)
 
     }
 }
