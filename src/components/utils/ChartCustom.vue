@@ -35,6 +35,11 @@ export default {
   data() {
     return {};
   },
+  computed:{
+    getChartData(){
+      return this.chartData
+    }
+  },
   methods: {
     chartConstructor(chartType, chartData, chartOptions) {
       const chartElement = document.querySelector("canvas");
@@ -46,8 +51,8 @@ export default {
     },
   },
   mounted() {
-    let { chartType, chartData, chartOptions } = this;
-    this.chartConstructor(chartType, chartData, chartOptions);
+    let { chartType, chartOptions } = this;
+    this.chartConstructor(chartType, this.getChartData, chartOptions);
   },
 };
 </script>

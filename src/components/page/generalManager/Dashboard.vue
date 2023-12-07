@@ -77,12 +77,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <!-- <Bar id="my-chart-id" :options="chartOptions" :data="chartData" /> -->
-          <PlanetChart
-            :chartData="chartData"
-            :chartOptions="chartOptions"
-            :chartType="chartType"
-          />
+          <canvas id="planet-chart"></canvas>
         </div>
       </div>
     </div>
@@ -90,8 +85,27 @@
 </template>
 <script>
 import serviceReport from "../../../services/Report.service";
-import PlanetChart from "../../utils/ChartCustom.vue";
-
+import {
+  Chart as ChartJS,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+  Legend,
+  Tooltip,
+} from "chart.js";
+ChartJS.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+  Legend,
+  Tooltip
+);
 export default {
   data() {
     return {
@@ -115,46 +129,13 @@ export default {
           "Okt",
           "Des",
         ],
-        datasets: [
-          {
-            label: "This week",
-            data: [12, 19, 10, 17, 6, 3, 7, 5, 9, 11, 13, 14],
-            backgroundColor: "rgba(224, 248, 255, 0.4)",
-            borderColor: "#5cddff",
-            lineTension: 0,
-            pointBackgroundColor: "#5cddff",
-          },
-          {
-            label: "Last week",
-            data: [10, 25, 3, 25, 17, 4, 9, 4, 17, 9, 7, 15],
-            backgroundColor: "rgba(241, 225, 197, 0.4)",
-            borderColor: "#ffc764",
-            lineTension: 0,
-            pointBackgroundColor: "#ffc764",
-          },
-          {
-            label: "Tommorow",
-            data: [25, 10, 3, 22, 13, 2, 9, 3, 15, 8, 9, 12],
-            backgroundColor: "rgba(246, 18, 94, 0.8)",
-            borderColor: "rgba(246, 18, 94, 0.8)",
-            lineTension: 0,
-            pointBackgroundColor: "rgba(246, 18, 94, 0.8)",
-          },
-          {
-            label: "Yesterday",
-            data: [11, 25, 5, 22, 16, 7, 9, 4, 13, 8, 7, 11],
-            backgroundColor: "rgba(159, 184, 50, 0.8)",
-            borderColor: "rgba(159, 184, 50, 0.8)",
-            lineTension: 0,
-            pointBackgroundColor: "rgba(159, 184, 50, 0.8)",
-          },
-        ],
+        datasets: [],
       },
       chartOptions: {
         responsive: true,
         plugins: {
           legend: {
-            position: "bottom",
+            position: "top",
             display: true,
           },
           title: {
@@ -165,10 +146,7 @@ export default {
       },
     };
   },
-  components: {
-    // Bar,
-    PlanetChart,
-  },
+  components: {},
   methods: {
     async getTotalAnggaran() {
       try {
@@ -187,26 +165,59 @@ export default {
         console.log(error);
       }
     },
-    // async getDataChart() {
-    //   try {
-    //     let res = await serviceReport.listSponsorship(this.token);
-    //     let data = res.data.data
-    //     let label, allData = []
-    //     for (let i = 0; i < data.length; i++) {
-    //       label = data[i].nama_sub_mata_anggaran
-           
-          
-    //     }
-    //     console.log(data);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
+    async getDataChart() {
+      try {
+        let res = await serviceReport.listSponsorship(this.token);
+        let data = res.data.data;
+
+        for (let i = 0; i < data.length; i++) {
+          const randomColor =
+            "hsl(" +
+            360 * Math.random() +
+            "," +
+            (25 + 70 * Math.random()) +
+            "%," +
+            50 +
+            "%)";
+          let CustomData = {
+            label: data[i].nama_sub_mata_anggaran,
+            data: [
+              data[i].januari,
+              data[i].febuari,
+              data[i].maret,
+              data[i].april,
+              data[i].mei,
+              data[i].juni,
+              data[i].juli,
+              data[i].juli,
+              data[i].agutus,
+              data[i].september,
+              data[i].oktober,
+              data[i].november,
+              data[i].desember,
+            ],
+            backgroundColor: randomColor,
+            borderColor: randomColor,
+            lineTension: 0,
+            pointBackgroundColor: randomColor,
+          };
+          this.chartData.datasets.push(CustomData);
+        }
+        const chartElement = document.querySelector("canvas");
+        new ChartJS(chartElement, {
+          type: this.chartType,
+          data: this.chartData,
+          options: this.chartOptions,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {
     this.getTotalAnggaran();
     this.getTotalRealisasi();
-    // this.getDataChart();
+    this.getDataChart();
   },
 };
 </script>
