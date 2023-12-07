@@ -90,7 +90,7 @@
 </template>
 <script>
 import serviceReport from "../../../services/Report.service";
-import PlanetChart from "../../utils/Chart.vue";
+import PlanetChart from "../../utils/ChartCustom.vue";
 
 export default {
   data() {
@@ -134,7 +134,7 @@ export default {
           },
           {
             label: "Tommorow",
-            data: [25,10, 3, 22, 13, 2, 9, 3, 15, 8, 9, 12],
+            data: [25, 10, 3, 22, 13, 2, 9, 3, 15, 8, 9, 12],
             backgroundColor: "rgba(246, 18, 94, 0.8)",
             borderColor: "rgba(246, 18, 94, 0.8)",
             lineTension: 0,
@@ -187,10 +187,26 @@ export default {
         console.log(error);
       }
     },
+    // async getDataChart() {
+    //   try {
+    //     let res = await serviceReport.listSponsorship(this.token);
+    //     let data = res.data.data
+    //     let label, allData = []
+    //     for (let i = 0; i < data.length; i++) {
+    //       label = data[i].nama_sub_mata_anggaran
+           
+          
+    //     }
+    //     console.log(data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
   },
   mounted() {
     this.getTotalAnggaran();
     this.getTotalRealisasi();
+    // this.getDataChart();
   },
 };
 </script>
