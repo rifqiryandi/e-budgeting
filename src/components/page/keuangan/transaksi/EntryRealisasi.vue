@@ -341,11 +341,11 @@
               </div>
               <div class="mb-1" v-if="detail.kode_buku == ''">
                 <p class="text-lg font-semibold mb-0">
-                  Kode Buku <span class="text-red-600">*</span>
+                  Kode Voucher <span class="text-red-600">*</span>
                 </p>
                 <input
                   v-model="Form.kode_buku"
-                  placeholder="Masukkan kode buku"
+                  placeholder="Masukkan Kode Voucher"
                   class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   style="height: 50px"
                 />
@@ -357,7 +357,7 @@
                 </p>
               </div>
               <div class="mb-" v-else>
-                <p class="text-lg font-semibold mb-0">Kode Buku</p>
+                <p class="text-lg font-semibold mb-0">Kode Voucher</p>
                 <p class="text-base">
                   {{ detail.kode_buku }}
                 </p>
@@ -879,6 +879,8 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        tanggalawal : "",
+        tanggalakhir : ""
       };
       try {
         let res = await serviceTransaksi.listRealisasi(payload, this.token);

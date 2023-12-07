@@ -14,12 +14,6 @@ switch (namaAkses) {
         component: () => import("./components/page/auth/Login.vue"),
       },
       {
-        path: "/dashboard",
-        alias: "/admin",
-        name: "Dashboard",
-        component: () => import("./components/page/admin/Dashboard.vue"),
-      },
-      {
         path: "/anggaran",
         alias: "/anggaran",
         name: "Daftar Anggaran",
@@ -49,6 +43,12 @@ switch (namaAkses) {
         name: "Switch Anggaran Antar Departemen",
         component: () => import("./components/page/superadmin/transaksi/SwitchAnggaranDepartemen.vue"),
       },
+      {
+        path: "/summary",
+        alias: "/summary",
+        name: "Summary",
+        component: () => import("./components/page/superadmin/laporan/Summary.vue"),
+      },
     ];
     break;
   case 'Admin Sistem':
@@ -57,12 +57,6 @@ switch (namaAkses) {
         alias: "/login",
         name: "Login",
         component: () => import("./components/page/auth/Login.vue"),
-      },
-      {
-        path: "/dashboard",
-        alias: "/admin",
-        name: "Dashboard",
-        component: () => import("./components/page/admin/Dashboard.vue"),
       },
       {
         path: "/user",
@@ -109,12 +103,6 @@ switch (namaAkses) {
         alias: "/login",
         name: "Login",
         component: () => import("./components/page/auth/Login.vue"),
-      },
-      {
-        path: "/dashboard",
-        alias: "/admin",
-        name: "Dashboard",
-        component: () => import("./components/page/admin/Dashboard.vue"),
       },
       {
         path: "/kegiatan",
@@ -182,12 +170,6 @@ switch (namaAkses) {
         component: () => import("./components/page/auth/Login.vue"),
       },
       {
-        path: "/dashboard",
-        alias: "/admin",
-        name: "Dashboard",
-        component: () => import("./components/page/admin/Dashboard.vue"),
-      },
-      {
         path: "/anggaran",
         alias: "/anggaran",
         name: "Daftar Anggaran",
@@ -246,12 +228,6 @@ switch (namaAkses) {
         component: () => import("./components/page/auth/Login.vue"),
       },
       {
-        path: "/dashboard",
-        alias: "/admin",
-        name: "Dashboard",
-        component: () => import("./components/page/admin/Dashboard.vue"),
-      },
-      {
         path: "/realisasianggaran",
         alias: "/realisasianggaran",
         name: "Validasi Realisasi Anggaran",
@@ -266,6 +242,28 @@ switch (namaAkses) {
       }
 
 
+    ];
+    break;
+  case "General Manager":
+    routes = [{
+        path: "/",
+        alias: "/login",
+        name: "Login",
+        component: () => import("./components/page/auth/Login.vue"),
+      },
+      {
+        path: "/dashboard",
+        alias: "/admin",
+        name: "Dashboard",
+        component: () => import("./components/page/generalManager/Dashboard.vue"),
+      },
+      {
+        path: "/rekapRealisasi",
+        alias: "/rekapRealisasi",
+        name: "Rekap Realisasi",
+        component: () => import("./components/page/generalManager/RekapRealisasi.vue"),
+      }
+      
     ];
     break;
 

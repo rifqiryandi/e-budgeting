@@ -88,10 +88,10 @@
                   class="label-nonAktifSwitch"
                   v-if="data.status_anggaran == 0"
                 >
-                  Request By Officer
+                  Request By Superadmin
                 </div>
                 <div
-                  class="label-AktifSwitch"
+                  class="label-warningSwitch"
                   v-else-if="data.status_anggaran == 1"
                 >
                   Validate By Departement Head Asal
@@ -101,6 +101,28 @@
                   v-else-if="data.status_anggaran == 2"
                 >
                   Validate By Departement Head Tujuan
+                </div>
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Departemen Asal"
+              style="min-width: 220px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nama_departement_awal }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Departemen Tujuan"
+              style="min-width: 220px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nama_departement_final }}
                 </div>
               </template>
             </Column>
@@ -348,7 +370,7 @@
                   class="label-nonAktifSwitch"
                   v-if="Detail.status_anggaran == 0"
                 >
-                  Request By Officer
+                  Request By Superadmin
                 </div>
                 <div
                   class="label-AktifSwitch"
@@ -728,7 +750,7 @@ export default {
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
         jenis_switchanggaran: 1,
-        kddepartemen : this.userSession.departemen
+        kddepartemen: this.userSession.departemen,
       };
       try {
         let res = await serviceAnggaran.ListSwitchAnggaran(payload, this.token);
@@ -789,6 +811,21 @@ export default {
   font-style: normal;
   font-weight: 700;
 }
+.label-warningSwitch {
+  width: max-content;
+  height: 32px;
+  padding: 5px 10px 5px 10px;
+  border-left: #ee6419 5px solid;
+  background: #ffe8dc;
+  color: #ee6419;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+
 
 .label-ReturSwitch {
   width: max-content;

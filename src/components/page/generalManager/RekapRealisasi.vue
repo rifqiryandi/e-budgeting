@@ -21,6 +21,20 @@
                 <option value="PK">Beban Komitmen</option>
               </select>
             </div>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Tanggal Realisasi
+              </label>
+              <VueDatePicker
+                placeholder="Pilih Range Tanggal"
+                v-model="tanggal"
+                format="dd/MMMM/yyyy"
+                range
+                auto-apply
+              />
+            </div>
           </div>
           <button
             class="btn w-full mt-3"
@@ -72,48 +86,76 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="Status">
+            <Column
+              field=""
+              header="Status"
+              style="min-width: 180px !important"
+            >
               <template #body="{ data }">
                 <div class="label-nonAktif" v-if="data.status_realisasi == 0">
                   Request By Officer
                 </div>
-                <div class="label-Aktif" v-else-if="data.status_realisasi == 1">
-                  Validate By Departemen Head
+                <div
+                  class="label-nonAktif"
+                  v-else-if="data.status_realisasi == 1"
+                >
+                  Request By Departemen Head
                 </div>
                 <div class="label-Aktif" v-else-if="data.status_realisasi == 2">
                   Validate By BUM
                 </div>
               </template>
             </Column>
-            <Column field="uraian_kegiatan" header="Kegiatan">
+
+            <Column
+              field="uraian_kegiatan"
+              header="Kegiatan"
+              style="min-width: 200px !important"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.uraian_kegiatan }}
                 </div>
               </template>
             </Column>
-            <Column field="nama_sub_mata_anggaran" header="Sub Mata Anggaran">
+            <Column
+              field="nama_sub_mata_anggaran"
+              header="Sub Mata Anggaran"
+              style="min-width: 200px !important"
+            >
               <template #body="{ data }">
                 <div>
                   {{ data.nama_sub_mata_anggaran }}
                 </div>
               </template>
             </Column>
-            <Column field="kode_pengajuan" header="Kode Pengajuan">
+            <Column
+              field="kode_pengajuan"
+              header="Kode Pengajuan"
+              style="min-width: 200px !important"
+            >
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   {{ data.kode_pengajuan }}
                 </div>
               </template>
             </Column>
-            <Column field="nominal" header="Nominal">
+            <Column
+              field="nominal"
+              header="Nominal"
+              style="min-width: 200px !important"
+            >
               <template #body="{ data }">
                 <div>
                   {{ data.nominal.toLocaleString("de-DE") }}
                 </div>
               </template>
             </Column>
-            <Column field="tanggal_pengajuan" header="Tanggal Pengajuan">
+            <Column
+              field="tanggal_pengajuan"
+              header="Tanggal Pengajuan"
+              style="min-width: 180px !important"
+            >
               <template #body="{ data }">
                 <div>
                   {{
@@ -126,7 +168,11 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="Jenis Pengajuan">
+            <Column
+              field=""
+              header="Jenis Pengajuan"
+              style="min-width: 160px !important"
+            >
               <template #body="{ data }">
                 <div>
                   <p class="text-base">
@@ -143,16 +189,19 @@
                 </div>
               </template>
             </Column>
-
             <Column field="" header="">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
                     class="bg-transparent border-0"
-                    title="Detail Realisasi"
+                    :title="
+                      data.status_realisasi == 1
+                        ? 'Validasi Realisasi'
+                        : 'Detail Realisasi'
+                    "
                     @click="detailView(data)"
                   >
-                    <div v-if="data.status_realisasi == 0">
+                    <div v-if="data.status_realisasi == 1">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         height="24"
@@ -291,10 +340,10 @@
                   Request By Officer
                 </div>
                 <div
-                  class="label-Aktif"
+                  class="label-nonAktif"
                   v-else-if="detail.status_realisasi == 1"
                 >
-                  Validate By Departemen Head
+                  Request By Departemen Head
                 </div>
                 <div
                   class="label-Aktif"
@@ -379,7 +428,7 @@
         <!-- Modal footer -->
         <div
           class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-          v-show="detail.status_realisasi == 0"
+          v-show="detail.status_realisasi == 1"
         >
           <button
             type="button"
@@ -423,11 +472,11 @@ import InputText from "primevue/inputtext";
 import { initFlowbite } from "flowbite";
 import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-// import VueDatePicker from "@vuepic/vue-datepicker";
+import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { Modal } from "flowbite";
 
-import serviceTransaksi from "../../../../services/Transaction.service";
+import serviceTransaksi from "../../../services/Transaction.service";
 
 export default {
   name: "Pengajuan Realisasi",
@@ -442,6 +491,7 @@ export default {
       rowDepartemen: null,
       rowAnggaran: null,
       rowPengajuan: null,
+      tanggal: "",
       filters: {
         kddepartemen: "",
         kdsubmatanggaran: "",
@@ -461,15 +511,6 @@ export default {
         kode_pengajuan: "",
         jnsdokumen: "",
       },
-      Form: {
-        id_pengajuan: "",
-        tanggal: "",
-        kode_pengajuan: "",
-        kode_buku: "",
-        nominal: "",
-        keterangan: "",
-        user_id: "",
-      },
       jenisPengajuan: {
         SPK: "",
         Faktur: "",
@@ -483,7 +524,7 @@ export default {
       },
       buttonActive: true,
       detail: {},
-      loading: true,
+      loading: false,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -504,7 +545,7 @@ export default {
     Column,
     InputText,
     // InputNumber,
-    // VueDatePicker,
+    VueDatePicker,
     // FileUpload,
   },
   computed: {
@@ -521,64 +562,6 @@ export default {
   methods: {
     downloadLinkFile(link) {
       window.open(link, "_blank", "noreferrer");
-    },
-    setFileUploadSPK(evt) {
-      this.UploadSPK.myFile = evt.files[0];
-    },
-    validationNominal(evt) {
-      if (evt.value > this.preview.nominal) {
-        this.$swal({
-          icon: "info",
-          title: "INFO",
-          text: "Nominal realisasi tidak boleh lebih dari nominal pengajuan",
-          confirmButtonColor: "#e77817",
-        });
-      }
-    },
-    async prosesValidasi() {
-      let payload = {
-        id_realisasi: this.detail.id_realisasi,
-        status: 1,
-        tanggal_pengajuan:
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
-          "-" +
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
-          "-" +
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
-        kode_buku: "",
-        userid: this.userSession.username,
-        tanggal_realisasi: "1900-01-01",
-      };
-
-      this.$swal({
-        icon: "question",
-        title: "Validasi pengajuan realisasi?",
-        showDenyButton: false,
-        showCancelButton: true,
-        confirmButtonColor: "#008073",
-        cancelButtonColor: "grey",
-        confirmButtonText: "Validasi",
-        cancelButtonText: "Batal",
-        customClass: {
-          actions: "my-actions",
-          cancelButton: "order-2 right-gap",
-          confirmButton: "order-1",
-        },
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            let respon = await serviceTransaksi.validasiRealisasi(
-              payload,
-              this.token
-            );
-            this.responBerhasil(respon);
-            this.hideModal();
-            this.refreshListTable(1);
-          } catch (error) {
-            this.responError(error);
-          }
-        }
-      });
     },
     responBerhasil(respon) {
       this.$swal({
@@ -653,24 +636,7 @@ export default {
       };
       this.Form.nominal = this.preview.nominal;
     },
-    async getPengajuan() {
-      let payload = {
-        idpengajuan: "",
-        kddepartemen: this.userSession.departemen,
-        status_pengajuan: 1,
-        jenis_pengajuan: "",
-      };
-      try {
-        let res = await serviceTransaksi.getPengajuanRealisasi(
-          payload,
-          this.token
-        );
-        this.rowPengajuan = res.data.data;
-      } catch (error) {
-        this.rowPengajuan = null;
-        console.log(error);
-      }
-    },
+
     cariData() {
       this.refreshListTable(1);
     },
@@ -689,31 +655,34 @@ export default {
       }
       this.refreshListTable();
     },
-    showInput() {
-      this.Form = {
-        id_pengajuan: "",
-        tanggal: "",
-        kode_pengajuan: "",
-        kode_buku: "",
-        nominal: "",
-        keterangan: "",
-        user_id: "",
-      };
-      const $targetEl = document.getElementById("input-modal");
-      this.modal = new Modal($targetEl);
-      this.modal.show();
-    },
     async getData() {
+      if (this.tanggal == "") {
+        return this.$swal({
+          icon: "info",
+          title: "Pemberitahuan",
+          text: "Silahkan Pilih Range Tanggal Terlebih Dahulu",
+          confirmButtonColor: "#e77817",
+        });
+      }
+      let tanggalAwal = new Date(this.tanggal[0]);
+      let tanggalAkhir = new Date(this.tanggal[1]);
+      let monthAwal = ("0" + (tanggalAwal.getMonth() + 1)).slice(-2);
+      let monthAkhir = ("0" + (tanggalAkhir.getMonth() + 1)).slice(-2);
+      let dayAwal = ("0" + tanggalAwal.getDate()).slice(-2);
+      let dayAkhir = ("0" + tanggalAkhir.getDate()).slice(-2);
       this.loading = true;
       let payload = {
         kdsubmatanggaran: this.filters.kdsubmatanggaran,
-        kddepartemen: this.userSession.departemen,
+        kddepartemen: "",
         jenis_pengajuan: this.filters.jenis_pengajuan,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
-        tanggalawal : "",
-        tanggalakhir : ""
+        tanggalawal:
+          tanggalAwal.getFullYear() + "-" + monthAwal + "-" + dayAwal,
+        tanggalakhir:
+          tanggalAkhir.getFullYear() + "-" + monthAkhir + "-" + dayAkhir,
+        status_pengajuan: 2,
       };
       try {
         let res = await serviceTransaksi.listRealisasi(payload, this.token);
@@ -738,8 +707,7 @@ export default {
   },
   mounted() {
     initFlowbite();
-    this.getData();
-    this.getPengajuan();
+    // this.getPengajuan();
   },
 };
 </script>

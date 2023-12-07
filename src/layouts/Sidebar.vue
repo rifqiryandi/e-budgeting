@@ -34,17 +34,30 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="user-panel mt-3 mb-3 d-flex pt-1">
         <div class="image">
           <!-- <img src="../assets/img/avatar5.png" class="img-circle elevation-2" alt="User Image"> -->
+          <!-- <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="32"
+            viewBox="0 -960 960 960"
+            width="32"
+            class="img-circle elevation-2" 
+          >
+            <path
+              d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"
+            />
+          </svg> -->
         </div>
         <div class="info">
-          <label class="d-block white-all">{{ userSession.nama }}</label>
-          <small style="color: #1e1e1e">{{ namaAkses }}</small>
-          <br />
-          <small style="color: #1e1e1e">{{
-            userSession.nama_departement
-          }}</small>
+          <label class="d-block white-all m-0">{{ userSession.nama }}</label>
+          <p class="text-sm m-0" style="color: #1e1e1e">{{ namaAkses }}</p>
+          <p class="text-sm m-0" style="color: #1e1e1e">
+            {{ userSession.nama_departement }}
+          </p>
+          <p class="text-sm m-0" style="color: #1e1e1e">
+            Tanggal : {{ currentDate }}
+          </p>
         </div>
       </div>
 
@@ -58,7 +71,10 @@
         >
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item nav-style" v-show="false">
+          <li
+            class="nav-item nav-style"
+            v-show="namaAkses == 'General Manager'"
+          >
             <router-link
               to="/dashboard"
               :class="NamePage == 'Dashboard' ? Active : notActive"
@@ -802,6 +818,48 @@
               <p style="color: #1e1e1e">Laporan Realisasi</p>
             </router-link>
           </li>
+
+          <!-- Summary Super admin -->
+          <!-- <li class="nav-item nav-style" v-show="namaAkses == 'Superadmin'">
+            <router-link
+              to="/summary"
+              :class="NamePage == 'Summary' ? Active : notActive"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+                class="nav-icon"
+              >
+                <path
+                  d="M320-280q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280Zm0-160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 320h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"
+                />
+              </svg>
+              <p style="color: #1e1e1e">Summary</p>
+            </router-link>
+          </li> -->
+
+          <!-- Rekap Realisasi -->
+          <li class="nav-item nav-style" v-show="namaAkses == 'General Manager'">
+            <router-link
+              to="/rekapRealisasi"
+              :class="NamePage == 'Rekap Realisasi' ? Active : notActive"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+                class="nav-icon"
+              >
+                <path
+                  d="M320-280q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280Zm0-160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 320h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"
+                />
+              </svg>
+              <p style="color: #1e1e1e">Rekap Realisasi</p>
+            </router-link>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -821,6 +879,10 @@ export default {
       notActive: "nav-link d-flex ",
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
       namaAkses: sessionStorage.getItem("namaAkes"),
+      currentDate: new Date()
+        .toLocaleDateString("de-DE")
+        .replace(".", "/")
+        .replace(".", "/"),
     };
   },
 };
@@ -861,5 +923,27 @@ export default {
 }
 #sidebar-overlay {
   z-index: 19 !important;
+}
+.div small {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.info {
+  /* padding: 0 !important; */
+  inline-size: 200px !important;
+  height: auto !important;
+  margin-bottom: 9px !important;
+}
+
+.user-panel,
+.user-panel .info {
+  white-space: unset !important;
+  padding-bottom: 0 !important;
+}
+.user-panel {
+  /* border: 2px solid #006699 !important;
+  border-radius: 16px; */
+  min-height: 125px !important;
+  max-height: 150px !important;
 }
 </style>

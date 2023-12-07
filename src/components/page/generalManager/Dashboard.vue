@@ -1,7 +1,7 @@
 <template lang="">
   <div class="row">
     <div class="col-4">
-      <div class="card card-info">
+      <div class="card card-info card-style-cstm">
         <div class="card-header text-header text-lg flex justify-left">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="col-4">
-      <div class="card card-success">
+      <div class="card card-success card-style-cstm">
         <div class="card-header text-header text-lg flex justify-left">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="col-4">
-      <div class="card">
+      <div class="card card-style-cstm">
         <div
           class="card-header text-header text-lg flex justify-left card-warning"
         >
@@ -72,9 +72,26 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <!-- <Bar id="my-chart-id" :options="chartOptions" :data="chartData" /> -->
+          <PlanetChart
+            :chartData="chartData"
+            :chartOptions="chartOptions"
+            :chartType="chartType"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import serviceReport from "../../../services/Report.service";
+import PlanetChart from "../../utils/Chart.vue";
+
 export default {
   data() {
     return {
@@ -82,7 +99,75 @@ export default {
       totalAnggaran: 0,
       sisaAnggaran: 0,
       totalRealisasi: 0,
+      chartType: "line",
+      chartData: {
+        labels: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "Mei",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Nov",
+          "Okt",
+          "Des",
+        ],
+        datasets: [
+          {
+            label: "This week",
+            data: [12, 19, 10, 17, 6, 3, 7, 5, 9, 11, 13, 14],
+            backgroundColor: "rgba(224, 248, 255, 0.4)",
+            borderColor: "#5cddff",
+            lineTension: 0,
+            pointBackgroundColor: "#5cddff",
+          },
+          {
+            label: "Last week",
+            data: [10, 25, 3, 25, 17, 4, 9, 4, 17, 9, 7, 15],
+            backgroundColor: "rgba(241, 225, 197, 0.4)",
+            borderColor: "#ffc764",
+            lineTension: 0,
+            pointBackgroundColor: "#ffc764",
+          },
+          {
+            label: "Tommorow",
+            data: [25,10, 3, 22, 13, 2, 9, 3, 15, 8, 9, 12],
+            backgroundColor: "rgba(246, 18, 94, 0.8)",
+            borderColor: "rgba(246, 18, 94, 0.8)",
+            lineTension: 0,
+            pointBackgroundColor: "rgba(246, 18, 94, 0.8)",
+          },
+          {
+            label: "Yesterday",
+            data: [11, 25, 5, 22, 16, 7, 9, 4, 13, 8, 7, 11],
+            backgroundColor: "rgba(159, 184, 50, 0.8)",
+            borderColor: "rgba(159, 184, 50, 0.8)",
+            lineTension: 0,
+            pointBackgroundColor: "rgba(159, 184, 50, 0.8)",
+          },
+        ],
+      },
+      chartOptions: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "bottom",
+            display: true,
+          },
+          title: {
+            display: true,
+            text: "Sponsorship",
+          },
+        },
+      },
     };
+  },
+  components: {
+    // Bar,
+    PlanetChart,
   },
   methods: {
     async getTotalAnggaran() {
@@ -125,7 +210,7 @@ export default {
 .card-warning {
   background: rgb(239, 113, 9) !important;
 }
-.card {
+.card-style-cstm {
   height: 160px !important;
 }
 </style>

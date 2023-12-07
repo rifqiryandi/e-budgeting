@@ -55,6 +55,17 @@ class UserService {
     return http.post("users/updatepass", data, config);
   }
 
+
+  getJabatan(token){
+    var config = {
+      headers: {
+        "x-access-token": token
+      }
+    }
+    return http.get("referensi/getjabatan", config);
+  }
+  
+
 }
 
 export default new UserService();

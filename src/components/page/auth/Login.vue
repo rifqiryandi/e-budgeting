@@ -66,15 +66,21 @@
                 <img src="../../../assets/bnilogo.png" class="img-style" />
                 <h4 class="text-info-style">e-Budgeting</h4>
               </div>
-              <h4 class="text-info-style text-center">Corporate Secretary Division</h4>
-
+              <h4 class="text-info-style text-center">
+                Corporate Secretary Division
+              </h4>
             </div>
           </div>
         </div>
       </div>
       <div class="card-footer justify-center bg-transparent inline-flex py-0">
-        <p class="m-0 text-center pt-3 text-base">Powered by </p>
-        <img src="../../../assets/janariLogo.png" width="48" height="48" alt="">
+        <p class="m-0 text-center pt-3 text-base">Powered by</p>
+        <img
+          src="../../../assets/janariLogo.png"
+          width="48"
+          height="48"
+          alt=""
+        />
       </div>
     </div>
   </div>
@@ -134,7 +140,7 @@ export default {
             let token = respon.data.accessToken;
             sessionStorage.setItem("isLogin", true);
             sessionStorage.setItem("token", token);
-            sessionStorage.setItem("keypass", btoa(data.password))
+            sessionStorage.setItem("keypass", btoa(data.password));
             if (respon.data.data.leveluser == 1) {
               sessionStorage.setItem("namaAkes", "Superadmin");
             } else if (respon.data.data.leveluser == 2) {
@@ -153,7 +159,11 @@ export default {
               "dataUser",
               btoa(JSON.stringify(respon.data.data))
             );
-            window.location.href = "/";
+            if (respon.data.data.leveluser == 5) {
+              window.location.href = "/dashboard";
+            } else {
+              window.location.href = "/";
+            }
           }
         } catch (error) {
           this.$swal({
