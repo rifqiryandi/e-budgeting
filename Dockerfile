@@ -1,10 +1,11 @@
 # build stage
-FROM node:16-alpine as build-stage
+FROM node:20-alpine as build-stage
 WORKDIR /app
-COPY package*.json ./
-RUN npm install --force
-COPY . .
-RUN npm run build
+ADD dist /app/dist
+# COPY package*.json ./
+# RUN npm install --force
+# COPY . .
+# RUN npm run build
 
 # production stage
 FROM nginx:stable-alpine as production-stage
