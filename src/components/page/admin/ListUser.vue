@@ -849,13 +849,19 @@
             >
               Jabatan <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
+            <select
               v-model="Form.jabatan"
-              placeholder="Masukkan Jabatan"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Jabatan --</option>
+              <option
+                v-for="(item, index) in getRowJabatan"
+                :key="index"
+                :value="item.kodejabatan"
+              >
+                {{ item.deskripsi_jabatan }}
+              </option>
+            </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.jabatan.$error"
