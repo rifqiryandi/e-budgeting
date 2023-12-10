@@ -147,7 +147,7 @@
             </Column>
             <Column
               field=""
-              header="Nominal"
+              header="Nominal Awal Tahun"
               class="text-right"
               style="min-width: 180px !important"
             >

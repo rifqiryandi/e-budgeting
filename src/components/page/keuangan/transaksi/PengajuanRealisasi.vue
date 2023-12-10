@@ -748,6 +748,8 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        tanggalawal : "",
+        tanggalakhir : ""
       };
       try {
         let res = await serviceTransaksi.listRealisasi(payload, this.token);

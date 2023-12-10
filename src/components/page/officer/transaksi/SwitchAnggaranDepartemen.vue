@@ -97,6 +97,28 @@
             </Column>
             <Column
               field=""
+              header="Departemen Asal"
+              style="min-width: 220px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nama_departement_awal }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Departemen Tujuan"
+              style="min-width: 220px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.nama_departement_final }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field=""
               header="Mata Anggaran"
               style="min-width: 200px !important"
             >
@@ -428,8 +450,7 @@ export default {
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
         jenis_switchanggaran: 1,
-        kddepartemen : this.userSession.departemen
-
+        kddepartemen: this.userSession.departemen,
       };
       try {
         let res = await serviceAnggaran.ListSwitchAnggaran(payload, this.token);

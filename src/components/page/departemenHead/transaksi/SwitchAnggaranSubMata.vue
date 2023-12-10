@@ -312,7 +312,7 @@
         <!-- Modal footer -->
         <div
           class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-          v-show="Detail.status == 1"
+          v-show="Detail.status_anggaran == 1"
         >
           <button
             type="button"

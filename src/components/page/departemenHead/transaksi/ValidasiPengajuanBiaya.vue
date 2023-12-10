@@ -431,7 +431,10 @@ export default {
         kdsubmatanggaran: this.Detail.kode_sub_mata_anggaran,
         nominal: this.Detail.nominal_pengajuan,
         alasan: "",
+        idkeg: this.Detail.id_kegiatan,
       };
+      console.log(payload);
+
       this.$swal({
         icon: "question",
         title: "Retur pengajuan biaya?",
@@ -532,6 +535,7 @@ export default {
       let payload = {
         idpengajuan: this.Detail.id,
       };
+      console.log(this.Detail);
       try {
         let res = await serviceFile.listFile(payload, this.token);
         this.listFile = res.data.data;

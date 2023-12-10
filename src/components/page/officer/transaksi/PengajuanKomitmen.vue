@@ -762,6 +762,7 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        kddepartemen : this.userSession.departemen
       };
       try {
         let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);

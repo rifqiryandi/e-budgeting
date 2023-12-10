@@ -281,13 +281,19 @@
             >
               Jabatan <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
+            <select
               v-model="Form.jabatan"
-              placeholder="Masukkan Jabatan"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Jabatan --</option>
+              <option
+                v-for="(item, index) in getRowJabatan"
+                :key="index"
+                :value="item.kodejabatan"
+              >
+                {{ item.deskripsi_jabatan }}
+              </option>
+            </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.jabatan.$error"
@@ -843,13 +849,19 @@
             >
               Jabatan <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
+            <select
               v-model="Form.jabatan"
-              placeholder="Masukkan Jabatan"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Jabatan --</option>
+              <option
+                v-for="(item, index) in getRowJabatan"
+                :key="index"
+                :value="item.kodejabatan"
+              >
+                {{ item.deskripsi_jabatan }}
+              </option>
+            </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.jabatan.$error"
@@ -912,7 +924,7 @@
               <option value="1">Super Admin</option>
               <option value="2">Officer</option>
               <option value="3">Departemen Head</option>
-              <option value="4">Keuangan/Treasury</option>
+              <option value="4">BUM</option>
               <option value="5">General Manager</option>
               <option value="6">Admin Sistem</option>
             </select>
@@ -1279,6 +1291,7 @@ export default {
       token: sessionStorage.getItem("token"),
       ListUser: null,
       rowDepartemen: null,
+      rowJabatan: null,
       detailUser: null,
       modal: null,
       loading: true,
@@ -1362,8 +1375,20 @@ export default {
     getDepartemen() {
       return this.rowDepartemen;
     },
+    getRowJabatan() {
+      return this.rowJabatan;
+    },
   },
   methods: {
+    async getListJabatan() {
+      try {
+        let res = await serviceUser.getJabatan(this.token);
+        this.rowJabatan = res.data.data
+      } catch (error) {
+        this.rowJabatan = null
+        console.log(error);
+      }
+    },
     // Custom Password validation
     validationPassword() {
       let pass = this.password;
@@ -1666,6 +1691,7 @@ export default {
     initFlowbite();
     this.getData();
     this.getAllDepartemen();
+    this.getListJabatan();
   },
 };
 </script>

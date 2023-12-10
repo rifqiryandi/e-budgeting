@@ -329,6 +329,32 @@
               PKP tidak boleh kosong!
             </p>
           </div>
+          <div class="" v-show="Form.pkp == 1">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Nomor Faktur
+            </label>
+            <input
+              v-model="Form.nomor_faktur"
+              placeholder="Masukkan Nomor Faktur"
+              class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              style="height: 50px"
+            />
+          </div>
+          <div class="" v-show="Form.pkp == 1">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Tanggal Faktur
+            </label>
+            <VueDatePicker
+              placeholder="Pilih Tanggal"
+              v-model="Form.tanggal_faktur"
+              format="dd/MMMM/yyyy"
+              auto-apply
+            />
+          </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -567,6 +593,28 @@
                   Validate By BUM
                 </div>
               </div>
+              <div class="mb-1" v-show="detail.pkp == 1">
+                <p class="text-lg font-semibold mb-0">Nomor Faktur</p>
+                <p class="text-base">
+                  {{
+                    detail.nomor_faktur != undefined ? detail.nomor_faktur : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1" v-show="detail.pkp == 1">
+                <p class="text-lg font-semibold mb-0">Tanggal Faktur</p>
+                <p class="text-base">
+                  {{
+                    detail.tanggal_faktur != undefined
+                      ? detail.tanggal_faktur.split("T")[0].split("-")[2] +
+                        "-" +
+                        detail.tanggal_faktur.split("T")[0].split("-")[1] +
+                        "-" +
+                        detail.tanggal_faktur.split("T")[0].split("-")[0]
+                      : ""
+                  }}
+                </p>
+              </div>
             </div>
           </div>
           <hr class="bg-gray-400" />
@@ -718,6 +766,8 @@ export default {
         user_id: "",
         tanggal_pengajuan: "",
         pkp: "",
+        nomor_faktur: "",
+        tanggal_faktur: "",
       },
       jenisPengajuan: {
         SPK: "",
@@ -732,7 +782,7 @@ export default {
         jenisPengajuan: "",
       },
       buttonActive: true,
-      detail: {},
+      detail: { pkp: "" },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
@@ -915,6 +965,8 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        tanggalawal: "",
+        tanggalakhir: "",
       };
       try {
         let res = await serviceTransaksi.listRealisasi(payload, this.token);
@@ -936,6 +988,16 @@ export default {
           confirmButtonColor: "#e77817",
         });
       }
+      if (this.Form.pkp == 1) {
+        if (this.Form.tanggal_faktur == "" || this.Form.nomor_faktur == "") {
+          return this.$swal({
+            icon: "info",
+            title: "INFO",
+            text: "Nomor Faktur dan Tanggal Faktur Tidak Boleh Kosong",
+            confirmButtonColor: "#e77817",
+          });
+        }
+      }
       let Forminput = this.Form;
 
       // Forminput.kode_buku = this.preview.kode_buku;
@@ -946,6 +1008,20 @@ export default {
       this.v$.$validate(); // checks all inputs
       if (!this.v$.Form.$error) {
         let tanggal = new Date(Forminput.tanggal_pengajuan);
+        if (Forminput.tanggal_faktur != "") {
+          let tanggalFaktur = new Date(Forminput.tanggal_faktur);
+          let yearF = tanggalFaktur.getFullYear();
+          let dayF = tanggalFaktur.getDate();
+          let monthF;
+          let addMonthF = tanggalFaktur.getMonth() + 1;
+          if (addMonthF >= 10) {
+            monthF = addMonthF.toString();
+          } else {
+            monthF = "0" + addMonthF.toString();
+          }
+          Forminput.tanggal_faktur = yearF + "-" + monthF + "-" + dayF;
+        }
+
         let year = tanggal.getFullYear();
         let day = tanggal.getDate();
         let month;

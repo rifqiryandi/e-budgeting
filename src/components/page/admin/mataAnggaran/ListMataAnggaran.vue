@@ -49,11 +49,7 @@
   <div id="main-content">
     <div class="row">
       <div class="col-12 d-flex justify-content-end">
-        <button
-          class="btn d-flex btn-add"
-          
-          @click="showInput"
-        >
+        <button class="btn d-flex btn-add" @click="showInput">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -237,7 +233,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              Kelompok Mata Anggaran <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.kdkelmatanggaran"
@@ -256,7 +252,7 @@
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdkelmatanggaran.$error"
             >
-              Kode Kelompok mata anggaran tidak boleh kosong!
+              Kelompok mata anggaran tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -276,7 +272,7 @@
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdmatanggaran.$error"
             >
-              Kode mata anggaran tidak boleh kosong!
+              Kode Mata anggaran tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -365,7 +361,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              Kelompok Mata Anggaran <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.kdkelmatanggaran"
@@ -384,7 +380,7 @@
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdkelmatanggaran.$error"
             >
-              Kode Kelompok mata anggaran tidak boleh kosong!
+              Kelompok mata anggaran tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -404,7 +400,7 @@
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdmatanggaran.$error"
             >
-              Kode mata anggaran tidak boleh kosong!
+              Kode Mata anggaran tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -774,6 +770,4 @@ export default {
   },
 };
 </script>
-<style>
-
-</style>
+<style></style>

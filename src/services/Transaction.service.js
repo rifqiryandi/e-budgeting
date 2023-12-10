@@ -286,7 +286,7 @@ class TransactionService {
         return http.post("transaksi/getpengajuan", data, config);
     }
 
-    validasiRealisasi(data, token){
+    validasiRealisasi(data, token) {
         var config = {
             headers: {
                 "x-access-token": token
@@ -294,7 +294,7 @@ class TransactionService {
         }
         return http.post("transaksi/validasirealisasi", data, config);
     }
-    uploadFileRealisasi(data, token){
+    uploadFileRealisasi(data, token) {
         var config = {
             headers: {
                 "x-access-token": token
@@ -302,8 +302,8 @@ class TransactionService {
         }
         return http.post("upload/realisasi", data, config);
     }
-    
-    listFileRealisasi(data, token){
+
+    listFileRealisasi(data, token) {
         var config = {
             headers: {
                 "x-access-token": token
@@ -311,6 +311,8 @@ class TransactionService {
         }
         return http.post("upload/listfilerealisasi", data, config);
     }
+
+
 }
 
 export default new TransactionService();

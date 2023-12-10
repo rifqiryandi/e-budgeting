@@ -403,12 +403,12 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        kddepartemen: this.userSession.departemen,
       };
       try {
         let res = await serviceAnggaran.getListPengajuanPK(payload, this.token);
         this.pagination.totaldata = res.data.total_data;
         this.listPengajuanKomitmen = res.data.data;
-        console.log(this.listPengajuanKomitmen);
         this.loading = false;
       } catch (error) {
         this.listPengajuanKomitmen = null;

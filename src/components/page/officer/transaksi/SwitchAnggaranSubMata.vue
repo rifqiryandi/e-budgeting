@@ -416,7 +416,7 @@ export default {
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
         jenis_switchanggaran: 2,
-        kddepartemen : this.userSession.departemen
+        kddepartemen: this.userSession.departemen,
       };
       try {
         let res = await serviceAnggaran.ListSwitchAnggaran(payload, this.token);

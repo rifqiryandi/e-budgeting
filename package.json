@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --no-clean",
     "lint": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint"
-
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -21,8 +20,10 @@
     "@vuepic/vue-datepicker": "^5.4.0",
     "admin-lte": "^3.1.0",
     "axios": "^1.4.0",
+    "babel-preset-es2015": "^6.24.1",
     "bootstrap": "^5.3.1",
     "bootstrap-vue": "^2.23.1",
+    "chart.js": "^3.9.1",
     "convert-csv-to-json": "^2.0.0",
     "core-js": "^3.6.5",
     "datatables.net": "^1.13.4",
@@ -42,6 +43,7 @@
     "sweetalert2": "^11.7.20",
     "vue": "^3.3.4",
     "vue-bs-modal": "^0.7.9",
+    "vue-chartjs": "^4.1.1",
     "vue-json-excel3": "^1.0.18",
     "vue-router": "^4.2.2",
     "vue-select": "^4.0.0-beta.6",
@@ -56,11 +58,15 @@
     "@vue/compiler-sfc": "^3.0.0",
     "autoprefixer": "^9.8.8",
     "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.3.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
+    "mini-css-extract-plugin": "^0.9.0",
     "postcss": "^7.0.39",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
-    "vite": "^4.4.9"
+    "vite": "^4.4.9",
+    "vue-loader": "^17.3.1",
+    "vue-template-compiler": "^2.7.15"
   },
   "eslintConfig": {
     "root": true,
