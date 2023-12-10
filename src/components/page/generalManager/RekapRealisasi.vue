@@ -334,6 +334,61 @@
                   }}
                 </p>
               </div>
+              <div class="mb-1" v-if="detail.kode_buku == ''">
+                <p class="text-lg font-semibold mb-0">
+                  Kode Voucher <span class="text-red-600">*</span>
+                </p>
+                <input
+                  v-model="Form.kode_buku"
+                  placeholder="Masukkan Kode Voucher"
+                  class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  style="height: 50px"
+                />
+                <p
+                  class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                  v-if="this.v$.Form.kode_buku.$error"
+                >
+                  Kode buku tidak boleh kosong!
+                </p>
+              </div>
+              <div class="mb-" v-else>
+                <p class="text-lg font-semibold mb-0">Kode Voucher</p>
+                <p class="text-base">
+                  {{ detail.kode_buku }}
+                </p>
+              </div>
+              <div class="mb-1" v-if="detail.kode_buku == ''">
+                <p class="text-lg font-semibold mb-0">
+                  Tanggal Realisasi <span class="text-red-600">*</span>
+                </p>
+                <VueDatePicker
+                  placeholder="Pilih Tanggal"
+                  v-model="Form.tanggal_realisasi"
+                  format="dd/MMMM/yyyy"
+                  auto-apply
+                />
+                <p
+                  class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+                  v-if="this.v$.Form.tanggal_realisasi.$error"
+                >
+                  Tanggal Realiasi tidak boleh kosong!
+                </p>
+              </div>
+              <div class="mb-1" v-else>
+                <p class="text-lg font-semibold mb-0">Tanggal Realisasi</p>
+                <p class="text-base">
+                  <!-- {{ detail.tanggal_realisasi }} -->
+                  {{
+                    detail.tanggal_realisasi != undefined
+                      ? detail.tanggal_realisasi.split("T")[0].split("-")[2] +
+                        "-" +
+                        detail.tanggal_realisasi.split("T")[0].split("-")[1] +
+                        "-" +
+                        detail.tanggal_realisasi.split("T")[0].split("-")[0]
+                      : ""
+                  }}
+                </p>
+              </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Status</p>
                 <div class="label-nonAktif" v-if="detail.status_realisasi == 0">
@@ -356,34 +411,6 @@
           </div>
           <hr class="bg-gray-400" />
           <div class="row">
-            <div
-              class="col-12 pt-6"
-              v-if="detail.pkp == 1"
-              v-show="
-                listFileRealisasi == null ||
-                jenisPengajuan.Invoice == '' ||
-                jenisPengajuan.Faktur == ''
-              "
-            >
-              <p class="text-yellow-400 text-base">
-                Untuk melanjutkan proses validasi, officer harus mengupload file
-                <b>Faktur Pajak</b> dan <b>Invoice</b> terlebih dahulu.
-              </p>
-            </div>
-            <div
-              class="col-12 pt-6"
-              v-else
-              v-show="
-                listFileRealisasi == null ||
-                jenisPengajuan.Invoice == '' ||
-                jenisPengajuan.FileLampiran == ''
-              "
-            >
-              <p class="text-yellow-400 text-base">
-                Untuk melanjutkan proses validasi, officer harus mengupload file
-                <b>Lampiran</b> dan <b>Invoice</b> terlebih dahulu.
-              </p>
-            </div>
             <div class="col-12 pt-6" v-show="listFileRealisasi != null">
               <label
                 class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
@@ -424,39 +451,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <!-- Modal footer -->
-        <div
-          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-          v-show="detail.status_realisasi == 1"
-        >
-          <button
-            type="button"
-            @click="prosesValidasi"
-            class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
-            v-if="detail.pkp == 1"
-            v-show="jenisPengajuan.Faktur != '' && jenisPengajuan.Invoice != ''"
-          >
-            VALIDASI
-          </button>
-          <button
-            type="button"
-            @click="prosesValidasi"
-            class="bg-bni-blue text-white font-medium rounded-lg text-base px-5 py-2.5 text-center"
-            v-else
-            v-show="
-              jenisPengajuan.FileLampiran != '' && jenisPengajuan.Invoice != ''
-            "
-          >
-            VALIDASI
-          </button>
-          <button
-            @click="hideModal"
-            type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-          >
-            TUTUP
-          </button>
         </div>
       </div>
     </div>

@@ -47,6 +47,26 @@
               </select>
             </div>
           </div>
+          <div class="grid grid-cols-1">
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Status
+              </label>
+              <select
+                v-model="filters.status"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Status --</option>
+                <option value="0">Belum Validasi</option>
+                <option value="1">Validate By Superadmin</option>
+                <option value="9">Validate By Officer</option>
+                <option value="2">Validate By Departemen Head</option>
+                
+              </select>
+            </div>
+          </div>
           <button
             class="btn w-full mt-3"
             style="
@@ -340,7 +360,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Departemen <span class="text-red-600">*</span>
+              Departemen <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.kddepartemen"
@@ -909,6 +929,7 @@ export default {
         kdsubmatanggaran: "",
         kddepartemen: "",
         cari: "",
+        status : ""
       },
       pagination: {
         perPage: 5,
@@ -1248,7 +1269,7 @@ export default {
       let payload = {
         kdsubmatanggaran: this.filters.kdsubmatanggaran,
         kddepartemen: this.filters.kddepartemen,
-        status: "",
+        status: this.filters.status,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,

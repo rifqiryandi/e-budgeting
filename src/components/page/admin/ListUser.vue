@@ -924,7 +924,7 @@
               <option value="1">Super Admin</option>
               <option value="2">Officer</option>
               <option value="3">Departemen Head</option>
-              <option value="4">Keuangan/Treasury</option>
+              <option value="4">BUM</option>
               <option value="5">General Manager</option>
               <option value="6">Admin Sistem</option>
             </select>

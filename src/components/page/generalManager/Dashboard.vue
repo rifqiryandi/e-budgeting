@@ -169,7 +169,6 @@ export default {
       try {
         let res = await serviceReport.listSponsorship(this.token);
         let data = res.data.data;
-
         for (let i = 0; i < data.length; i++) {
           const randomColor =
             "hsl(" +
@@ -179,8 +178,14 @@ export default {
             "%," +
             50 +
             "%)";
+          let labelData = data[i].nama_sub_mata_anggaran;
+          // delete data[i].nama_sub_mata_anggaran;
+          // delete data[i].kode_sub_mata_anggaran;
+          // for (let z = 0; z < data[i].length; z++) {
+
+          // }
           let CustomData = {
-            label: data[i].nama_sub_mata_anggaran,
+            label: labelData,
             data: [
               data[i].januari,
               data[i].febuari,
@@ -188,7 +193,6 @@ export default {
               data[i].april,
               data[i].mei,
               data[i].juni,
-              data[i].juli,
               data[i].juli,
               data[i].agutus,
               data[i].september,
@@ -201,6 +205,7 @@ export default {
             lineTension: 0,
             pointBackgroundColor: randomColor,
           };
+          // console.log(CustomData);
           this.chartData.datasets.push(CustomData);
         }
         const chartElement = document.querySelector("canvas");

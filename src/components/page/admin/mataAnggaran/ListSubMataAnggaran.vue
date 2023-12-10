@@ -236,7 +236,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
+              Kelompok Mata Anggaran <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.kdkelmatanggaran"
@@ -256,14 +256,14 @@
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdkelmatanggaran.$error"
             >
-              Kode Kelompok mata anggaran tidak boleh kosong!
+              Kelompok mata anggaran tidak boleh kosong!
             </p>
           </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kode Mata Anggaran <span class="text-red-600">*</span>
+              Mata Anggaran <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.kdmatanggaran"
@@ -283,7 +283,7 @@
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kdmatanggaran.$error"
             >
-              Kode mata anggaran tidak boleh kosong!
+              Mata anggaran tidak boleh kosong!
             </p>
           </div>
           <div class="">
@@ -415,7 +415,7 @@
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
               >
-                Kode Kelompok Mata Anggaran <span class="text-red-600">*</span>
+                Kelompok Mata Anggaran <span class="text-red-600">*</span>
               </label>
               <select
                 v-model="Form.kdkelmatanggaran"
@@ -435,14 +435,14 @@
                 class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
                 v-if="this.v$.Form.kdkelmatanggaran.$error"
               >
-                Kode Kelompok mata anggaran tidak boleh kosong!
+                Kelompok mata anggaran tidak boleh kosong!
               </p>
             </div>
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
               >
-                Kode Mata Anggaran <span class="text-red-600">*</span>
+                Mata Anggaran <span class="text-red-600">*</span>
               </label>
               <select
                 v-model="Form.kdmatanggaran"
@@ -462,7 +462,7 @@
                 class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
                 v-if="this.v$.Form.kdmatanggaran.$error"
               >
-                Kode mata anggaran tidak boleh kosong!
+                Mata anggaran tidak boleh kosong!
               </p>
             </div>
             <div class="">
@@ -621,9 +621,8 @@ import useValidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { Modal } from "flowbite";
 import ToogleBtn from "../../../utils/ToggleBtn.vue";
-
-import serviceMataAnggaran from "../../../../services/MataAnggaran.service";
 import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
+import serviceMataAnggaran from "../../../../services/MataAnggaran.service";
 import serviceKMataAnggaran from "../../../../services/KelompokMataAnggaran.service";
 
 export default {
@@ -694,13 +693,6 @@ export default {
         this.rowKelompokMataA = res.data.data;
       } catch (error) {
         console.log(error.response.data.Msg);
-
-        // this.$swal({
-        //   icon: "error",
-        //   title: "GAGAL",
-        //   text: error.response.data.Msg,
-        //   confirmButtonColor: "#e77817",
-        // });
       }
     },
     async getMataAnggaranFilter() {
