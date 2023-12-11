@@ -22,7 +22,11 @@
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
-                  {{ item.nama_sub_mata_anggaran }}
+                  {{
+                    item.kode_sub_mata_anggaran +
+                    " - " +
+                    item.nama_sub_mata_anggaran
+                  }}
                 </option>
               </select>
             </div>
@@ -78,7 +82,7 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="min-width: 220px !important">
+            <Column field="" header="Status" style="min-width: 220px !important">
               <template #body="{ data }">
                 <ValidationBtnEvn
                   :nilaiStatus="data.status_kegiatan"
@@ -486,7 +490,10 @@ export default {
       }
     },
     async getAllDepartemen() {
-      let payload = {};
+      let payload = {
+        entitas: "",
+        status: "",
+      };
       try {
         let respon = await serviceDepartemen.getDataDepartemen(
           payload,
@@ -503,7 +510,10 @@ export default {
       }
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,

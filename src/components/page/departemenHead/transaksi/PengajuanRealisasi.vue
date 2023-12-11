@@ -316,7 +316,7 @@
                 jenisPengajuan.Faktur == ''
               "
             >
-              <p class="text-yellow-400 text-base">
+              <p class="bg-orange-400 text-white text-base py-3" style="border-radius: 6px;text-align: center;">
                 Untuk melanjutkan proses validasi, officer harus mengupload file
                 <b>Faktur Pajak</b> dan <b>Invoice</b> terlebih dahulu.
               </p>
@@ -330,9 +330,9 @@
                 jenisPengajuan.FileLampiran == ''
               "
             >
-              <p class="text-yellow-400 text-base">
+              <p class="bg-orange-400 text-white text-base py-3" style="border-radius: 6px;text-align: center;">
                 Untuk melanjutkan proses validasi, officer harus mengupload file
-                <b>Lampiran</b> dan <b>Invoice</b> terlebih dahulu.
+                <b>Surat Keterangan Non PKP</b> dan <b>Invoice</b> terlebih dahulu.
               </p>
             </div>
             <div class="col-12 pt-6" v-show="listFileRealisasi != null">

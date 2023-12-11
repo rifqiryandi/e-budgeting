@@ -277,7 +277,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Pengajuan Biaya <span class="text-red-600">*</span>
+              Pengajuan Pembayaran <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.id_pengajuan"
@@ -285,7 +285,7 @@
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               :disabled="preview.jenisPengajuan == ''"
             >
-              <option value="">-- Pilih Pengajuan Biaya --</option>
+              <option value="">-- Pilih Pengajuan Pembayaran --</option>
               <option
                 v-for="(item, index) in getRowPengajuan"
                 :key="index"
@@ -401,7 +401,7 @@
               :disabled="preview.nominal <= 0"
             />
           </div>
-          <div class="">
+          <div class="" v-show="false">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >

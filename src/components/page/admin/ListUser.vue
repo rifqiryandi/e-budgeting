@@ -46,28 +46,6 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column>
-              <template #body="{ data }">
-                <div style="font-weight: 600">
-                  <button
-                    class="bg-transparent"
-                    @click="detailData(data)"
-                    title="Detail"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24"
-                      viewBox="0 -960 960 960"
-                      width="24"
-                    >
-                      <path
-                        d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </template>
-            </Column>
             <Column field="nama" header="Nama">
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -109,7 +87,7 @@
                 />
               </template>
             </Column>
-            <Column header="Aksi">
+            <Column header="Task">
               <template #body="{ data }">
                 <button
                   class="bg-transparent mr-2"
@@ -129,7 +107,7 @@
                 </button>
                 <button
                   class="bg-transparent mr-2"
-                  title="EDIT"
+                  title="RESET PASSWORD"
                   @click="ubahPassUser(data)"
                 >
                   <svg
@@ -143,8 +121,8 @@
                     />
                   </svg>
                 </button>
-                <button
-                  class="bg-transparent"
+                <!-- <button
+                  class="bg-transparent mr-2"
                   title="HAPUS"
                   @click="deleteUser(data)"
                   v-if="data.username != userSession.username"
@@ -157,6 +135,22 @@
                   >
                     <path
                       d="M292.309-140.001q-29.923 0-51.115-21.193-21.193-21.192-21.193-51.115V-720h-40v-59.999H360v-35.384h240v35.384h179.999V-720h-40v507.691q0 30.308-21 51.308t-51.308 21H292.309ZM680-720H280v507.691q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h375.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463V-720ZM376.155-280h59.999v-360h-59.999v360Zm147.691 0h59.999v-360h-59.999v360ZM280-720v520-520Z"
+                    />
+                  </svg>
+                </button> -->
+                <button
+                  class="bg-transparent"
+                  @click="detailData(data)"
+                  title="Detail"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                  >
+                    <path
+                      d="M480.091-336.924q67.985 0 115.485-47.59 47.5-47.591 47.5-115.577 0-67.985-47.59-115.485-47.591-47.5-115.577-47.5-67.985 0-115.485 47.59-47.5 47.591-47.5 115.577 0 67.985 47.59 115.485 47.591 47.5 115.577 47.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.055 171.999q-137.977 0-251.439-76.115Q115.155-372.231 61.54-500q53.615-127.769 167.022-203.884 113.406-76.115 251.383-76.115t251.439 76.115Q844.845-627.769 898.46-500q-53.615 127.769-167.022 203.884-113.406 76.115-251.383 76.115ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
                     />
                   </svg>
                 </button>
@@ -1383,9 +1377,9 @@ export default {
     async getListJabatan() {
       try {
         let res = await serviceUser.getJabatan(this.token);
-        this.rowJabatan = res.data.data
+        this.rowJabatan = res.data.data;
       } catch (error) {
-        this.rowJabatan = null
+        this.rowJabatan = null;
         console.log(error);
       }
     },
@@ -1480,7 +1474,10 @@ export default {
     },
     async getAllDepartemen() {
       let token = sessionStorage.getItem("token");
-      let payload = {};
+      let payload = {
+        entitas: "",
+        status: "",
+      };
       try {
         let respon = await serviceDepartemen.getDataDepartemen(payload, token);
         this.rowDepartemen = respon.data.data;
@@ -1514,8 +1511,11 @@ export default {
     async getData() {
       this.loading = true;
       let token = sessionStorage.getItem("token");
+      let payload = {
+        status: "",
+      };
       try {
-        let respon = await serviceUser.getDataUser(token);
+        let respon = await serviceUser.getDataUser(payload, token);
         this.ListUser = respon.data.data;
         this.loading = false;
       } catch (error) {

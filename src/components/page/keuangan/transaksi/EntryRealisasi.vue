@@ -411,7 +411,7 @@
               >
                 <option value="">-- Pilih Jenis Dokumen --</option>
                 <option value="5" v-show="jenisPengajuan.Pajak == ''">
-                  Bukti Potong Pajak
+                  Voucher Pembukuan
                 </option>
               </select>
             </div>

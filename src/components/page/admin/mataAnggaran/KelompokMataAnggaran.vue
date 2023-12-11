@@ -47,7 +47,7 @@
             <Column
               field="kode_kelompok_mata_anggaran"
               header="Kode Kelompok Mata Anggaran"
-              style="width: 20%"
+              style="min-width: 120px !important; max-width: 120px !important;"
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
@@ -58,7 +58,7 @@
             <Column
               field="nama_kelompok_mata_anggaran"
               header="Nama Kelompok Mata Anggaran"
-              style="width: 25%"
+              style="min-width: 240px !important"
             >
               <template #body="{ data }">
                 <div>
@@ -66,7 +66,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="status_aktif" header="Status" style="width: 10%">
+            <Column field="status_aktif" header="Status" style="min-width: 80px !important; max-width: 80px !important;">
               <template #body="{ data }">
                 <ToogleBtn
                   :nilaiStatus="data.status_aktif"
@@ -75,7 +75,7 @@
                 />
               </template>
             </Column>
-            <Column field="" header="Aksi" style="width: 10%">
+            <Column field="" header="Task" style="width: 10%">
               <template #body="{ data }">
                 <button
                   class="bg-transparent mr-2"

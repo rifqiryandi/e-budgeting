@@ -1,68 +1,4 @@
 <template>
-  <!-- <div class="row">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-              >
-                Sub Mata Anggaran
-              </label>
-              <select
-                v-model="filters.kdsubmatanggaran"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="">-- Pilih Sub Mata Anggaran --</option>
-                <option
-                  v-for="(item, index) in getSMataAnggaran"
-                  :key="index"
-                  :value="item.kode_sub_mata_anggaran"
-                >
-                  {{ item.nama_sub_mata_anggaran }}
-                </option>
-              </select>
-            </div>
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-              >
-                Departemen
-              </label>
-              <select
-                v-model="filters.kddepartemen"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="">-- Pilih departemen --</option>
-                <option
-                  v-for="(item, index) in getDepartemen"
-                  :key="index"
-                  :value="item.kode_departement"
-                >
-                  {{ item.nama_departement }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <button
-            class="btn w-full mt-3"
-            style="
-              border-radius: 6px;
-              background: #006699;
-              color: #ffff;
-              height: 48px;
-              padding-top: 11px;
-              padding-bottom: 11px;
-            "
-            @click="getData"
-          >
-            Tampilkan
-          </button>
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div class="row">
     <div class="col-12 d-flex justify-content-end">
       <button class="btn d-flex btn-add" @click="showInput">
@@ -247,7 +183,7 @@
               :useGrouping="false"
               prefix="%"
               :min="0"
-              :max="100"
+              :max="batasPersen"
               @input="calculationNominal"
             />
             <p
@@ -366,6 +302,7 @@ export default {
         nominal: "",
       },
       loading: true,
+      batasPersen: 100,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -420,12 +357,12 @@ export default {
     },
     calculationNominal(evt) {
       // let kaliValue;
-      if (evt.value > 100) {
-        this.Form.presentasi = 100;
+      if (evt.value > this.batasPersen) {
+        this.Form.presentasi = this.batasPersen;
         return this.$swal({
           icon: "info",
           title: "Pemberitahuan",
-          text: "Tidak boleh lebih dari 100%",
+          text: "Tidak boleh lebih dari sisa persen :" + this.batasPersen + "%",
           confirmButtonColor: "#e77817",
         });
       } else {
@@ -448,7 +385,10 @@ export default {
       }
     },
     async getAllDepartemen() {
-      let payload = {};
+      let payload = {
+        entitas: "",
+        status: "",
+      };
       try {
         let respon = await serviceDepartemen.getDataDepartemen(
           payload,
@@ -465,7 +405,10 @@ export default {
       }
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,
@@ -501,13 +444,29 @@ export default {
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
       };
+      let payloadForPersen = {
+        perPage: 100,
+        currentPage: 1,
+        cari: "",
+      };
       try {
         let res = await serviceAnggaran.getListPresentasiAnggaran(
           payload,
           this.token
         );
+        let respon = await serviceAnggaran.getListPresentasiAnggaran(
+          payloadForPersen,
+          this.token
+        );
         this.pagination.totaldata = res.data.data.total_data;
         this.ListPersentasi = res.data.data.data;
+        let persen = 0;
+        for (let i = 0; i < respon.data.data.data.length; i++) {
+          persen = persen + Number(respon.data.data.data[i].presentasi);
+        }
+        this.batasPersen = this.batasPersen - persen;
+        console.log(this.batasPersen);
+
         this.loading = false;
       } catch (error) {
         this.ListPersentasi = null;

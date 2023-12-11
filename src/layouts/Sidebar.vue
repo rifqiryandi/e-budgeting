@@ -510,7 +510,7 @@
                     <router-link
                       to="/pengajuanKomitmen"
                       :class="
-                        NamePage == 'Pengajuan Komitmen' ? Active : notActive
+                        NamePage == 'Pengajuan Termin' ? Active : notActive
                       "
                     >
                       <svg

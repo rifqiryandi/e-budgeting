@@ -22,7 +22,11 @@
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
-                  {{ item.nama_sub_mata_anggaran }}
+                  {{
+                    item.kode_sub_mata_anggaran +
+                    " - " +
+                    item.nama_sub_mata_anggaran
+                  }}
                 </option>
               </select>
             </div>
@@ -149,11 +153,11 @@
               </template>
             </Column>
 
-            <Column field="tahun" header="Tahun">
+            <!-- <Column field="tahun" header="Tahun">
               <template #body="{ data }">
                 {{ data.tahun }}
               </template>
-            </Column>
+            </Column> -->
             <Column
               field=""
               header="Nominal Awal Tahun"
@@ -176,7 +180,7 @@
                 {{ data.sisa_anggaran.toLocaleString("de-DE") }}
               </template>
             </Column>
-            <Column field="" header="Aksi" class="text-right">
+            <Column field="" header="Task" class="text-right">
               <template #body="{ data }">
                 <div class="dropdown">
                   <button
@@ -188,7 +192,7 @@
                     aria-expanded="false"
                     :disabled="data.status_anggaran != 2"
                   >
-                    Menu
+                    Aksi
                   </button>
                   <div
                     class="dropdown-menu"
@@ -879,7 +883,7 @@ export default {
       this.modal.show();
       this.getIdAnggaran();
     },
-    
+
     cariData() {
       this.refreshListTable(1);
     },
@@ -900,7 +904,10 @@ export default {
       this.refreshListTable();
     },
     async getAllDepartemen() {
-      let payload = {};
+      let payload = {
+        entitas: "",
+        status: "",
+      };
       try {
         let respon = await serviceDepartemen.getDataDepartemen(
           payload,
@@ -917,7 +924,10 @@ export default {
       }
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,
@@ -1032,7 +1042,7 @@ export default {
         }
       }
     },
-    
+
     async prosesInput() {
       let Forminput = this.Form;
       Forminput.userid = this.userSession.username;

@@ -1,29 +1,6 @@
 <template lang="">
   <div class="row">
     <div class="col-4">
-      <div class="card card-info card-style-cstm">
-        <div class="card-header text-header text-lg flex justify-left">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24"
-            viewBox="0 -960 960 960"
-            width="24"
-            class="mr-3 icon-dashboard"
-          >
-            <path
-              d="M200-280v-280h80v280h-80Zm240 0v-280h80v280h-80ZM80-120v-80h800v80H80Zm600-160v-280h80v280h-80ZM80-640v-80l400-200 400 200v80H80Zm178-80h444-444Zm0 0h444L480-830 258-720Z"
-            />
-          </svg>
-          TOTAL REALISASI
-        </div>
-        <div
-          class="card-body text-content-dashboard text-xl d-flex align-items-center justify-end"
-        >
-          {{ "Rp " + totalRealisasi.toLocaleString("de-DE") }}
-        </div>
-      </div>
-    </div>
-    <div class="col-4">
       <div class="card card-success card-style-cstm">
         <div class="card-header text-header text-lg flex justify-left">
           <svg
@@ -46,6 +23,30 @@
         </div>
       </div>
     </div>
+    <div class="col-4">
+      <div class="card card-info card-style-cstm">
+        <div class="card-header text-header text-lg flex justify-left">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+            class="mr-3 icon-dashboard"
+          >
+            <path
+              d="M200-280v-280h80v280h-80Zm240 0v-280h80v280h-80ZM80-120v-80h800v80H80Zm600-160v-280h80v280h-80ZM80-640v-80l400-200 400 200v80H80Zm178-80h444-444Zm0 0h444L480-830 258-720Z"
+            />
+          </svg>
+          TOTAL REALISASI
+        </div>
+        <div
+          class="card-body text-content-dashboard text-xl d-flex align-items-center justify-end"
+        >
+          {{ "Rp " + totalRealisasi.toLocaleString("de-DE") }}
+        </div>
+      </div>
+    </div>
+
     <div class="col-4">
       <div class="card card-style-cstm">
         <div
@@ -140,7 +141,7 @@ export default {
           },
           title: {
             display: true,
-            text: "Sponsorship",
+            text: "Realisasi Anggaran",
           },
         },
       },
@@ -179,11 +180,7 @@ export default {
             50 +
             "%)";
           let labelData = data[i].nama_sub_mata_anggaran;
-          // delete data[i].nama_sub_mata_anggaran;
-          // delete data[i].kode_sub_mata_anggaran;
-          // for (let z = 0; z < data[i].length; z++) {
 
-          // }
           let CustomData = {
             label: labelData,
             data: [

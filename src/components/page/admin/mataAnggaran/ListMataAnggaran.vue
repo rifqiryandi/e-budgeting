@@ -145,7 +145,7 @@
                   />
                 </template>
               </Column>
-              <Column field="" header="Aksi" style="width: 10%">
+              <Column field="" header="Task" style="width: 10%">
                 <template #body="{ data }">
                   <button
                     class="bg-transparent mr-2"
@@ -331,7 +331,7 @@
         <div
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
-          <h3 class="text-xl font-medium" style="color: #fff">Tambah Data</h3>
+          <h3 class="text-xl font-medium" style="color: #fff">Edit Data</h3>
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"

@@ -22,7 +22,11 @@
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
-                  {{ item.nama_sub_mata_anggaran }}
+                  {{
+                    item.kode_sub_mata_anggaran +
+                    " - " +
+                    item.nama_sub_mata_anggaran
+                  }}
                 </option>
               </select>
             </div>
@@ -265,7 +269,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Beban Opex <span class="text-red-600">*</span>
+              Rencana Kegiatan <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.id_kegiatan"
@@ -584,7 +588,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              File Pengajuan biaya<span class="text-red-600">*</span>
+              File Pengajuan biaya
             </label>
             <FileUpload
               :customUpload="true"
@@ -600,12 +604,12 @@
                 <p>Drag and drop files to here to upload.</p>
               </template>
             </FileUpload>
-            <p
+            <!-- <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Upload.file.$error"
             >
               File tidak boleh kosong!
-            </p>
+            </p> -->
           </div>
         </div>
         <!-- Modal footer -->
@@ -803,6 +807,7 @@ export default {
         this.Form.id_kegiatan.nominal == null
           ? this.Form.id_kegiatan.nominal
           : this.Form.id_kegiatan.nominal;
+      this.Form.uraian_kegiatan = this.Form.id_kegiatan.uraian_kegiatan
     },
     cariData() {
       this.refreshListTable(1);
@@ -838,7 +843,10 @@ export default {
       }
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,
@@ -956,7 +964,7 @@ export default {
 
       // checks all inputs
       if (!this.v$.Form.jnspengajuan.$error) {
-        if (!this.v$.Form.$error && !this.v$.Upload.$error) {
+        if (!this.v$.Form.$error) {
           let addMonth = this.Form.bulan_pengajuan.month + 1;
           if (addMonth >= 10) {
             Forminput.bulan_pengajuan = addMonth.toString();

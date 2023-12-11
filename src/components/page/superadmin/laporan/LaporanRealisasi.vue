@@ -495,6 +495,7 @@ export default {
       }
     },
     async getMataAnggaran() {
+      this.Filters.kdmatanggaran = ""
       let payload = {
         kdkelmatanggaran: this.Filters.kdkelmatanggaran,
       };
@@ -543,16 +544,29 @@ export default {
         hari + ", " + namaBulan + " " + d.getDay() + ", " + this.tahun;
     },
     async getData() {
-      let payload = {
-        kdmatanggaran: this.Filters.kdmatanggaran,
-        kdkelmatanggaran: this.Filters.kdkelmatanggaran,
-      };
+      if (this.Filters.kdkelmatanggaran == "") {
+        this.listLaporan = null
+        return this.$swal({
+            icon: "info",
+            title: "Pemberitahuan",
+            text: "Pilih Kelompok Mata Anggaran Terlebih Dahulu",
+            confirmButtonColor: "#e77817",
+          });
+      }
+      if (this.Filters.kdmatanggaran == "") {
+        this.listLaporan = null
+        return this.$swal({
+            icon: "info",
+            title: "Pemberitahuan",
+            text: "Pilih Mata Anggaran Terlebih Dahulu",
+            confirmButtonColor: "#e77817",
+          });
+      }
       try {
-        let res = await serviceReport.laporanRealisasi(payload, this.token);
-
+        let res = await serviceReport.laporanRealisasi(this.Filters, this.token);
         this.listLaporan = res.data.data;
-        console.log(this.listLaporan);
       } catch (error) {
+        this.listLaporan = null
         console.log(error);
       }
     },
@@ -572,7 +586,7 @@ export default {
 </script>
 <style>
 .label-ijo {
-  color: rgb(6, 165, 6);
+  color: rgb(45, 220, 45);
 }
 .label-yellow {
   color: rgb(245, 195, 17);
@@ -584,9 +598,12 @@ export default {
   color: rgb(241, 0, 0);
 }
 .color-mataanggaran {
-  background-color: rgb(94, 198, 240) !important;
+  background-color: rgb(93, 113, 121) !important;
+  color: #fff !important;
 }
 .color-kmataanggaran {
-  background-color: rgb(15, 185, 252) !important;
+  background-color: rgb(160, 166, 169) !important;
+  color: #fff  !important;
+
 }
 </style>

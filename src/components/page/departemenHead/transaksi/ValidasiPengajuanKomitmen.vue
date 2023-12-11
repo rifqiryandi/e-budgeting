@@ -259,7 +259,7 @@
                   }}
                 </p>
               </div>
-              <div class="mb-1">
+              <!-- <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sisa Komitmen Anggaran</p>
                 <p class="text-base">
                   {{
@@ -268,7 +268,7 @@
                       : ""
                   }}
                 </p>
-              </div>
+              </div> -->
 
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Status</p>

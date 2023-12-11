@@ -140,11 +140,11 @@
               </template>
             </Column>
 
-            <Column field="tahun" header="Tahun">
+            <!-- <Column field="tahun" header="Tahun">
               <template #body="{ data }">
                 {{ data.tahun }}
               </template>
-            </Column>
+            </Column> -->
             <Column
               field=""
               header="Nominal Awal Tahun"
@@ -515,7 +515,10 @@ export default {
       this.refreshListTable();
     },
     async getAllDepartemen() {
-      let payload = {};
+      let payload = {
+        entitas: "",
+        status: "",
+      };
       try {
         let respon = await serviceDepartemen.getDataDepartemen(
           payload,
@@ -532,7 +535,10 @@ export default {
       }
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,

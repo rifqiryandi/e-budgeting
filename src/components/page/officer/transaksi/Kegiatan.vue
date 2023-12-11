@@ -22,7 +22,11 @@
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
-                  {{ item.nama_sub_mata_anggaran }}
+                  {{
+                    item.kode_sub_mata_anggaran +
+                    " - " +
+                    item.nama_sub_mata_anggaran
+                  }}
                 </option>
               </select>
             </div>
@@ -266,7 +270,11 @@
                 :key="index"
                 :value="item"
               >
-                {{ item.nama_sub_mata_anggaran }}
+                {{
+                  item.kode_sub_mata_anggaran +
+                  " - " +
+                  item.nama_sub_mata_anggaran
+                }}
               </option>
             </select>
             <p
@@ -276,7 +284,7 @@
               Anggaran tidak boleh kosong!
             </p>
           </div>
-          <div class="">
+          <!-- <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -288,20 +296,19 @@
               class="w-full"
               disabled
             />
-          </div>
+          </div> -->
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Kegiatan <span class="text-red-600">*</span>
+              Proyeksi Kegiatan <span class="text-red-600">*</span>
             </label>
-            <input
-              type="text"
-              id="base-input"
+            <textarea
               v-model="Form.kegiatan"
-              placeholder="Masukkan Kegiatan"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
+              cols="30"
+              rows="10"
+              class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            ></textarea>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kegiatan.$error"
@@ -339,7 +346,6 @@
               v-model="Form.nominal"
               placeholder="Masukkan Nominal"
               class="w-full"
-              @input="validationNominal"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -503,7 +509,10 @@ export default {
       }
     },
     async getAllDepartemen() {
-      let payload = {};
+      let payload = {
+        entitas: "",
+        status: "",
+      };
       try {
         let respon = await serviceDepartemen.getDataDepartemen(
           payload,
@@ -520,7 +529,10 @@ export default {
       }
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,

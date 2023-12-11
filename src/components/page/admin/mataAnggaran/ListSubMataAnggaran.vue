@@ -4,7 +4,28 @@
       <div class="card">
         <div class="card-body">
           <div class="space-y-6">
-            <div class="grid grid-cols-1 l">
+            <div class="grid grid-cols-1 ">
+              <div class="w-full mb-2">
+                <label
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                >
+                  Kelompok Mata Anggaran
+                </label>
+                <select
+                  v-model="filters.kdkelmatanggaran"
+                  @change="getMataAnggaranFilter"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+                  <option
+                    v-for="(item, index) in getKelompokMataAnggaran"
+                    :key="index"
+                    :value="item.kode_kelompok_mata_anggaran"
+                  >
+                    {{ item.nama_kelompok_mata_anggaran }}
+                  </option>
+                </select>
+              </div>
               <div class="w-full">
                 <label
                   class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -50,10 +71,7 @@
   <!-- Sub Mata Anggaran -->
   <div class="row">
     <div class="col-12 flex justify-end">
-      <button
-        class="btn d-flex btn-add"
-        @click="showInput"
-      >
+      <button class="btn d-flex btn-add" @click="showInput">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"
@@ -140,17 +158,33 @@
                 </div>
               </template>
             </Column>
+            <Column field="" header="Last Update" style="width: 20%; text-align: center;">
+              <template #body="{ data }">
+                <div>
+                  {{
+                    data.update_date == null
+                      ? ""
+                      : data.update_date.split("T")[0].split("-")[2] +
+                        "-" +
+                        data.update_date.split("T")[0].split("-")[1] +
+                        "-" +
+                        data.update_date.split("T")[0].split("-")[0] +
+                        " | " +
+                        data.update_date.split("T")[1].split(".")[0]
+                  }}
+                </div>
+              </template>
+            </Column>
             <Column field="" header="Status" style="width: 10%">
               <template #body="{ data }">
                 <ToogleBtn
                   :nilaiStatus="data.status_aktif"
                   :apihit="this.apiHit"
                   :keyid="data.id"
-
                 />
               </template>
             </Column>
-            <Column field="" header="Aksi" style="width: 10%">
+            <Column field="" header="Task" style="min-width: 120px  !important;">
               <template #body="{ data }">
                 <button
                   class="bg-transparent mr-2"
@@ -362,7 +396,7 @@
         <div
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
-          <h3 class="text-xl font-medium" style="color: #fff">Tambah Data</h3>
+          <h3 class="text-xl font-medium" style="color: #fff">Edit Data</h3>
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -635,7 +669,7 @@ export default {
       ListSMataAnggaran: null,
       rowMataAnggaran: null,
       rowKelompokMataA: null,
-      rowMataAnggaranFilter:null,
+      rowMataAnggaranFilter: null,
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         kdkelmatanggaran: "",
@@ -679,8 +713,8 @@ export default {
     rowAllMataAnggaran() {
       return this.rowMataAnggaran;
     },
-    rowAllMataAnggaranFilter(){
-      return this.rowMataAnggaranFilter
+    rowAllMataAnggaranFilter() {
+      return this.rowMataAnggaranFilter;
     },
     getKelompokMataAnggaran() {
       return this.rowKelompokMataA;
@@ -697,7 +731,7 @@ export default {
     },
     async getMataAnggaranFilter() {
       let payload = {
-        kdkelmatanggaran: "",
+        kdkelmatanggaran: this.filters.kdkelmatanggaran,
       };
       try {
         let respon = await serviceMataAnggaran.getDataMataAnggaran(
@@ -755,7 +789,6 @@ export default {
         this.loading = false;
         this.ListSMataAnggaran = null;
         console.log(error.response.data.Msg);
-
       }
     },
     async editSMataAnggaran(data) {
@@ -892,6 +925,4 @@ export default {
   },
 };
 </script>
-<style>
-
-</style>
+<style></style>

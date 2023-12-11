@@ -125,7 +125,7 @@ switch (namaAkses) {
       {
         path: "/pengajuanKomitmen",
         alias: "/pengajuanKomitmen",
-        name: "Pengajuan Komitmen",
+        name: "Pengajuan Termin",
         component: () => import("./components/page/officer/transaksi/PengajuanKomitmen.vue"),
       },
       {

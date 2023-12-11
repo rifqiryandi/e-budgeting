@@ -195,7 +195,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Pengajuan Komitmen
+            Pengajuan Termin
           </h3>
           <button
             type="button"
@@ -342,7 +342,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Pengajuan Komitmen Kembali
+            Pengajuan Termin Kembali
           </h3>
           <button
             type="button"
