@@ -195,7 +195,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="" style="min-width: 90px !important">
+            <Column field="" header="Task" style="min-width: 90px !important">
               <template #body="{ data }">
                 <button
                   class="bg-transparent border-0 mr-2"

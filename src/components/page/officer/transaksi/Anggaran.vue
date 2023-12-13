@@ -5,7 +5,49 @@
         <div class="card-body">
           <h3 style="font-weight: 500">Pencarian</h3>
           <hr />
-          <div class="grid grid-cols-1 gap-2">
+          <div class="grid grid-cols-1">
+            <div class="w-full mb-2">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Kelompok Mata Anggaran
+              </label>
+              <select
+                v-model="filters.kdkelmatanggaran"
+                @change="getMataAnggaranFilter"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+                <option
+                  v-for="(item, index) in getKelompokMataAnggaran"
+                  :key="index"
+                  :value="item.kode_kelompok_mata_anggaran"
+                >
+                  {{ item.nama_kelompok_mata_anggaran }}
+                </option>
+              </select>
+            </div>
+            <div class="w-full">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Mata Anggaran
+              </label>
+              <select
+                v-model="filters.kdmatanggaran"
+                @change="getSubMataAnggaranFilter"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Mata Anggaran --</option>
+                <option
+                  v-for="(item, index) in rowAllMataAnggaranFilter"
+                  :key="index"
+                  :value="item.kode_mata_anggaran"
+                >
+                  {{ item.nama_mata_anggaran }}
+                </option>
+              </select>
+            </div>
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -18,7 +60,7 @@
               >
                 <option value="">-- Pilih Sub Mata Anggaran --</option>
                 <option
-                  v-for="(item, index) in getSMataAnggaran"
+                  v-for="(item, index) in getSMataAnggaranFilter"
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
@@ -28,6 +70,23 @@
                     item.nama_sub_mata_anggaran
                   }}
                 </option>
+              </select>
+            </div>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Status
+              </label>
+              <select
+                v-model="filters.status"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Status --</option>
+                <option value="0">Belum Validasi</option>
+                <option value="1">Validated By Superadmin</option>
+                <option value="9">Validated By Officer</option>
+                <option value="2">Validated By Departemen Head</option>
               </select>
             </div>
           </div>
@@ -52,7 +111,6 @@
       </div>
     </div>
   </div>
-
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -606,7 +664,11 @@
                     :key="index"
                     :value="item"
                   >
-                    {{ item.nama_sub_mata_anggaran }}
+                    {{
+                      item.kode_sub_mata_anggaran +
+                      " - " +
+                      item.nama_sub_mata_anggaran
+                    }}
                   </option>
                 </select>
                 <p
@@ -675,7 +737,7 @@
   </div>
 </template>
 <script>
-import exportFromJSON from "export-from-json";
+// import exportFromJSON from "export-from-json";
 import InputNumber from "primevue/inputnumber";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -706,10 +768,16 @@ export default {
       rowAnggaran: null,
       rowKMataAnggaran: null,
       rowMataAnggaran: null,
+      rowMataAnggaranFilter: null,
+      rowSMataAnggaranFilter: null,
       filters: {
         kdsubmatanggaran: "",
         kddepartemen: "",
         cari: "",
+        status: "",
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+        tahun: new Date().getFullYear(),
       },
       pagination: {
         perPage: 5,
@@ -796,20 +864,57 @@ export default {
     getAnggaran() {
       return this.rowAnggaran;
     },
-    getKelompokMataAnggaran() {
-      return this.rowKMataAnggaran;
-    },
     getMataAnggaran() {
       return this.rowMataAnggaran;
     },
+    getKelompokMataAnggaran() {
+      return this.rowKMataAnggaran;
+    },
+    getSMataAnggaranFilter() {
+      return this.rowSMataAnggaranFilter;
+    },
+    rowAllMataAnggaranFilter() {
+      return this.rowMataAnggaranFilter;
+    },
   },
   methods: {
-    tes() {
-      const data = this.ListTransaksi;
-      const fileName = "download";
-      const exportType = exportFromJSON.types.csv;
+    // tes() {
+    //   const data = this.ListTransaksi;
+    //   const fileName = "download";
+    //   const exportType = exportFromJSON.types.csv;
 
-      exportFromJSON({ data, fileName, exportType });
+    //   exportFromJSON({ data, fileName, exportType });
+    // },
+    async getMataAnggaranFilter() {
+      let payload = {
+        kdkelmatanggaran: this.filters.kdkelmatanggaran,
+      };
+      try {
+        let respon = await serviceMataAnggaran.getDataMataAnggaran(
+          payload,
+          this.token
+        );
+        this.rowMataAnggaranFilter = respon.data.data;
+      } catch (error) {
+        this.rowMataAnggaranFilter = null;
+        console.log(error);
+      }
+    },
+    async getSubMataAnggaranFilter() {
+      let payload = {
+        kdkelmatanggaran: this.filters.kdkelmatanggaran,
+        kdmatanggaran: this.filters.kdmatanggaran,
+      };
+      try {
+        let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
+          payload,
+          this.token
+        );
+        this.rowSMataAnggaranFilter = res.data.data;
+      } catch (error) {
+        this.rowSMataAnggaranFilter = null;
+        console.log(error);
+      }
     },
     async rowDataKMataAnggaran() {
       try {
@@ -979,10 +1084,13 @@ export default {
       let payload = {
         kdsubmatanggaran: this.filters.kdsubmatanggaran,
         kddepartemen: this.userSession.departemen,
-        status: "",
+        status: this.filters.status,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        tahun: this.filters.tahun,
+        kelmatanggaran: this.filters.kdkelmatanggaran,
+        matanggaran: this.filters.kdmatanggaran,
       };
       try {
         let res = await serviceAnggaran.getTransaksi(payload, this.token);

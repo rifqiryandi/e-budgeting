@@ -22,7 +22,11 @@
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
-                  {{ item.nama_sub_mata_anggaran }}
+                  {{
+                    item.kode_sub_mata_anggaran +
+                    " - " +
+                    item.nama_sub_mata_anggaran
+                  }}
                 </option>
               </select>
             </div>
@@ -107,7 +111,11 @@
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
+                  {{
+                    data.kode_sub_mata_anggaran +
+                    " - " +
+                    data.nama_sub_mata_anggaran
+                  }}
                 </div>
               </template>
             </Column>
@@ -148,7 +156,7 @@
                 {{ data.nominal.toLocaleString("de-DE") }}
               </template>
             </Column>
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -175,7 +183,7 @@
       </div>
     </div>
   </div>
-  <!-- Modal Insert pengajuan biaya -->
+  <!-- Modal retur pengajuan biaya -->
   <div
     id="detail-modal"
     tabindex="-1"
@@ -189,7 +197,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Pengajuan Biaya
+            Pengajuan Retur
           </h3>
           <button
             type="button"
@@ -385,6 +393,9 @@ export default {
         kdsubmatanggaran: "",
         cari: "",
         status: "",
+        bulan: new Date().getMonth() + 1,
+        
+        kddepartemen: "",
       },
       pagination: {
         perPage: 5,
@@ -403,6 +414,10 @@ export default {
       },
       Detail: {
         alasan: "",
+      },
+      filterForm: {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
       },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
@@ -457,6 +472,8 @@ export default {
         idkegiatan: "",
         status: 1,
         kddepartemen: this.userSession.departemen,
+        bulan: this.filters.bulan,
+        kdsubmatanggaran: this.filters.kdsubmatanggaran,
       };
       try {
         let res = await serviceAnggaran.getKegiatan(payload, this.token);
@@ -499,7 +516,10 @@ export default {
       this.refreshListTable();
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: this.filterForm.kdkelmatanggaran,
+        kdmatanggaran: this.filterForm.kdmatanggaran,
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,

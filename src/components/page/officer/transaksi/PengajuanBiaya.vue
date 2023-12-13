@@ -81,19 +81,6 @@
         </svg>
         Pengajuan Biaya
       </button>
-      <!-- <button class="btn d-flex btn-add ml-2" @click="showInputBaru" >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24"
-          viewBox="0 -960 960 960"
-          width="24"
-        >
-          <path
-            d="M450.001-450.001h-230v-59.998h230v-230h59.998v230h230v59.998h-230v230h-59.998v-230Z"
-          />
-        </svg>
-        Pengajuan Baru
-      </button> -->
     </div>
   </div>
   <div class="row mt-3">
@@ -269,6 +256,73 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
+              Kelompok Mata Anggaran
+            </label>
+            <select
+              v-model="filterForm.kdkelmatanggaran"
+              @change="rowDataMataAnggaran"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+              <option
+                v-for="(item, index) in getKelompokMataAnggaran"
+                :key="index"
+                :value="item.kode_kelompok_mata_anggaran"
+              >
+                {{ item.nama_kelompok_mata_anggaran }}
+              </option>
+            </select>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Mata Anggaran
+            </label>
+            <select
+              v-model="filterForm.kdmatanggaran"
+              @change="getSubMataAnggaran"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Mata Anggaran --</option>
+              <option
+                v-for="(item, index) in getMataAnggaran"
+                :key="index"
+                :value="item.kode_mata_anggaran"
+              >
+                {{ item.nama_mata_anggaran }}
+              </option>
+            </select>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Sub Mata Anggaran
+            </label>
+            <select
+              v-model="filters.kdsubmatanggaran"
+              @change="getRowKegiatan"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Sub Mata Anggaran --</option>
+              <option
+                v-for="(item, index) in getSMataAnggaran"
+                :key="index"
+                :value="item.kode_sub_mata_anggaran"
+              >
+                {{
+                  item.kode_sub_mata_anggaran +
+                  " - " +
+                  item.nama_sub_mata_anggaran
+                }}
+              </option>
+            </select>
+          </div>
+          <div class="">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
               Rencana Kegiatan <span class="text-red-600">*</span>
             </label>
             <select
@@ -374,220 +428,6 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              File Pengajuan biaya<span class="text-red-600">*</span>
-            </label>
-            <FileUpload
-              :customUpload="true"
-              @select="setFileUpload($event)"
-              :showUploadButton="false"
-              :showCancelButton="false"
-              :multiple="false"
-              accept="application/pdf,zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed"
-              :maxFileSize="1000000"
-              chooseLabel="Browse"
-            >
-              <template #empty>
-                <p>Drag and drop files to here to upload.</p>
-              </template>
-            </FileUpload>
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Upload.file.$error"
-            >
-              File tidak boleh kosong!
-            </p>
-          </div>
-        </div>
-        <!-- Modal footer -->
-        <div
-          class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-        >
-          <button
-            type="button"
-            @click="prosesInput"
-            class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
-          >
-            SIMPAN
-          </button>
-          <button
-            @click="hideModal"
-            type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-          >
-            TUTUP
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Insert pengajuan baru -->
-  <div
-    id="input-modal-baru"
-    tabindex="-1"
-    class="fixed mb-8 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto top-10 bottom-10 left-0 right-0 h-[calc(100%-1rem)] max-h-full"
-  >
-    <div class="relative w-full max-w-4xl max-h-full">
-      <!-- Modal content -->
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <!-- Modal header -->
-        <div
-          class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
-        >
-          <h3 class="text-xl font-medium" style="color: #fff">
-            Pengajuan Baru
-          </h3>
-          <button
-            type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            @click="hideModal"
-          >
-            <svg
-              class="w-3 h-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-            <span class="sr-only">Close modal</span>
-          </button>
-        </div>
-        <!-- Modal body -->
-        <div class="p-6 space-y-2">
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Anggaran <span class="text-red-600">*</span>
-            </label>
-            <select
-              v-model="FormPB.id_anggaran"
-              @change="setPreviewKegiatan"
-              class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              style="height: 50px"
-            >
-              <option value="">-- Pilih Anggaran --</option>
-              <option
-                v-for="(item, index) in getAnggaran"
-                :key="index"
-                :value="item"
-              >
-                {{ item.nama_sub_mata_anggaran }}
-              </option>
-            </select>
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormPB.id_anggaran.$error"
-            >
-              Anggaran tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Sisa Anggaran
-            </label>
-            <InputNumber
-              v-model="preview.nominal_sisa_kegiatan"
-              placeholder="Masukkan Sisa anggaran"
-              class="w-full"
-              disabled
-            />
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nominal Kegiatan<span class="text-red-600">*</span>
-            </label>
-            <InputNumber
-              v-model="FormPB.nominal_kegiatan"
-              placeholder="Masukkan Nominal"
-              class="w-full"
-              @input="validationNominalPB"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormPB.nominal_kegiatan.$error"
-            >
-              Nominal tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Uraian Kegiatan <span class="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              id="base-input"
-              v-model="FormPB.uraian_kegiatan"
-              placeholder="Masukkan Urain Kegiatan"
-              class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              style="height: 50px"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormPB.uraian_kegiatan.$error"
-            >
-              Kegiatan tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Bulan <span class="text-red-600">*</span>
-            </label>
-            <VueDatePicker
-              placeholder="Pilih Bulan"
-              v-model="FormPB.bulan_pengajuan"
-              format="MMMM/yyyy"
-              auto-apply
-              month-picker
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormPB.bulan_pengajuan.$error"
-            >
-              Bulan tidak boleh kosong!
-            </p>
-          </div>
-          <div class="">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
-              Nominal Pengajuan biaya<span class="text-red-600">*</span>
-            </label>
-            <InputNumber
-              v-model="FormPB.nominal_pengajuan"
-              placeholder="Masukkan Nominal"
-              class="w-full"
-              @input="validationNominalPBPengajuan"
-              :disabled="FormPB.nominal_kegiatan == 0"
-              style="height: 50px"
-            />
-            <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.FormPB.nominal_pengajuan.$error"
-            >
-              Nominal tidak boleh kosong!
-            </p>
-          </div>
-          <div class="mt-2">
-            <label
-              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-            >
               File Pengajuan biaya
             </label>
             <FileUpload
@@ -604,12 +444,6 @@
                 <p>Drag and drop files to here to upload.</p>
               </template>
             </FileUpload>
-            <!-- <p
-              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
-              v-if="this.v$.Upload.file.$error"
-            >
-              File tidak boleh kosong!
-            </p> -->
           </div>
         </div>
         <!-- Modal footer -->
@@ -618,7 +452,7 @@
         >
           <button
             type="button"
-            @click="prosesInputPB"
+            @click="prosesInput"
             class="bg-bni-blue text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 text-center"
           >
             SIMPAN
@@ -652,6 +486,8 @@ import { Modal } from "flowbite";
 import serviceAnggaran from "../../../../services/Transaction.service";
 import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
 import serviceFile from "../../../../services/File.service";
+import serviceKMataAnggaran from "../../../../services/KelompokMataAnggaran.service";
+import serviceMataAnggaran from "../../../../services/MataAnggaran.service";
 // import serviceDepartemen from "../../../../services/Departemen.service";
 
 export default {
@@ -666,6 +502,8 @@ export default {
       rowDepartemen: null,
       rowAnggaran: null,
       rowKegiatan: null,
+      rowKMataAnggaran: null,
+      rowMataAnggaran: null,
       filters: {
         kdsubmatanggaran: "",
         kddepartemen: "",
@@ -674,6 +512,9 @@ export default {
         jenis_pengajuan: "",
         cari: "",
         status: "",
+        bulan: new Date().getMonth() + 1,
+        kdmatanggaran: "",
+        kdkelmatanggaran: "",
       },
       pagination: {
         perPage: 5,
@@ -712,6 +553,10 @@ export default {
         jnspengajuan: "",
         idpengajuan: "",
       },
+      filterForm: {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+      },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
@@ -732,9 +577,6 @@ export default {
         nominal_pengajuan: { required },
         uraian_kegiatan: { required },
         bulan_pengajuan: { required },
-      },
-      Upload: {
-        file: { required },
       },
     };
   },
@@ -759,8 +601,38 @@ export default {
     getAnggaran() {
       return this.rowAnggaran;
     },
+    getKelompokMataAnggaran() {
+      return this.rowKMataAnggaran;
+    },
+    getMataAnggaran() {
+      return this.rowMataAnggaran;
+    },
   },
   methods: {
+    async rowDataKMataAnggaran() {
+      try {
+        let res = await serviceKMataAnggaran.getDataKMataAnggaran(this.token);
+        this.rowKMataAnggaran = res.data.data;
+      } catch (error) {
+        this.rowKMataAnggaran = null;
+        console.log(error);
+      }
+    },
+    async rowDataMataAnggaran() {
+      let payload = {
+        kdkelmatanggaran: this.filterForm.kdkelmatanggaran,
+      };
+      try {
+        let res = await serviceMataAnggaran.getDataMataAnggaran(
+          payload,
+          this.token
+        );
+        this.rowMataAnggaran = res.data.data;
+      } catch (error) {
+        this.rowMataAnggaran = null;
+        console.log(error);
+      }
+    },
     setPreviewKegiatan() {
       this.preview.nominal_sisa_kegiatan =
         this.FormPB.id_anggaran.sisa_nominal_pengajaun;
@@ -807,7 +679,7 @@ export default {
         this.Form.id_kegiatan.nominal == null
           ? this.Form.id_kegiatan.nominal
           : this.Form.id_kegiatan.nominal;
-      this.Form.uraian_kegiatan = this.Form.id_kegiatan.uraian_kegiatan
+      this.Form.uraian_kegiatan = this.Form.id_kegiatan.uraian_kegiatan;
     },
     cariData() {
       this.refreshListTable(1);
@@ -844,8 +716,8 @@ export default {
     },
     async getSubMataAnggaran() {
       let payload = {
-        kdkelmatanggaran: "",
-        kdmatanggaran: "",
+        kdkelmatanggaran: this.filterForm.kdkelmatanggaran,
+        kdmatanggaran: this.filterForm.kdmatanggaran,
       };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
@@ -863,6 +735,8 @@ export default {
         idkegiatan: "",
         status: 1,
         kddepartemen: this.userSession.departemen,
+        bulan: this.filters.bulan,
+        kdsubmatanggaran: this.filters.kdsubmatanggaran,
       };
       try {
         let res = await serviceAnggaran.getKegiatan(payload, this.token);
@@ -951,7 +825,7 @@ export default {
       Forminput.userid = this.userSession.username;
       this.v$.$validate();
       // Set File Upload value
-      if (!this.v$.Form.$error) {
+      if (this.Upload.file != null) {
         formData.append("myFile", Upload.file);
         formData.append("rubrik", Forminput.id_kegiatan.kode_departemen);
         formData.append(
@@ -981,8 +855,10 @@ export default {
               Forminput,
               this.token
             );
-            formData.append("idpengajuan", respon.data.idpengajuan);
-            await serviceFile.uploadFile(formData, this.token);
+            if (this.Upload.file != null) {
+              formData.append("idpengajuan", respon.data.idpengajuan);
+              await serviceFile.uploadFile(formData, this.token);
+            }
             this.modal.hide();
             this.$swal({
               icon: "success",
@@ -1126,8 +1002,8 @@ export default {
   mounted() {
     initFlowbite();
     this.getData();
-    this.getSubMataAnggaran();
-    this.getRowKegiatan();
+    // this.getSubMataAnggaran();
+    this.rowDataKMataAnggaran();
     this.getAllAnggaran();
   },
 };

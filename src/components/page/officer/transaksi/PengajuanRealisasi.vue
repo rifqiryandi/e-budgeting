@@ -189,7 +189,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -521,11 +521,17 @@
             <div class="">
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Entitas</p>
-                <p class="text-base">{{ detail.nama_entitas }}</p>
+                <p class="text-base">{{ detail.nama_entitas + " - " + detail.kode_entitas }}</p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
-                <p class="text-base">{{ detail.nama_sub_mata_anggaran }}</p>
+                <p class="text-base">
+                  {{
+                    detail.kode_sub_mata_anggaran +
+                    " - " +
+                    detail.nama_sub_mata_anggaran
+                  }}
+                </p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Jenis Pengajuan</p>
@@ -647,7 +653,7 @@
                   v-if="detail.pkp == 0"
                   v-show="jenisPengajuan.FileLampiran == ''"
                 >
-                  Lampiran
+                  Lampiran Non PKP
                 </option>
               </select>
             </div>
@@ -892,7 +898,7 @@ export default {
         nominal: this.Form.id_pengajuan.nominal_pengajuan,
         jenisPengajuan: this.preview.jenisPengajuan,
       };
-
+      this.Form.keterangan = this.Form.id_pengajuan.uraian_kegiatan
       this.Form.nominal = this.preview.nominal;
     },
     async getPengajuan() {
@@ -1008,7 +1014,7 @@ export default {
       this.v$.$validate(); // checks all inputs
       if (!this.v$.Form.$error) {
         let tanggal = new Date(Forminput.tanggal_pengajuan);
-        if (Forminput.tanggal_faktur != "") {
+        if (Forminput.tanggal_faktur != undefined) {
           let tanggalFaktur = new Date(Forminput.tanggal_faktur);
           let yearF = tanggalFaktur.getFullYear();
           let dayF = tanggalFaktur.getDate();

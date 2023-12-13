@@ -5,7 +5,49 @@
         <div class="card-body">
           <h3 style="font-weight: 500">Pencarian</h3>
           <hr />
-          <div class="grid grid-cols-1 gap-2">
+          <div class="grid grid-cols-1">
+            <div class="w-full mb-2">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Kelompok Mata Anggaran
+              </label>
+              <select
+                v-model="filters.kdkelmatanggaran"
+                @change="getMataAnggaranFilter"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Kelompok Mata Anggaran --</option>
+                <option
+                  v-for="(item, index) in getKelompokMataAnggaran"
+                  :key="index"
+                  :value="item.kode_kelompok_mata_anggaran"
+                >
+                  {{ item.nama_kelompok_mata_anggaran }}
+                </option>
+              </select>
+            </div>
+            <div class="w-full">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Mata Anggaran
+              </label>
+              <select
+                v-model="filters.kdmatanggaran"
+                @change="getSubMataAnggaranFilter"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Mata Anggaran --</option>
+                <option
+                  v-for="(item, index) in rowAllMataAnggaranFilter"
+                  :key="index"
+                  :value="item.kode_mata_anggaran"
+                >
+                  {{ item.nama_mata_anggaran }}
+                </option>
+              </select>
+            </div>
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -18,7 +60,7 @@
               >
                 <option value="">-- Pilih Sub Mata Anggaran --</option>
                 <option
-                  v-for="(item, index) in getSMataAnggaran"
+                  v-for="(item, index) in getSMataAnggaranFilter"
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
@@ -28,6 +70,22 @@
                     item.nama_sub_mata_anggaran
                   }}
                 </option>
+              </select>
+            </div>
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Status
+              </label>
+              <select
+                v-model="filters.status"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Status --</option>
+                <option value="0">Belum Validasi</option>
+                <option value="1">Tervalidasi</option>
+                <option value="2">Digunakan</option>
               </select>
             </div>
           </div>
@@ -49,7 +107,6 @@
       </div>
     </div>
   </div>
-
   <div class="row mt-3">
     <div class="col-12">
       <div class="card">
@@ -82,7 +139,11 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="Status" style="min-width: 220px !important">
+            <Column
+              field=""
+              header="Status"
+              style="min-width: 220px !important"
+            >
               <template #body="{ data }">
                 <ValidationBtnEvn
                   :nilaiStatus="data.status_kegiatan"
@@ -375,6 +436,8 @@ import ValidationBtnEvn from "../../../utils/ValidationBtnEvn.vue";
 import serviceAnggaran from "../../../../services/Transaction.service";
 import serviceSMataAnggaran from "../../../../services/SubMataAnggaran.service";
 import serviceDepartemen from "../../../../services/Departemen.service";
+import serviceKMataAnggaran from "../../../../services/KelompokMataAnggaran.service";
+import serviceMataAnggaran from "../../../../services/MataAnggaran.service";
 export default {
   name: "Kegiatan",
   data() {
@@ -386,11 +449,17 @@ export default {
       rowSMataAnggaran: null,
       rowDepartemen: null,
       rowAnggaran: null,
+      rowKMataAnggaran: null,
+      rowMataAnggaranFilter: null,
+      rowSMataAnggaranFilter: null,
       filters: {
         kdsubmatanggaran: "",
         kddepartemen: "",
         cari: "",
         status: "",
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+        bulan: new Date().getMonth() + 1,
       },
       pagination: {
         perPage: 5,
@@ -443,8 +512,57 @@ export default {
     getAnggaran() {
       return this.rowAnggaran;
     },
+    getKelompokMataAnggaran() {
+      return this.rowKMataAnggaran;
+    },
+    getSMataAnggaranFilter() {
+      return this.rowSMataAnggaranFilter;
+    },
+    rowAllMataAnggaranFilter() {
+      return this.rowMataAnggaranFilter;
+    },
   },
   methods: {
+    async getMataAnggaranFilter() {
+      let payload = {
+        kdkelmatanggaran: this.filters.kdkelmatanggaran,
+      };
+      try {
+        let respon = await serviceMataAnggaran.getDataMataAnggaran(
+          payload,
+          this.token
+        );
+        this.rowMataAnggaranFilter = respon.data.data;
+      } catch (error) {
+        this.rowMataAnggaranFilter = null;
+        console.log(error);
+      }
+    },
+    async getSubMataAnggaranFilter() {
+      let payload = {
+        kdkelmatanggaran: this.filters.kdkelmatanggaran,
+        kdmatanggaran: this.filters.kdmatanggaran,
+      };
+      try {
+        let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
+          payload,
+          this.token
+        );
+        this.rowSMataAnggaranFilter = res.data.data;
+      } catch (error) {
+        this.rowSMataAnggaranFilter = null;
+        console.log(error);
+      }
+    },
+    async rowDataKMataAnggaran() {
+      try {
+        let res = await serviceKMataAnggaran.getDataKMataAnggaran(this.token);
+        this.rowKMataAnggaran = res.data.data;
+      } catch (error) {
+        this.rowKMataAnggaran = null;
+        console.log(error);
+      }
+    },
     cariData() {
       this.refreshListTable(1);
     },
@@ -544,10 +662,11 @@ export default {
       let payload = {
         kdsubmatanggaran: this.filters.kdsubmatanggaran,
         kddepartemen: this.userSession.departemen,
-        status: "",
+        status: this.filters.status,
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        bulan: this.filters.bulan,
       };
       try {
         let res = await serviceAnggaran.listKegiatan(payload, this.token);
@@ -627,7 +746,8 @@ export default {
     this.getData();
     this.getAllDepartemen();
     this.getSubMataAnggaran();
-    this.getAllAnggaran();
+    // this.getAllAnggaran();
+    this.rowDataKMataAnggaran();
   },
 };
 </script>

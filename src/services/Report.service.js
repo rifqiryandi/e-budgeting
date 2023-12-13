@@ -18,22 +18,22 @@ class ReportService {
         return http.post("reporting/reportrealisasidepart", data, config);
     }
 
-    totalAnggaran(token) {
+    totalAnggaran(data, token) {
         var config = {
             headers: {
                 "x-access-token": token
             }
         }
-        return http.post("reporting/totalanggaran", {}, config);
+        return http.post("reporting/totalanggaran", data, config);
     }
 
-    totalRealisasi(token) {
+    totalRealisasi(data, token) {
         var config = {
             headers: {
                 "x-access-token": token
             }
         }
-        return http.post("reporting/totalrealisasi", {}, config);
+        return http.post("reporting/totalrealisasi", data, config);
     }
 
     listSponsorship(token) {

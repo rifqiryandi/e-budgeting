@@ -1,5 +1,49 @@
 <template lang="">
   <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
+          <div class="grid grid-cols-1">
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Status
+              </label>
+              <select
+                v-model="filters.status"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option value="">-- Pilih Status --</option>
+                <option value="1">Aktif</option>
+                <option value="0">Non-Aktif</option>
+              </select>
+            </div>
+          </div>
+          <button
+            class="btn w-full mt-3"
+            style="
+              border-radius: 6px;
+              background: #006699;
+              color: #ffff;
+              height: 48px;
+              padding-top: 11px;
+              padding-bottom: 11px;
+            "
+            @click="getData"
+          >
+            Tampilkan
+          </button>
+          <!-- <unduhExcel :data="getAllData" type="xlsx" name="filename.xlsx">
+              Unduh Data
+            </unduhExcel> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-12 d-flex justify-content-end">
       <button class="btn d-flex btn-add" @click="showInput()">
         <svg
@@ -259,7 +303,7 @@
                 :key="index"
                 :value="item.kode_departement"
               >
-                {{ item.nama_departement }}
+                {{ item.nama_departement + " (" + item.kode_departement + ")" }}
               </option>
             </select>
             <p
@@ -285,7 +329,7 @@
                 :key="index"
                 :value="item.kodejabatan"
               >
-                {{ item.deskripsi_jabatan }}
+                {{ item.deskripsi_jabatan + " (" + item.kodejabatan + ")" }}
               </option>
             </select>
             <p
@@ -827,7 +871,7 @@
                 :key="index"
                 :value="item.kode_departement"
               >
-                {{ item.nama_departement }}
+                {{ item.nama_departement + " (" + item.kode_departement + ")" }}
               </option>
             </select>
             <p
@@ -853,7 +897,7 @@
                 :key="index"
                 :value="item.kodejabatan"
               >
-                {{ item.deskripsi_jabatan }}
+                {{ item.deskripsi_jabatan + " (" + item.kodejabatan + ")" }}
               </option>
             </select>
             <p
@@ -1291,6 +1335,7 @@ export default {
       loading: true,
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        status: "",
       },
       Form: {
         username: "",
@@ -1512,7 +1557,7 @@ export default {
       this.loading = true;
       let token = sessionStorage.getItem("token");
       let payload = {
-        status: "",
+        status: this.filters.status,
       };
       try {
         let respon = await serviceUser.getDataUser(payload, token);
@@ -1521,12 +1566,7 @@ export default {
       } catch (error) {
         this.loading = false;
         this.ListUser = null;
-        this.$swal({
-          icon: "error",
-          title: "GAGAL",
-          text: error.response.data.Msg,
-          confirmButtonColor: "#e77817",
-        });
+        console.log(error);
       }
     },
     detailData(data) {
@@ -1730,3 +1770,4 @@ export default {
 
 @import "../../../../node_modules/vue-select/dist/vue-select.css";
 </style>
+

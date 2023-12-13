@@ -267,7 +267,7 @@
             <div class="">
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Entitas</p>
-                <p class="text-base">{{ detail.nama_entitas }}</p>
+                <p class="text-base">{{ detail.nama_entitas + " - " + detail.kode_entitas }}</p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>

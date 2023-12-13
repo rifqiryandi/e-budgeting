@@ -22,7 +22,11 @@
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
-                  {{ item.nama_sub_mata_anggaran }}
+                  {{
+                    item.kode_sub_mata_anggaran +
+                    " - " +
+                    item.nama_sub_mata_anggaran
+                  }}
                 </option>
               </select>
             </div>
@@ -132,16 +136,17 @@
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
-                    class="bg-transparent border-0"
+                    class="border-bni-blue border-2 py-2 px-3 rounded-md"
                     title="Validasi Pengajuan"
                     @click="showValidasi(data)"
                   >
-                    <p v-if="data.status_pengajuan == 0">
+                    <p
+                      class="m-0 text-bni-blue"
+                      v-if="data.status_pengajuan == 0"
+                    >
                       Validasi
                     </p>
-                    <p v-else>
-                      Detail
-                    </p>
+                    <p class="m-0 text-bni-blue" v-else>Detail</p>
                   </button>
                 </div>
               </template>
@@ -196,11 +201,19 @@
             <div class="">
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Entitas</p>
-                <p class="text-base">{{ Detail.nama_entitas }}</p>
+                <p class="text-base">
+                  {{ Detail.nama_entitas + " - " + Detail.kode_entitas }}
+                </p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
-                <p class="text-base">{{ Detail.nama_sub_mata_anggaran }}</p>
+                <p class="text-base">
+                  {{
+                    Detail.kode_sub_mata_anggaran +
+                    " - " +
+                    Detail.nama_sub_mata_anggaran
+                  }}
+                </p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Jenis Pengajuan</p>
@@ -287,7 +300,10 @@
           </div>
           <hr class="bg-gray-400" />
           <p class="text-lg font-semibold mb-0">Lampiran File</p>
-          <div class="grid grid-cols-1 lg:grid-cols-2 mb-1">
+          <div
+            class="grid grid-cols-1 lg:grid-cols-2 mb-1"
+            v-show="listFile != null"
+          >
             <div class="flex">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -383,6 +399,10 @@ export default {
         sisa_nominal: "",
       },
       Detail: {},
+      filterForm: {
+        kdkelmatanggaran: "",
+        kdmataanggaran: "",
+      },
       listFile: null,
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
@@ -412,11 +432,11 @@ export default {
         status: 2,
         rubrik: this.Detail.kode_departement,
         kdsubmatanggaran: this.Detail.kode_sub_mata_anggaran,
-        nominal: this.Detail.nominal_pengajuan + this.Detail.sisanominal_pengajuan,
+        nominal:
+          this.Detail.nominal_pengajuan + this.Detail.sisanominal_pengajuan,
         alasan: "",
         idkeg: this.Detail.id_kegiatan,
       };
-      console.log(payload);
 
       this.$swal({
         icon: "question",
@@ -518,12 +538,12 @@ export default {
       let payload = {
         idpengajuan: this.Detail.id,
       };
-      console.log(this.Detail);
       try {
         let res = await serviceFile.listFile(payload, this.token);
         this.listFile = res.data.data;
       } catch (error) {
-        this.responError(error);
+        console.log(error);
+        // this.responError(error);
       }
       const $targetEl = document.getElementById("validasi-modal");
       this.modal = new Modal($targetEl);
@@ -548,7 +568,10 @@ export default {
       this.refreshListTable();
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: this.filterForm.kdkelmatanggaran,
+        kdmatanggaran: this.filterForm.kdmataanggaran,
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,

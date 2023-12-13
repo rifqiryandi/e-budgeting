@@ -60,12 +60,12 @@ export default {
     getLabelTrue() {
       if (this.namaAkses == "Superadmin") {
         return this.nilaiStatus == 1
-          ? "Validate By Superadmin"
+          ? "Validated By Superadmin"
           : this.nilaiStatus == 2
-          ? "Validate By Departemen Head"
+          ? "Validated By Departemen Head"
           : this.nilaiStatus == 0
           ? "On Progress By Superadmin"
-          : "Validate By Departemen Head";
+          : "Validated By Departemen Head";
       }
       // else if (this.namaAkses == "Officer") {
       //   return this.nilaiStatus == 1
@@ -80,10 +80,10 @@ export default {
         return this.nilaiStatus == 1
           ? "On Progress By Departemen Head"
           : this.nilaiStatus == 2
-          ? "Validate By Departemen Head"
+          ? "Validated By Departemen Head"
           : this.nilaiStatus == 0
           ? "On Progress By Superadmin"
-          : "Validate By Departemen Head";
+          : "Validated By Departemen Head";
       }
     },
     getLabelFalse() {

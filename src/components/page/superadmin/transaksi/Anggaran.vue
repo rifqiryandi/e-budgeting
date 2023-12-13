@@ -6,7 +6,7 @@
           <h3 style="font-weight: 500">Pencarian</h3>
           <hr />
           <div class="grid grid-cols-1">
-            <!-- <div class="w-full mb-2">
+            <div class="w-full mb-2">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
               >
@@ -47,7 +47,7 @@
                   {{ item.nama_mata_anggaran }}
                 </option>
               </select>
-            </div> -->
+            </div>
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -112,6 +112,16 @@
                 <option value="9">Validate By Officer</option>
                 <option value="2">Validate By Departemen Head</option>
               </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1">
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Tahun
+              </label>
+              <VueDatePicker v-model="filters.tahun" auto-apply year-picker />
             </div>
           </div>
           <button
@@ -205,7 +215,7 @@
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_entitas }}
+                  {{ data.nama_entitas + " - " + data.kode_entitas }}
                 </div>
               </template>
             </Column>
@@ -311,7 +321,6 @@
                 </div>
               </template>
             </Column>
-            
           </DataTable>
         </div>
       </div>
@@ -1013,6 +1022,7 @@ export default {
         status: "",
         kdkelmatanggaran: "",
         kdmatanggaran: "",
+        tahun: "",
       },
       pagination: {
         perPage: 5,
@@ -1106,20 +1116,20 @@ export default {
     getSMataAnggaran() {
       return this.rowSMataAnggaran;
     },
-    getSMataAnggaranFilter() {
-      return this.rowSMataAnggaranFilter;
-    },
     getDepartemen() {
       return this.rowDepartemen;
     },
     getAnggaran() {
       return this.rowAnggaran;
     },
+    getMataAnggaran() {
+      return this.rowMataAnggaran;
+    },
     getKelompokMataAnggaran() {
       return this.rowKMataAnggaran;
     },
-    getMataAnggaran() {
-      return this.rowMataAnggaran;
+    getSMataAnggaranFilter() {
+      return this.rowSMataAnggaranFilter;
     },
     rowAllMataAnggaranFilter() {
       return this.rowMataAnggaranFilter;
@@ -1386,6 +1396,7 @@ export default {
         kdmataanggaran: "",
       };
       this.rowSMataAnggaran = null;
+      this.rowMataAnggaran = null;
 
       const $targetEl = document.getElementById("input-modal");
       this.modal = new Modal($targetEl);
@@ -1406,6 +1417,9 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        tahun: this.filters.tahun,
+        kelmatanggaran: this.filters.kdkelmatanggaran,
+        matanggaran: this.filters.kdmatanggaran,
       };
       try {
         let res = await serviceAnggaran.getTransaksi(payload, this.token);
