@@ -380,6 +380,7 @@
                 }}
               </option>
             </select>
+
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.id_anggaran.$error"
@@ -387,19 +388,40 @@
               Anggaran tidak boleh kosong!
             </p>
           </div>
-          <!-- <div class="">
+          <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Sisa Anggaran
+              Status In Direct Opex <span class="text-red-600">*</span>
             </label>
-            <InputNumber
-              v-model="preview.nominal_sisa"
-              placeholder="Masukkan Sisa anggaran"
-              class="w-full"
-              disabled
+            <select
+              v-model="Form.opex"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">-- Pilih Status In Direct Opex --</option>
+              <option value="1">Ya</option>
+              <option value="0">Tidak</option>
+            </select>
+            <p
+              class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
+              v-if="this.v$.Form.opex.$error"
+            >
+              Status In Direct Opex tidak boleh kosong!
+            </p>
+          </div>
+          <div class="" v-if="Form.opex == 1">
+            <label
+              class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+            >
+              Keterangan In Direct Opex <span class="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              v-model="Form.keterangan"
+              placeholder="Divisi/Wilayah/Cabang"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-          </div> -->
+          </div>
           <div class="">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
@@ -430,7 +452,9 @@
               v-model="Form.bulan"
               format="MMMM/yyyy"
               auto-apply
+              disable-year-select
               month-picker
+
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -533,6 +557,8 @@ export default {
         nominal: "",
         bulan: "",
         userid: "",
+        opex: "",
+        keterangan: "",
       },
       preview: {
         nominal_sisa: "",
@@ -553,6 +579,7 @@ export default {
         nominal: { required },
         bulan: { required },
         userid: { required },
+        opex: { required },
       },
     };
   },
@@ -781,18 +808,19 @@ export default {
     },
     async prosesInput() {
       let Forminput = this.Form;
-      // if (Forminput.nominal > this.preview.nominal_sisa) {
-      //   return this.$swal({
-      //     icon: "info",
-      //     title: "INFO",
-      //     text: "Nominal tidak boleh lebih dari sisa anggaran",
-      //     confirmButtonColor: "#e77817",
-      //   });
-      // }
+
       Forminput.userid = this.userSession.username;
 
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
+        if (Forminput.keterangan == "") {
+          return this.$swal({
+            icon: "info",
+            title: "INFO",
+            text: "Keterangan In Direct Opex tidak boleh kosong",
+            confirmButtonColor: "#e77817",
+          });
+        }
         Forminput.id_anggaran = this.Form.id_anggaran.id;
         let addMonth = this.Form.bulan.month + 1;
         if (addMonth >= 10) {
@@ -864,5 +892,8 @@ export default {
 .dp__input_wrap input:focus {
   border-color: #006699 !important;
   box-shadow: none !important;
+}
+.dp__month_picker_header{
+  display: none !important;
 }
 </style>

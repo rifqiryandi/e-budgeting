@@ -77,7 +77,11 @@
           >
             <ColumnGroup type="header">
               <Row>
-                <Column header="Divisi Corporate Secretary" :rowspan="2" />
+                <Column
+                  header="Divisi Corporate Secretary"
+                  :rowspan="2"
+                  style="font-size: 23px !important"
+                />
                 <Column :header="'Tahun ' + tahun" :colspan="6" />
               </Row>
               <Row>
@@ -123,10 +127,11 @@
             <Column style="min-width: 160px !important; text-align: right">
               <template #body="{ data }">
                 {{
-                  data.nominalmatarealisasidepart != undefined ?
-                  data.nominalmatarealisasidepart != 0
-                    ? data.nominalmatarealisasidepart.toLocaleString("de-DE")
-                    : "-" : data.nominalrealisasidepart != null
+                  data.nominalmatarealisasidepart != undefined
+                    ? data.nominalmatarealisasidepart != 0
+                      ? data.nominalmatarealisasidepart.toLocaleString("de-DE")
+                      : "-"
+                    : data.nominalrealisasidepart != 0
                     ? data.nominalrealisasidepart.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -135,10 +140,11 @@
             <Column style="min-width: 160px !important ; text-align: right">
               <template #body="{ data }">
                 {{
-                  data.nominalmataanggaranfydepart != undefined ?
-                  data.nominalmataanggaranfydepart != null
-                    ? data.nominalmataanggaranfydepart.toLocaleString("de-DE")
-                    : "-" : data.anggaranfydepart != 0
+                  data.nominalmataanggaranfydepart != undefined
+                    ? data.nominalmataanggaranfydepart != 0
+                      ? data.nominalmataanggaranfydepart.toLocaleString("de-DE")
+                      : "-"
+                    : data.anggaranfydepart != 0
                     ? data.anggaranfydepart.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -147,19 +153,26 @@
             <Column style="min-width: 160px !important ; text-align: right">
               <template #body="{ data }">
                 {{
-                  data.mataanggaranytddepart != undefined ?
-                  data.mataanggaranytddepart != 0
-                    ? data.mataanggaranytddepart.toLocaleString("de-DE")
-                    : "-" :data.anggaranytddepart != 0
+                  data.mataanggaranytddepart != undefined
+                    ? data.mataanggaranytddepart != 0
+                      ? data.mataanggaranytddepart.toLocaleString("de-DE")
+                      : "-"
+                    : data.anggaranytddepart != 0
                     ? data.anggaranytddepart.toLocaleString("de-DE")
                     : "-"
                 }}
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
-                  {{ data.fycse != undefined ? data.fycse : data.fydepart }}%
+                <div class="flex float-right">
+                  {{
+                    data.fydepartkel != undefined
+                      ? data.fydepartkel
+                      : data.fydepartmata != undefined
+                      ? data.fydepartmata
+                      : data.fydepart
+                  }}%
 
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -167,12 +180,20 @@
                     viewBox="0 -960 960 960"
                     width="24"
                     :class="
-                      data.fycse != undefined
-                        ? data.fycse >= 0 && data.fycse <= 70
+                      data.fydepartkel != undefined
+                        ? data.fydepartkel >= 0 && data.fydepartkel <= 70
                           ? 'label-ijo'
-                          : data.fycse >= 71 && data.fycse <= 90
+                          : data.fydepartkel >= 71 && data.fydepartkel <= 90
                           ? 'label-yellow'
-                          : data.fycse >= 91 && data.fycse <= 100
+                          : data.fydepartkel >= 91 && data.fydepartkel <= 100
+                          ? 'label-orange'
+                          : 'label-red'
+                        : data.fydepartmata != undefined
+                        ? data.fydepartmata >= 0 && data.fydepartmata <= 70
+                          ? 'label-ijo'
+                          : data.fydepartmata >= 71 && data.fydepartmata <= 90
+                          ? 'label-yellow'
+                          : data.fydepartmata >= 91 && data.fydepartmata <= 100
                           ? 'label-orange'
                           : 'label-red'
                         : data.fydepart >= 0 && data.fydepart <= 70
@@ -191,10 +212,16 @@
                 </div>
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
-                  {{ data.ytdcse != undefined ? data.ytdcse : data.ytddepart }}%
+                <div class="flex float-right">
+                  {{
+                    data.ytddepartkel != undefined
+                      ? data.ytddepartkel
+                      : data.ytddepartmata != undefined
+                      ? data.ytddepartmata
+                      : data.ytddepart
+                  }}%
 
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -202,12 +229,21 @@
                     viewBox="0 -960 960 960"
                     width="24"
                     :class="
-                      data.ytdcse != undefined
-                        ? data.ytdcse >= 0 && data.ytdcse <= 70
+                      data.ytddepartkel != undefined
+                        ? data.ytddepartkel >= 0 && data.ytddepartkel <= 70
                           ? 'label-ijo'
-                          : data.ytdcse >= 71 && data.ytdcse <= 90
+                          : data.ytddepartkel >= 71 && data.ytddepartkel <= 90
                           ? 'label-yellow'
-                          : data.ytdcse >= 91 && data.ytdcse <= 100
+                          : data.ytddepartkel >= 91 && data.ytddepartkel <= 100
+                          ? 'label-orange'
+                          : 'label-red'
+                        : data.ytddepartmata != undefined
+                        ? data.ytddepartmata >= 0 && data.ytddepartmata <= 70
+                          ? 'label-ijo'
+                          : data.ytddepartmata >= 71 && data.ytddepartmata <= 90
+                          ? 'label-yellow'
+                          : data.ytddepartmata >= 91 &&
+                            data.ytddepartmata <= 100
                           ? 'label-orange'
                           : 'label-red'
                         : data.ytddepart >= 0 && data.ytddepart <= 70
@@ -343,7 +379,7 @@ export default {
       let hari = days[d.getDay()];
 
       this.tanggalLengkap =
-        hari + ", " + namaBulan + " " + d.getDay() + ", " + this.tahun;
+        hari + ", " + namaBulan + " " + d.getDate() + ", " + this.tahun;
     },
     async getData() {
       console.log(this.userSession);

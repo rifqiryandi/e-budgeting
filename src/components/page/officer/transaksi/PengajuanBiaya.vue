@@ -415,7 +415,6 @@
               placeholder="Masukkan Nominal"
               class="w-full"
               @input="validationNominal"
-              :disabled="Form.jnspengajuan == 'PK'"
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -1055,6 +1054,9 @@ export default {
 
 .dp__pointer {
   height: 50px !important;
+}
+.dp__month_picker_header{
+  display: none !important;
 }
 /* .p-fileupload-choose {
   box-shadow: none;

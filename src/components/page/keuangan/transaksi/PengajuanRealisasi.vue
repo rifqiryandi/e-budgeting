@@ -175,7 +175,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -518,7 +518,7 @@ export default {
       },
       buttonActive: true,
       detail: {},
-      loading: true,
+      loading: false,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -585,6 +585,8 @@ export default {
         tanggal_realisasi: "1900-01-01",
         status_validasi: 1,
       };
+      console.log(this.detail.tanggal_pengajuan);
+      console.log(payload);
 
       this.$swal({
         icon: "question",
@@ -774,7 +776,7 @@ export default {
   },
   mounted() {
     initFlowbite();
-    this.getData();
+    // this.getData();
     this.getPengajuan();
   },
 };

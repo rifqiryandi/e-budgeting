@@ -44,6 +44,16 @@ class ReportService {
         }
         return http.post("reporting/sponsorship", {}, config);
     }
+    
+    sponsorshipList(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token
+            }
+        }
+        return http.post("reporting/sponsorshiplist", data, config);
+    }
+
 }
 
 export default new ReportService();

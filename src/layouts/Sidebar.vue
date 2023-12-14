@@ -49,10 +49,10 @@
             />
           </svg> -->
         </div>
-        <div class="info">
+        <div class="info border-b-2 border-gray-500">
           <label class="d-block white-all m-0">{{ userSession.nama }}</label>
           <p class="text-sm m-0" style="color: #1e1e1e">{{ namaAkses }}</p>
-          <p class="text-sm m-0" style="color: #1e1e1e">
+          <p class="text-sm m-0" style="color: #1e1e1e" v-show="namaAkses == 'Officer' || namaAkses == 'BUM' || namaAkses == 'Departemen Head'">
             {{ userSession.nama_departement }}
           </p>
           <p class="text-sm m-0" style="color: #1e1e1e">
@@ -60,7 +60,7 @@
           </p>
         </div>
       </div>
-
+      
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul

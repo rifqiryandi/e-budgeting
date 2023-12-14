@@ -194,7 +194,7 @@
                 <div style="font-weight: 600">
                   <button
                     class="bg-transparent border-0"
-                    title="Detail Realisasi"
+                    title="Upload Lampiran Pengajuan Realisasi"
                     @click="detailView(data)"
                   >
                     <svg
@@ -789,7 +789,7 @@ export default {
       },
       buttonActive: true,
       detail: { pkp: "" },
-      loading: true,
+      loading: false,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -1174,7 +1174,7 @@ export default {
   },
   mounted() {
     initFlowbite();
-    this.getData();
+    // this.getData();
   },
 };
 </script>

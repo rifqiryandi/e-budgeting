@@ -243,9 +243,8 @@
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">-- Pilih Jenis Pengajuan --</option>
-              <option value="PBI">Pengajuan Biasa</option>
-              <option value="PK">Pengajuan Komitmen</option>
-              <option value="PB">Pengajuan Baru</option>
+              <option value="PBI">Beban Reguler</option>
+              <option value="PK">Beban Komitmen</option>
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -585,6 +584,7 @@ export default {
       if (!this.v$.Form.$error) {
         Forminput.sisa_nominal =
           Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
+          console.log(Forminput);
         Forminput.id_anggaran =
           this.Form.id_kegiatan.id_anggaran.toLocaleString();
         Forminput.id_kegiatan = this.Form.id_kegiatan.id.toLocaleString();

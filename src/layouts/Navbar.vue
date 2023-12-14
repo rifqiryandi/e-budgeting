@@ -95,7 +95,7 @@
             @click="ProsesLogout()"
             class="dropdown-item d-flex justify-content-center cursor-pointer cstm-logout"
           >
-            LOGOUT
+            Logout
           </a>
         </div>
       </li>

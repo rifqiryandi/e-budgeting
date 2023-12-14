@@ -1463,7 +1463,7 @@ export default {
     },
     checkMinLength() {
       let pass = this.password;
-      if (pass.length <= 8) {
+      if (pass.length <= 7) {
         return false;
       } else {
         return true;
@@ -1504,7 +1504,7 @@ export default {
     },
     checkMinLengthChange() {
       let pass = this.passwordUser;
-      if (pass.length <= 8) {
+      if (pass.length <= 7) {
         return false;
       } else {
         return true;

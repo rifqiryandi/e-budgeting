@@ -291,6 +291,28 @@
                   Validate By BUM
                 </div>
               </div>
+              <div class="mb-1" v-show="detail.pkp == 1">
+                <p class="text-lg font-semibold mb-0">Nomor Faktur</p>
+                <p class="text-base">
+                  {{
+                    detail.nomor_faktur != undefined ? detail.nomor_faktur : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1" v-show="detail.pkp == 1">
+                <p class="text-lg font-semibold mb-0">Tanggal Faktur</p>
+                <p class="text-base">
+                  {{
+                    detail.tanggal_faktur != undefined
+                      ? detail.tanggal_faktur.split("T")[0].split("-")[2] +
+                        "-" +
+                        detail.tanggal_faktur.split("T")[0].split("-")[1] +
+                        "-" +
+                        detail.tanggal_faktur.split("T")[0].split("-")[0]
+                      : ""
+                  }}
+                </p>
+              </div>
             </div>
           </div>
           <hr class="bg-gray-400" />
@@ -478,7 +500,7 @@ export default {
       },
       buttonActive: true,
       detail: {},
-      loading: true,
+      loading: false,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -733,7 +755,7 @@ export default {
   },
   mounted() {
     initFlowbite();
-    this.getData();
+    // this.getData();
     this.getPengajuan();
   },
 };

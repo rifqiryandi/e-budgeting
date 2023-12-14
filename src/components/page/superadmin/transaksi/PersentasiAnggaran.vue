@@ -1,5 +1,37 @@
 <template>
   <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="grid grid-cols-1">
+            <div class="">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Tahun
+              </label>
+              <VueDatePicker v-model="filters.tahun" auto-apply year-picker />
+            </div>
+          </div>
+          <button
+            class="btn w-full mt-3"
+            style="
+              border-radius: 6px;
+              background: #006699;
+              color: #ffff;
+              height: 48px;
+              padding-top: 11px;
+              padding-bottom: 11px;
+            "
+            @click="getData"
+          >
+            Tampilkan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-12 d-flex justify-content-end">
       <button class="btn d-flex btn-add" @click="showInput">
         <svg
@@ -23,10 +55,8 @@
           <DataTable
             :value="getAllData"
             lazy
-            paginator
             :rows="pagination.perPage"
             :totalRecords="pagination.totaldata"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
             paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
             currentPageReportTemplate="{first} to {last} of {totalRecords}"
             tableStyle="min-width: 50rem"
@@ -174,14 +204,13 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Persentasi <span class="text-red-600">*</span>
+              Persentasi (%)<span class="text-red-600">*</span>
             </label>
             <InputNumber
               v-model="Form.presentasi"
               placeholder="Masukkan Persentasi"
               class="w-full"
               :useGrouping="false"
-              prefix="%"
               :min="0"
               :max="batasPersen"
               @input="calculationNominal"
@@ -285,9 +314,10 @@ export default {
         kdsubmatanggaran: "",
         kddepartemen: "",
         cari: "",
+        tahun: "",
       },
       pagination: {
-        perPage: 5,
+        perPage: 12,
         currentPage: 1,
         totaldata: 0,
       },
@@ -443,28 +473,23 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        tahun: this.filters.tahun,
       };
-      let payloadForPersen = {
-        perPage: 100,
-        currentPage: 1,
-        cari: "",
-      };
+
       try {
         let res = await serviceAnggaran.getListPresentasiAnggaran(
           payload,
           this.token
         );
-        let respon = await serviceAnggaran.getListPresentasiAnggaran(
-          payloadForPersen,
-          this.token
-        );
         this.pagination.totaldata = res.data.data.total_data;
         this.ListPersentasi = res.data.data.data;
         let persen = 0;
-        for (let i = 0; i < respon.data.data.data.length; i++) {
-          persen = persen + Number(respon.data.data.data[i].presentasi);
+        for (let i = 0; i < res.data.data.data.length; i++) {
+          persen = Number(persen) + Number(res.data.data.data[i].presentasi);
         }
-        this.batasPersen = this.batasPersen - persen;
+        console.log(Number(persen));
+        this.batasPersen = 100;
+        this.batasPersen = Number(this.batasPersen) - Number(persen);
         console.log(this.batasPersen);
 
         this.loading = false;

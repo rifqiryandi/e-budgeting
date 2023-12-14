@@ -1,9 +1,11 @@
 <template lang="">
-  <div class="row">
-    <h3 class="bg-bni-blue text-white rounded-md text-center py-1">Opex</h3>
+  <div class="row flex justify-center">
+    <h3 class="bg-bni-blue text-white rounded-md text-center py-1">
+      Beban Opex
+    </h3>
     <div class="col-lg-3 col-6">
       <div class="card card-success card-style-cstm">
-        <div class="card-header text-header text-lg flex justify-left">
+        <div class="card-header text-header flex justify-left">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -18,7 +20,7 @@
           TOTAL ANGGARAN
         </div>
         <div
-          class="card-body text-content-dashboard text-xl d-flex align-items-center justify-end pl-0 pr-2"
+          class="card-body text-content-dashboard d-flex align-items-center justify-end pl-0 pr-2"
         >
           {{ "Rp " + totalAnggaran.toLocaleString("de-DE") }}
         </div>
@@ -26,7 +28,7 @@
     </div>
     <div class="col-lg-3 col-6">
       <div class="card card-info card-style-cstm">
-        <div class="card-header text-header text-lg flex justify-left">
+        <div class="card-header text-header flex justify-left">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -47,9 +49,9 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-2 col-6">
       <div class="card card-style-cstm card-danger">
-        <div class="card-header text-header text-lg flex justify-left">
+        <div class="card-header text-header flex justify-left">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -72,9 +74,7 @@
     </div>
     <div class="col-lg-3 col-6">
       <div class="card card-style-cstm">
-        <div
-          class="card-header text-header text-lg flex justify-left card-warning"
-        >
+        <div class="card-header text-header flex justify-left card-warning">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -97,10 +97,97 @@
     </div>
   </div>
   <div class="row">
-    <h3 class="bg-bni-blue text-white rounded-md text-center py-1">Non-Opex</h3>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <DataTable :value="getListSponsorship" tableStyle="min-width: 50rem">
+            <ColumnGroup type="header">
+              <Row>
+                <Column
+                  header="Data Realisasi Anggaran Sponsorship"
+                  :colspan="7"
+                  style="
+                    background-color: #00c2c7 !important;
+                    color: #333333 !important;
+                  "
+                />
+              </Row>
+              <Row>
+                <Column
+                  header="Sub Mata Anggaran"
+                  style="
+                    background-color: #daf8e3 !important;
+                    color: #333333 !important;
+                  "
+                />
+
+                <Column
+                  header="Total Anggaran"
+                  style="
+                    background-color: #daf8e3 !important;
+                    color: #333333 !important;
+                  "
+                />
+                <Column
+                  header="Total Realisasi"
+                  style="
+                    background-color: #daf8e3 !important;
+                    color: #333333 !important;
+                  "
+                />
+                <Column
+                  header="Persentase"
+                  style="
+                    background-color: #daf8e3 !important;
+                    color: #333333 !important;
+                  "
+                />
+                <Column
+                  header="Sisa Anggaran"
+                  style="
+                    background-color: #daf8e3 !important;
+                    color: #333333 !important;
+                  "
+                />
+              </Row>
+            </ColumnGroup>
+
+            <Column style="min-width: 620px !important">
+              <template #body="{ data }">
+                {{ data.kode_mata_anggaran + " - " + data.nama_mata_anggaran }}
+              </template>
+            </Column>
+            <!-- Depart -->
+            <Column style="min-width: 160px !important; text-align: right">
+              <template #body="{ data }">
+                {{ data.nominalanggaranfysponsor.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+            <Column style="min-width: 160px !important ; text-align: right">
+              <template #body="{ data }">
+                {{ data.nominalrealisasisponsor.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+            <Column style="min-width: 160px !important ; text-align: right">
+              <template #body="{ data }"> {{ data.fydepart }}% </template>
+            </Column>
+            <Column style="min-width: 90px !important; text-align: right">
+              <template #body="{ data }">
+                {{ data.sisaanggarancse.toLocaleString("de-DE") }}
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row flex justify-center">
+    <h3 class="bg-bni-blue text-white rounded-md text-center py-1">
+      Beban Non Operasional
+    </h3>
     <div class="col-lg-3 col-6">
       <div class="card card-success card-style-cstm">
-        <div class="card-header text-header text-lg flex justify-left">
+        <div class="card-header text-header flex justify-left">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -115,7 +202,7 @@
           TOTAL ANGGARAN
         </div>
         <div
-          class="card-body text-content-dashboard text-xl d-flex align-items-center justify-end pl-0 pr-2"
+          class="card-body text-content-dashboard d-flex align-items-center justify-end pl-0 pr-2"
         >
           {{ "Rp " + totalAnggaranNon.toLocaleString("de-DE") }}
         </div>
@@ -123,7 +210,7 @@
     </div>
     <div class="col-lg-3 col-6">
       <div class="card card-info card-style-cstm">
-        <div class="card-header text-header text-lg flex justify-left">
+        <div class="card-header text-header flex justify-left">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -138,15 +225,15 @@
           TOTAL REALISASI
         </div>
         <div
-          class="card-body text-content-dashboard text-xl d-flex align-items-center justify-end pl-0 pr-2"
+          class="card-body text-content-dashboard d-flex align-items-center justify-end pl-0 pr-2"
         >
           {{ "Rp " + totalRealisasiNon.toLocaleString("de-DE") }}
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-2 col-6">
       <div class="card card-style-cstm card-danger">
-        <div class="card-header text-header text-lg flex justify-left">
+        <div class="card-header text-header flex justify-left">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -161,7 +248,7 @@
           PERSENTASE
         </div>
         <div
-          class="card-body text-content-dashboard text-xl d-flex align-items-center justify-end pl-0 pr-2"
+          class="card-body text-content-dashboard d-flex align-items-center justify-end pl-0 pr-2"
         >
           {{ persentaseNonOpex + "%" }}
         </div>
@@ -169,9 +256,7 @@
     </div>
     <div class="col-lg-3 col-6">
       <div class="card card-style-cstm">
-        <div
-          class="card-header text-header text-lg flex justify-left card-warning"
-        >
+        <div class="card-header text-header flex justify-left card-warning">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -186,7 +271,7 @@
           SISA ANGGARAN
         </div>
         <div
-          class="card-body text-content-dashboard text-xl d-flex align-items-center justify-end pl-0 pr-2"
+          class="card-body text-content-dashboard d-flex align-items-center justify-end pl-0 pr-2"
         >
           {{ "Rp " + sisaAnggaranNon.toLocaleString("de-DE") }}
         </div>
@@ -236,9 +321,20 @@
         </div>
       </div>
     </div>
+    <div class="col-lg-6 col-12">
+      <div class="card">
+        <div class="card-body">
+          <canvas id="chart6"></canvas>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import ColumnGroup from "primevue/columngroup"; // optional
+import Row from "primevue/row"; // optional
 import serviceReport from "../../../services/Report.service";
 import {
   Chart as ChartJS,
@@ -265,6 +361,7 @@ export default {
   data() {
     return {
       token: sessionStorage.getItem("token"),
+      listTableSponsor: null,
       totalAnggaran: 0,
       sisaAnggaran: 0,
       totalRealisasi: 0,
@@ -376,8 +473,33 @@ export default {
         ],
         datasets: [],
       },
+      chartData6: {
+        labels: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "Mei",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Nov",
+          "Okt",
+          "Des",
+        ],
+        datasets: [],
+      },
       chartOptions: {
         responsive: true,
+        scales: {
+          y: {
+            min: 0,
+            ticks: {
+              stepSize: 10000000,
+            },
+          },
+        },
         plugins: {
           legend: {
             position: "top",
@@ -391,7 +513,12 @@ export default {
       },
     };
   },
-  components: {},
+  components: {
+    DataTable,
+    Column,
+    ColumnGroup,
+    Row,
+  },
   computed: {
     persentaseOpex() {
       return this.persentase != "NaN" ? this.persentase : 0;
@@ -399,8 +526,22 @@ export default {
     persentaseNonOpex() {
       return this.persentaseNon != "NaN" ? this.persentaseNon : 0;
     },
+    getListSponsorship() {
+      return this.listTableSponsor;
+    },
   },
   methods: {
+    async getListSponsor() {
+      let payload = {
+        opex: 1,
+      };
+      try {
+        let res = await serviceReport.sponsorshipList(payload, this.token);
+        this.listTableSponsor = res.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getTotalAnggaran() {
       let payload = {
         opexs: 1,
@@ -511,42 +652,7 @@ export default {
     },
     async getDataChart1() {
       try {
-        let res = await serviceReport.listSponsorship(this.token);
-        let data = res.data.data;
-        const randomColor =
-          "hsl(" +
-          360 * Math.random() +
-          "," +
-          (25 + 70 * Math.random()) +
-          "%," +
-          50 +
-          "%)";
-        let labelData = data[0].nama_sub_mata_anggaran;
-
-        let CustomData = {
-          label: labelData,
-          data: [
-            data[0].januari,
-            data[0].febuari,
-            data[0].maret,
-            data[0].april,
-            data[0].mei,
-            data[0].juni,
-            data[0].juli,
-            data[0].agutus,
-            data[0].september,
-            data[0].oktober,
-            data[0].november,
-            data[0].desember,
-          ],
-          backgroundColor: randomColor,
-          borderColor: randomColor,
-          lineTension: 0,
-          pointBackgroundColor: randomColor,
-        };
-        // console.log(CustomData);
-        this.chartData1.datasets.push(CustomData);
-
+        this.chartData1.datasets.push(this.chartData.datasets[0]);
         const chartElement = document.querySelector("#chart1");
         new ChartJS(chartElement, {
           type: this.chartType,
@@ -559,42 +665,7 @@ export default {
     },
     async getDataChart2() {
       try {
-        let res = await serviceReport.listSponsorship(this.token);
-        let data = res.data.data;
-        const randomColor =
-          "hsl(" +
-          360 * Math.random() +
-          "," +
-          (25 + 70 * Math.random()) +
-          "%," +
-          50 +
-          "%)";
-        let labelData = data[1].nama_sub_mata_anggaran;
-
-        let CustomData = {
-          label: labelData,
-          data: [
-            data[1].januari,
-            data[1].febuari,
-            data[1].maret,
-            data[1].april,
-            data[1].mei,
-            data[1].juni,
-            data[1].juli,
-            data[1].agutus,
-            data[1].september,
-            data[1].oktober,
-            data[1].november,
-            data[1].desember,
-          ],
-          backgroundColor: randomColor,
-          borderColor: randomColor,
-          lineTension: 0,
-          pointBackgroundColor: randomColor,
-        };
-        // console.log(CustomData);
-        this.chartData2.datasets.push(CustomData);
-
+        this.chartData2.datasets.push(this.chartData.datasets[1]);
         const chartElement = document.querySelector("#chart2");
         new ChartJS(chartElement, {
           type: this.chartType,
@@ -607,42 +678,7 @@ export default {
     },
     async getDataChart3() {
       try {
-        let res = await serviceReport.listSponsorship(this.token);
-        let data = res.data.data;
-        const randomColor =
-          "hsl(" +
-          360 * Math.random() +
-          "," +
-          (25 + 70 * Math.random()) +
-          "%," +
-          50 +
-          "%)";
-        let labelData = data[2].nama_sub_mata_anggaran;
-
-        let CustomData = {
-          label: labelData,
-          data: [
-            data[2].januari,
-            data[2].febuari,
-            data[2].maret,
-            data[2].april,
-            data[2].mei,
-            data[2].juni,
-            data[2].juli,
-            data[2].agutus,
-            data[2].september,
-            data[2].oktober,
-            data[2].november,
-            data[2].desember,
-          ],
-          backgroundColor: randomColor,
-          borderColor: randomColor,
-          lineTension: 0,
-          pointBackgroundColor: randomColor,
-        };
-        // console.log(CustomData);
-        this.chartData3.datasets.push(CustomData);
-
+        this.chartData3.datasets.push(this.chartData.datasets[2]);
         const chartElement = document.querySelector("#chart3");
         new ChartJS(chartElement, {
           type: this.chartType,
@@ -655,42 +691,7 @@ export default {
     },
     async getDataChart4() {
       try {
-        let res = await serviceReport.listSponsorship(this.token);
-        let data = res.data.data;
-        const randomColor =
-          "hsl(" +
-          360 * Math.random() +
-          "," +
-          (25 + 70 * Math.random()) +
-          "%," +
-          50 +
-          "%)";
-        let labelData = data[3].nama_sub_mata_anggaran;
-
-        let CustomData = {
-          label: labelData,
-          data: [
-            data[3].januari,
-            data[3].febuari,
-            data[3].maret,
-            data[3].april,
-            data[3].mei,
-            data[3].juni,
-            data[3].juli,
-            data[3].agutus,
-            data[3].september,
-            data[3].oktober,
-            data[3].november,
-            data[3].desember,
-          ],
-          backgroundColor: randomColor,
-          borderColor: randomColor,
-          lineTension: 0,
-          pointBackgroundColor: randomColor,
-        };
-        // console.log(CustomData);
-        this.chartData4.datasets.push(CustomData);
-
+        this.chartData4.datasets.push(this.chartData.datasets[3]);
         const chartElement = document.querySelector("#chart4");
         new ChartJS(chartElement, {
           type: this.chartType,
@@ -703,46 +704,24 @@ export default {
     },
     async getDataChart5() {
       try {
-        let res = await serviceReport.listSponsorship(this.token);
-        let data = res.data.data;
-        const randomColor =
-          "hsl(" +
-          360 * Math.random() +
-          "," +
-          (25 + 70 * Math.random()) +
-          "%," +
-          50 +
-          "%)";
-        let labelData = data[4].nama_sub_mata_anggaran;
-
-        let CustomData = {
-          label: labelData,
-          data: [
-            data[4].januari,
-            data[4].febuari,
-            data[4].maret,
-            data[4].april,
-            data[4].mei,
-            data[4].juni,
-            data[4].juli,
-            data[4].agutus,
-            data[4].september,
-            data[4].oktober,
-            data[4].november,
-            data[4].desember,
-          ],
-          backgroundColor: randomColor,
-          borderColor: randomColor,
-          lineTension: 0,
-          pointBackgroundColor: randomColor,
-        };
-        // console.log(CustomData);
-        this.chartData5.datasets.push(CustomData);
-
+        this.chartData5.datasets.push(this.chartData.datasets[4]);
         const chartElement = document.querySelector("#chart5");
         new ChartJS(chartElement, {
           type: this.chartType,
           data: this.chartData5,
+          options: this.chartOptions,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getDataChart6() {
+      try {
+        this.chartData6.datasets.push(this.chartData.datasets[5]);
+        const chartElement = document.querySelector("#chart6");
+        new ChartJS(chartElement, {
+          type: this.chartType,
+          data: this.chartData6,
           options: this.chartOptions,
         });
       } catch (error) {
@@ -755,13 +734,15 @@ export default {
     this.getTotalAnggaran();
     await this.getTotalRealisasiNonOpex();
     this.getTotalAnggaranNonOpex();
-    this.getDataChart();
+    await this.getDataChart();
     this.getDataChart1();
     this.getDataChart2();
     this.getDataChart3();
     this.getDataChart4();
     this.getDataChart5();
+    this.getDataChart6();
 
+    this.getListSponsor();
   },
 };
 </script>
@@ -769,12 +750,23 @@ export default {
 .text-header {
   font-weight: 500;
   text-align: center;
+  font-size: 20px !important;
   color: #fff !important;
 }
 .text-content-dashboard {
   font-weight: 500;
+  font-size: 28px !important;
   text-align: right;
 }
+@media only screen and (max-width: 892px) {
+  .text-content-dashboard {
+    font-size: 26px !important;
+  }
+  .text-header {
+    font-size: 19px !important;
+  }
+}
+
 .icon-dashboard {
   fill: #fff;
 }

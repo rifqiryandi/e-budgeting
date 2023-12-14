@@ -77,13 +77,13 @@
           >
             <ColumnGroup type="header">
               <Row>
-                <Column header="Divisi Corporate Secretary" :rowspan="2" />
-                <Column :header="'Tahun ' + tahun" :colspan="22" />
+                <Column header="Divisi Corporate Secretary" :rowspan="2" style="font-size: 23px !important;"/>
+                <Column :header="'Tahun ' + tahun" :colspan="24" />
               </Row>
               <Row>
                 <Column
                   header="Total - CSE"
-                  :colspan="4"
+                  :colspan="6"
                   style="background-color: rgb(140, 24, 198) !important"
                 />
                 <Column
@@ -114,7 +114,15 @@
                   style="background-color: rgb(140, 24, 198) !important"
                 />
                 <Column
+                  header="Anggaran YTD"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
+                <Column
                   header="% FY"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
+                <Column
+                  header="% YTD"
                   style="background-color: rgb(140, 24, 198) !important"
                 />
                 <Column
@@ -251,14 +259,31 @@
                 }}
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 160px !important ; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
+                {{
+                  data.totalkelmtytd != undefined
+                    ? data.totalkelmtytd != 0
+                      ? data.totalkelmtytd.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalmataytd != undefined
+                    ? data.totalmataytd != 0
+                      ? data.totalmataytd.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalsubanggaranytd != 0
+                    ? data.totalsubanggaranytd.toLocaleString("de-DE")
+                    : "-"
+                }}
+              </template>
+            </Column>
+            <Column style="min-width: 90px !important; text-align: right">
+              <template #body="{ data }">
+                <div class="flex float-right">
                   {{
-                    data.kelpresentease != undefined
-                      ? data.kelpresentease
-                      : data.presentasemata != undefined
-                      ? data.presentasemata
+                    data.kelpresenteasefy != undefined
+                      ? data.kelpresenteasefy
+                      : data.presentasematafy != undefined
+                      ? data.presentasematafy
                       : data.subpresentase
                   }}%
                   <svg
@@ -267,32 +292,84 @@
                     viewBox="0 -960 960 960"
                     width="24"
                     :class="
-                      data.kelpresentease != undefined
-                        ? data.kelpresentease >= 0 && data.kelpresentease <= 70
+                      data.kelpresenteasefy != undefined
+                        ? data.kelpresenteasefy >= 0 && data.kelpresenteasefy <= 70
                           ? 'label-ijo'
-                          : data.kelpresentease >= 71 &&
-                            data.kelpresentease <= 90
+                          : data.kelpresenteasefy >= 71 &&
+                            data.kelpresenteasefy <= 90
                           ? 'label-yellow'
-                          : data.kelpresentease >= 91 &&
-                            data.kelpresentease <= 100
+                          : data.kelpresenteasefy >= 91 &&
+                            data.kelpresenteasefy <= 100
                           ? 'label-orange'
                           : 'label-red'
-                        : data.presentasemata != undefined
-                        ? data.presentasemata >= 0 && data.presentasemata <= 70
+                        : data.presentasematafy != undefined
+                        ? data.presentasematafy >= 0 && data.presentasematafy <= 70
                           ? 'label-ijo'
-                          : data.presentasemata >= 71 &&
-                            data.presentasemata <= 90
+                          : data.presentasematafy >= 71 &&
+                            data.presentasematafy <= 90
                           ? 'label-yellow'
-                          : data.presentasemata >= 91 &&
-                            data.presentasemata <= 100
-                          ? 'label-orange'
+                          : data.presentasematafy >= 91 &&
+                            data.presentasematafy <= 100
+                          ? 'label-red'
                           : 'label-red'
                         : data.subpresentase >= 0 && data.subpresentase <= 70
                         ? 'label-ijo'
                         : data.subpresentase >= 71 && data.subpresentase <= 90
                         ? 'label-yellow'
                         : data.subpresentase >= 91 && data.subpresentase <= 100
-                        ? 'label-orange'
+                        ? 'label-red'
+                        : 'label-red'
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
+                </div>
+              </template>
+            </Column>
+            <Column style="min-width: 90px !important; text-align: right">
+              <template #body="{ data }">
+                <div class="flex float-right">
+                  {{
+                    data.kelpresenteaseytd != undefined
+                      ? data.kelpresenteaseytd
+                      : data.presentasemataytd != undefined
+                      ? data.presentasemataytd
+                      : data.subpresentase
+                  }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.kelpresenteaseytd != undefined
+                        ? data.kelpresenteaseytd >= 0 && data.kelpresenteaseytd <= 70
+                          ? 'label-ijo'
+                          : data.kelpresenteaseytd >= 71 &&
+                            data.kelpresenteaseytd <= 90
+                          ? 'label-yellow'
+                          : data.kelpresenteaseytd >= 91 &&
+                            data.kelpresenteaseytd <= 100
+                          ? 'label-orange'
+                          : 'label-red'
+                        : data.presentasemataytd != undefined
+                        ? data.presentasemataytd >= 0 && data.presentasemataytd <= 70
+                          ? 'label-ijo'
+                          : data.presentasemataytd >= 71 &&
+                            data.presentasemataytd <= 90
+                          ? 'label-yellow'
+                          : data.presentasemataytd >= 91 &&
+                            data.presentasemataytd <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.subpresentase >= 0 && data.subpresentase <= 70
+                        ? 'label-ijo'
+                        : data.subpresentase >= 71 && data.subpresentase <= 90
+                        ? 'label-yellow'
+                        : data.subpresentase >= 91 && data.subpresentase <= 100
+                        ? 'label-red'
                         : 'label-red'
                     "
                   >
@@ -360,9 +437,9 @@
                 }}
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
+                <div class="flex float-right">
                   {{ data.fycse != undefined ? data.fycse : data.mtfycse }}%
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -376,14 +453,14 @@
                           : data.fycse >= 71 && data.fycse <= 90
                           ? 'label-yellow'
                           : data.fycse >= 91 && data.fycse <= 100
-                          ? 'label-orange'
+                          ? 'label-red'
                           : 'label-red'
                         : data.mtfycse >= 0 && data.mtfycse <= 70
                         ? 'label-ijo'
                         : data.mtfycse >= 71 && data.mtfycse <= 90
                         ? 'label-yellow'
                         : data.mtfycse >= 91 && data.mtfycse <= 100
-                        ? 'label-orange'
+                        ? 'label-red'
                         : 'label-red'
                     "
                   >
@@ -394,9 +471,9 @@
                 </div>
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
+                <div class="flex float-right">
                   {{ data.ytdcse != undefined ? data.ytdcse : data.mtytdcse }}%
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -410,14 +487,14 @@
                           : data.ytdcse >= 71 && data.ytdcse <= 90
                           ? 'label-yellow'
                           : data.ytdcse >= 91 && data.ytdcse <= 100
-                          ? 'label-orange'
+                          ? 'label-red'
                           : 'label-red'
                         : data.mtytdcse >= 0 && data.mtytdcse <= 70
                         ? 'label-ijo'
                         : data.mtytdcse >= 71 && data.mtytdcse <= 90
                         ? 'label-yellow'
                         : data.mtytdcse >= 91 && data.mtytdcse <= 100
-                        ? 'label-orange'
+                        ? 'label-red'
                         : 'label-red'
                     "
                   >
@@ -481,9 +558,9 @@
                 }}
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
+                <div class="flex float-right">
                   {{ data.fydir != undefined ? data.fydir : data.mtfydir }}%
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -497,14 +574,14 @@
                           : data.fydir >= 71 && data.fydir <= 90
                           ? 'label-yellow'
                           : data.fydir >= 91 && data.fydir <= 100
-                          ? 'label-orange'
+                          ? 'label-red'
                           : 'label-red'
                         : data.mtfydir >= 0 && data.mtfydir <= 70
                         ? 'label-ijo'
                         : data.mtfydir >= 71 && data.mtfydir <= 90
                         ? 'label-yellow'
                         : data.mtfydir >= 91 && data.mtfydir <= 100
-                        ? 'label-orange'
+                        ? 'label-red'
                         : 'label-red'
                     "
                   >
@@ -515,9 +592,9 @@
                 </div>
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
+                <div class="flex float-right">
                   {{ data.ytddir != undefined ? data.ytddir : data.mtytddir }}%
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -583,8 +660,8 @@
                     ? data.anggaranfycomm != 0
                       ? data.anggaranfycomm.toLocaleString("de-DE")
                       : "-"
-                    : data.mataanggaranfycomm != null
-                    ? data.mataanggaranfycomm.toLocaleString("de-DE")
+                    : data.nominalmataanggarancomfy != null
+                    ? data.nominalmataanggarancomfy.toLocaleString("de-DE")
                     : "-"
                 }}
               </template>
@@ -602,23 +679,30 @@
                 }}
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
+                <div class="flex float-right">
                   {{ data.fycomm != undefined ? data.fycomm : data.mtfycomm }}%
-
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="24"
                     viewBox="0 -960 960 960"
                     width="24"
                     :class="
-                      data.fycomm >= 0 && data.fycomm <= 70
+                      data.mtfycomm != undefined
+                        ? data.mtfycomm >= 0 && data.mtfycomm <= 70
+                          ? 'label-ijo'
+                          : data.mtfycomm >= 71 && data.mtfycomm <= 90
+                          ? 'label-yellow'
+                          : data.mtfycomm >= 91 && data.mtfycomm <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.fycomm >= 0 && data.fycomm <= 70
                         ? 'label-ijo'
                         : data.fycomm >= 71 && data.fycomm <= 90
                         ? 'label-yellow'
                         : data.fycomm >= 91 && data.fycomm <= 100
-                        ? 'label-orange'
+                        ? 'label-red'
                         : 'label-red'
                     "
                   >
@@ -629,11 +713,11 @@
                 </div>
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div class="flex">
+                <div class="flex float-right">
                   {{
-                    data.ytdcomm != undefined ? data.ytdcomm : data.mtytdcomm
+                    data.mtytdcomm != undefined ? data.mtytdcomm : data.ytdcomm
                   }}%
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -647,14 +731,14 @@
                           : data.ytdcomm >= 71 && data.ytdcomm <= 90
                           ? 'label-yellow'
                           : data.ytdcomm >= 91 && data.ytdcomm <= 100
-                          ? 'label-orange'
+                          ? 'label-red'
                           : 'label-red'
                         : data.mtytdcomm >= 0 && data.mtytdcomm <= 70
                         ? 'label-ijo'
                         : data.mtytdcomm >= 71 && data.mtytdcomm <= 90
                         ? 'label-yellow'
                         : data.mtytdcomm >= 91 && data.mtytdcomm <= 100
-                        ? 'label-orange'
+                        ? 'label-red'
                         : 'label-red'
                     "
                   >
@@ -781,7 +865,7 @@ export default {
       let hari = days[d.getDay()];
 
       this.tanggalLengkap =
-        hari + ", " + namaBulan + " " + d.getDay() + ", " + this.tahun;
+        hari + ", " + namaBulan + " " + d.getDate() + ", " + this.tahun;
     },
     async getData() {
       if (this.Filters.kdkelmatanggaran == "") {
@@ -802,9 +886,12 @@ export default {
           confirmButtonColor: "#e77817",
         });
       }
-      
+
       try {
-        let res = await serviceReport.laporanRealisasi(this.Filters, this.token);
+        let res = await serviceReport.laporanRealisasi(
+          this.Filters,
+          this.token
+        );
         this.listLaporan = res.data.data;
       } catch (error) {
         this.listLaporan = null;

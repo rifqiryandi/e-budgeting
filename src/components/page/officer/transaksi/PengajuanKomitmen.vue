@@ -619,6 +619,7 @@ export default {
         }
         FormData.sisa_nominal =
           Number(this.FormRetur.sisa_nominal) - Number(this.FormRetur.nominal);
+          console.log(FormData);
         if (FormData.sisa_nominal == 0) {
           FormData.cek = "habis";
         }
@@ -854,4 +855,8 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.dp__month_picker_header{
+  display: none !important;
+}
+</style>

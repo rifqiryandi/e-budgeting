@@ -175,7 +175,7 @@
               </template>
             </Column>
 
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -566,7 +566,7 @@ export default {
       },
       buttonActive: true,
       detail: {},
-      loading: true,
+      loading: false,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -905,7 +905,7 @@ export default {
   },
   mounted() {
     initFlowbite();
-    this.getData();
+    // this.getData();
   },
 };
 </script>
