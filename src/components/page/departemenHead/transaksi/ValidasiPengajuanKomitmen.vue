@@ -85,7 +85,7 @@
                   </div>
                   <div
                     class="label-Aktif"
-                    v-else-if="data.status_pengajuan == 1"
+                    v-else-if="data.status_pengajuan == 1 || data.status_pengajuan == 3"
                   >
                     Tervalidasi
                   </div>

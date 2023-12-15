@@ -124,7 +124,7 @@
                 <div class="label-nonAktif" v-if="data.status_pengajuan == 0">
                   Belum diproses
                 </div>
-                <div class="label-Aktif" v-else-if="data.status_pengajuan == 1">
+                <div class="label-Aktif" v-else-if="data.status_pengajuan == 1 || data.status_pengajuan == 3">
                   Tervalidasi
                 </div>
                 <div class="label-Retur" v-else-if="data.status_pengajuan == 2">

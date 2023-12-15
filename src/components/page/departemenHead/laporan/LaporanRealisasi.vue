@@ -265,12 +265,16 @@
             <Column style="min-width: 160px !important; text-align: right">
               <template #body="{ data }">
                 {{
-                  data.sisaanggarancse != undefined
-                    ? data.sisaanggarancse != 0
-                      ? data.sisaanggarancse.toLocaleString("de-DE")
+                  data.sisaanggarankel != undefined
+                    ? data.sisaanggarankel != 0
+                      ? data.sisaanggarankel.toLocaleString("de-DE")
                       : "-"
-                    : data.sisamtanggarancse != null
-                    ? data.sisamtanggarancse.toLocaleString("de-DE")
+                    : data.sisaanggaranmata != undefined
+                    ? data.sisaanggaranmata != 0
+                      ? data.sisaanggaranmata.toLocaleString("de-DE")
+                      : "-"
+                    : data.sisaanggarancse != 0
+                    ? data.sisaanggarancse.toLocaleString("de-DE")
                     : "-"
                 }}
               </template>

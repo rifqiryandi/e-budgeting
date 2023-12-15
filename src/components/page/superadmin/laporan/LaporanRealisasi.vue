@@ -284,7 +284,7 @@
                       ? data.kelpresenteasefy
                       : data.presentasematafy != undefined
                       ? data.presentasematafy
-                      : data.subpresentase
+                      : data.subpresentasefy
                   }}%
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -312,11 +312,11 @@
                             data.presentasematafy <= 100
                           ? 'label-red'
                           : 'label-red'
-                        : data.subpresentase >= 0 && data.subpresentase <= 70
+                        : data.subpresentasefy >= 0 && data.subpresentasefy <= 70
                         ? 'label-ijo'
-                        : data.subpresentase >= 71 && data.subpresentase <= 90
+                        : data.subpresentasefy >= 71 && data.subpresentasefy <= 90
                         ? 'label-yellow'
-                        : data.subpresentase >= 91 && data.subpresentase <= 100
+                        : data.subpresentasefy >= 91 && data.subpresentasefy <= 100
                         ? 'label-red'
                         : 'label-red'
                     "
@@ -336,7 +336,7 @@
                       ? data.kelpresenteaseytd
                       : data.presentasemataytd != undefined
                       ? data.presentasemataytd
-                      : data.subpresentase
+                      : data.subpresentaseytd
                   }}%
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -364,11 +364,11 @@
                             data.presentasemataytd <= 100
                           ? 'label-red'
                           : 'label-red'
-                        : data.subpresentase >= 0 && data.subpresentase <= 70
+                        : data.subpresentaseytd >= 0 && data.subpresentaseytd <= 70
                         ? 'label-ijo'
-                        : data.subpresentase >= 71 && data.subpresentase <= 90
+                        : data.subpresentaseytd >= 71 && data.subpresentaseytd <= 90
                         ? 'label-yellow'
-                        : data.subpresentase >= 91 && data.subpresentase <= 100
+                        : data.subpresentaseytd >= 91 && data.subpresentaseytd <= 100
                         ? 'label-red'
                         : 'label-red'
                     "
@@ -526,7 +526,7 @@
                     ? data.nominalrealisasidir != 0
                       ? data.nominalrealisasidir.toLocaleString("de-DE")
                       : "-"
-                    : data.realisasidir != null
+                    : data.realisasidir != 0
                     ? data.realisasidir.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -539,7 +539,7 @@
                     ? data.anggaranfydir != 0
                       ? data.anggaranfydir.toLocaleString("de-DE")
                       : "-"
-                    : data.mataanggaranfydir != null
+                    : data.mataanggaranfydir != 0
                     ? data.mataanggaranfydir.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -552,7 +552,7 @@
                     ? data.anggaranytddir != 0
                       ? data.anggaranytddir.toLocaleString("de-DE")
                       : "-"
-                    : data.mataanggaranytddir != null
+                    : data.mataanggaranytddir != 0
                     ? data.mataanggaranytddir.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -633,7 +633,7 @@
                     ? data.sisaanggarandir != 0
                       ? data.sisaanggarandir.toLocaleString("de-DE")
                       : "-"
-                    : data.sisamtanggarandir != null
+                    : data.sisamtanggarandir != 0
                     ? data.sisamtanggarandir.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -647,7 +647,7 @@
                     ? data.nominalrealisasicomm != 0
                       ? data.nominalrealisasicomm.toLocaleString("de-DE")
                       : "-"
-                    : data.realisasicomm != null
+                    : data.realisasicomm != 0
                     ? data.realisasicomm.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -660,7 +660,7 @@
                     ? data.anggaranfycomm != 0
                       ? data.anggaranfycomm.toLocaleString("de-DE")
                       : "-"
-                    : data.nominalmataanggarancomfy != null
+                    : data.nominalmataanggarancomfy != 0
                     ? data.nominalmataanggarancomfy.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -673,7 +673,7 @@
                     ? data.anggaranytdcomm != 0
                       ? data.anggaranytdcomm.toLocaleString("de-DE")
                       : "-"
-                    : data.mataanggaranytdcomm != null
+                    : data.mataanggaranytdcomm != 0
                     ? data.mataanggaranytdcomm.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -752,11 +752,11 @@
             <Column style="min-width: 160px !important; text-align: right">
               <template #body="{ data }">
                 {{
-                  data.sisaanggarancomm != null
+                  data.sisaanggarancomm != undefined
                     ? data.sisaanggarancomm != 0
                       ? data.sisaanggarancomm.toLocaleString("de-DE")
                       : "-"
-                    : data.sisamtanggarancomm != null
+                    : data.sisamtanggarancomm != 0
                     ? data.sisamtanggarancomm.toLocaleString("de-DE")
                     : "-"
                 }}

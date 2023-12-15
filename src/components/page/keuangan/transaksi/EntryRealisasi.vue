@@ -144,11 +144,11 @@
               <template #body="{ data }">
                 <div>
                   {{
-                    data.tanggal_pengajuan.split("T")[0].split("-")[2] +
+                    data.tanggal_pengajuan.split("T")[0].split("-")[0] +
                     "-" +
                     data.tanggal_pengajuan.split("T")[0].split("-")[1] +
                     "-" +
-                    data.tanggal_pengajuan.split("T")[0].split("-")[0]
+                    data.tanggal_pengajuan.split("T")[0].split("-")[2]
                   }}
                 </div>
               </template>
@@ -385,11 +385,11 @@
                   <!-- {{ detail.tanggal_realisasi }} -->
                   {{
                     detail.tanggal_realisasi != undefined
-                      ? detail.tanggal_realisasi.split("T")[0].split("-")[2] +
+                      ? detail.tanggal_realisasi.split("T")[0].split("-")[0] +
                         "-" +
                         detail.tanggal_realisasi.split("T")[0].split("-")[1] +
                         "-" +
-                        detail.tanggal_realisasi.split("T")[0].split("-")[0]
+                        detail.tanggal_realisasi.split("T")[0].split("-")[2]
                       : ""
                   }}
                 </p>
@@ -706,11 +706,11 @@ export default {
           id_realisasi: this.detail.id_realisasi,
           status: 2,
           tanggal_pengajuan:
-            this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
+            this.detail.tanggal_pengajuan.split("T")[0].split("-")[2] +
             "-" +
             this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
             "-" +
-            this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
+            this.detail.tanggal_pengajuan.split("T")[0].split("-")[0],
           kode_buku: this.Form.kode_buku,
           userid: this.userSession.username,
           tanggal_realisasi: this.Form.tanggal_realisasi,

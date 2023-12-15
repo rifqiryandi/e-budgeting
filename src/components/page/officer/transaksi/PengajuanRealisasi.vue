@@ -159,11 +159,11 @@
               <template #body="{ data }">
                 <div>
                   {{
-                    data.tanggal_pengajuan.split("T")[0].split("-")[2] +
+                    data.tanggal_pengajuan.split("T")[0].split("-")[0] +
                     "-" +
                     data.tanggal_pengajuan.split("T")[0].split("-")[1] +
                     "-" +
-                    data.tanggal_pengajuan.split("T")[0].split("-")[0]
+                    data.tanggal_pengajuan.split("T")[0].split("-")[2]
                   }}
                 </div>
               </template>
@@ -292,11 +292,17 @@
                 :value="item"
               >
                 {{
-                  item.kode_sub_mata_anggaran +
-                  " - " +
-                  item.prefix_kegiatan +
-                  " - " +
-                  item.uraian_kegiatan
+                  preview.jenisPengajuan == "PBI"
+                    ? item.kode_sub_mata_anggaran +
+                      " - " +
+                      item.prefix_kegiatan +
+                      " - " +
+                      item.uraian_kegiatan
+                    : item.kode_sub_mata_anggaran +
+                      " - " +
+                      item.prefix_kegiatan +
+                      " - " +
+                      item.uraian
                 }}
               </option>
             </select>
@@ -398,7 +404,7 @@
               @input="validationNominal"
               placeholder=""
               class="w-full"
-              :disabled="preview.nominal <= 0"
+              disabled
             />
           </div>
           <div class="" v-show="false">
@@ -521,7 +527,9 @@
             <div class="">
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Entitas</p>
-                <p class="text-base">{{ detail.nama_entitas + " - " + detail.kode_entitas }}</p>
+                <p class="text-base">
+                  {{ detail.nama_entitas + " - " + detail.kode_entitas }}
+                </p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
@@ -774,6 +782,7 @@ export default {
         pkp: "",
         nomor_faktur: "",
         tanggal_faktur: "",
+        jenis_pengajuan: "",
       },
       jenisPengajuan: {
         SPK: "",
@@ -898,7 +907,11 @@ export default {
         nominal: this.Form.id_pengajuan.nominal_pengajuan,
         jenisPengajuan: this.preview.jenisPengajuan,
       };
-      this.Form.keterangan = this.Form.id_pengajuan.uraian_kegiatan
+      if (this.preview.jenisPengajuan == "PK") {
+        this.Form.keterangan = this.Form.id_pengajuan.uraian;
+      } else {
+        this.Form.keterangan = this.Form.id_pengajuan.uraian_kegiatan;
+      }
       this.Form.nominal = this.preview.nominal;
     },
     async getPengajuan() {
@@ -1010,7 +1023,7 @@ export default {
       Forminput.kode_pengajuan = this.preview.kode_pengajuan;
       Forminput.user_id = this.userSession.username;
       Forminput.id_pengajuan = Forminput.id_pengajuan.id;
-
+      Forminput.jenis_pengajuan = this.preview.jenisPengajuan;
       this.v$.$validate(); // checks all inputs
       if (!this.v$.Form.$error) {
         let tanggal = new Date(Forminput.tanggal_pengajuan);

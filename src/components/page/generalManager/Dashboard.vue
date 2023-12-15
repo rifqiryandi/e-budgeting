@@ -549,7 +549,7 @@ export default {
       try {
         let res = await serviceReport.totalAnggaran(payload, this.token);
         this.totalAnggaran = res.data.data[0].nominal_anggaran;
-        this.sisaAnggaran = res.data.data[0].sisa_anggaran;
+        this.sisaAnggaran = res.data.data[0].sisa_pengajuan;
         this.persentase = Math.round(
           (this.totalRealisasi / res.data.data[0].nominal_anggaran) * 100
         ).toFixed(2);
@@ -563,7 +563,7 @@ export default {
       };
       try {
         let res = await serviceReport.totalRealisasi(payload, this.token);
-        this.totalRealisasi = res.data.data[0].nominal;
+        this.totalRealisasi = res.data.data != null ? res.data.data : 0;
       } catch (error) {
         console.log(error);
       }
@@ -579,8 +579,8 @@ export default {
             ? res.data.data[0].nominal_anggaran
             : 0;
         this.sisaAnggaranNon =
-          res.data.data[0].sisa_anggaran != null
-            ? res.data.data[0].sisa_anggaran
+          res.data.data[0].sisa_pengajuan != null
+            ? res.data.data[0].sisa_pengajuan
             : 0;
         this.persentaseNon = Math.round(
           (this.totalRealisasiNon / this.totalAnggaranNon) * 100
@@ -595,8 +595,7 @@ export default {
       };
       try {
         let res = await serviceReport.totalRealisasi(payload, this.token);
-        this.totalRealisasiNon =
-          res.data.data[0].nominal != null ? res.data.data[0].nominal : 0;
+        this.totalRealisasiNon = res.data.data != null ? res.data.data : 0;
       } catch (error) {
         console.log(error);
       }

@@ -117,11 +117,11 @@
               <template #body="{ data }">
                 <div>
                   {{
-                    data.tanggal_pengajuan.split("T")[0].split("-")[2] +
+                    data.tanggal_pengajuan.split("T")[0].split("-")[0] +
                     "-" +
                     data.tanggal_pengajuan.split("T")[0].split("-")[1] +
                     "-" +
-                    data.tanggal_pengajuan.split("T")[0].split("-")[0]
+                    data.tanggal_pengajuan.split("T")[0].split("-")[2]
                   }}
                 </div>
               </template>
@@ -557,11 +557,11 @@ export default {
         id_realisasi: this.detail.id_realisasi,
         status: 1,
         tanggal_pengajuan:
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
+          this.detail.tanggal_pengajuan.split("T")[0].split("-")[2] +
           "-" +
           this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
           "-" +
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
+          this.detail.tanggal_pengajuan.split("T")[0].split("-")[0],
         kode_buku: "",
         userid: this.userSession.username,
         tanggal_realisasi: "1900-01-01",

@@ -195,6 +195,30 @@
                 </div>
               </template>
             </Column>
+            <Column
+              field=""
+              header="Tanggal Switch"
+              class="text-center"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.create_at != null ? data.create_at : "" }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Tanggal Validasi"
+              class="text-center"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.update_at != null ? data.update_at : "" }}
+                </div>
+              </template>
+            </Column>
             <Column field="" header="Task" style="min-width: 90px !important">
               <template #body="{ data }">
                 <button
@@ -329,6 +353,26 @@
                 </p>
                 <p class="text-base">
                   {{ Detail.nama_sub_mata_anggaran_final }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Tanggal Switch</p>
+                <p class="text-base">
+                  {{
+                    Detail.create_at != undefined
+                      ? Detail.create_at
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Tanggal Validasi</p>
+                <p class="text-base">
+                  {{
+                    Detail.update_at != undefined
+                      ? Detail.update_at
+                      : ""
+                  }}
                 </p>
               </div>
             </div>
@@ -472,6 +516,26 @@
                   {{ Detail.nama_sub_mata_anggaran_final }}
                 </p>
               </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Tanggal Switch</p>
+                <p class="text-base">
+                  {{
+                    Detail.create_at != undefined
+                      ? Detail.create_at
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Tanggal Validasi</p>
+                <p class="text-base">
+                  {{
+                    Detail.update_at != undefined
+                      ? Detail.update_at
+                      : ""
+                  }}
+                </p>
+              </div>
             </div>
             <div class>
               <div class="mb-1">
@@ -514,7 +578,7 @@
                   Request By Officer
                 </div>
                 <div
-                  class="label-AktifSwitch"
+                  class="label-nonAktifSwitch"
                   v-else-if="Detail.status_anggaran == 1"
                 >
                   Validate By Departement Head Asal

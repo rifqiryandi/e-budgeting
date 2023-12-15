@@ -587,9 +587,19 @@ export default {
           console.log(Forminput);
         Forminput.id_anggaran =
           this.Form.id_kegiatan.id_anggaran.toLocaleString();
-        Forminput.id_kegiatan = this.Form.id_kegiatan.id.toLocaleString();
+        let payload = {
+          id : Forminput.id,
+          id_anggaran : Forminput.id_anggaran,
+          id_kegiatan : Forminput.id_kegiatan.id,
+          jnspengajuan : Forminput.jnspengajuan,
+          nominal : Forminput.nominal,
+          sisa_nominal : Forminput.sisa_nominal,
+          uraian_kegiatan : Forminput.uraian_kegiatan,
+          userid : Forminput.userid
+        }
+        // console.log(payload);
         try {
-          let respon = await serviceAnggaran.inputRetur(Forminput, this.token);
+          let respon = await serviceAnggaran.inputRetur(payload, this.token);
           this.modal.hide();
           this.$swal({
             icon: "success",
