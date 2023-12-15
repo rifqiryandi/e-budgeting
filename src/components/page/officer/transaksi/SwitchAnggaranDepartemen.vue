@@ -207,7 +207,7 @@
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.update_at != null ? data.update_at : "" }}
+                  {{ data.update_at != "01-01-1970" ? data.update_at : "" }}
                 </div>
               </template>
             </Column>
@@ -301,7 +301,7 @@
                 <p class="text-lg font-semibold mb-0">Tanggal Switch</p>
                 <p class="text-base">
                   {{
-                    Detail.create_at != undefined
+                    Detail.create_at != null
                       ? Detail.create_at
                       : ""
                   }}
@@ -311,7 +311,7 @@
                 <p class="text-lg font-semibold mb-0">Tanggal Validasi</p>
                 <p class="text-base">
                   {{
-                    Detail.update_at != undefined
+                    Detail.update_at != "01-01-1970"
                       ? Detail.update_at
                       : ""
                   }}

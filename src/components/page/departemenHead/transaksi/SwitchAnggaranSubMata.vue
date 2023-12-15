@@ -155,6 +155,30 @@
                 </div>
               </template>
             </Column>
+            <Column
+              field=""
+              header="Tanggal Switch"
+              class="text-center"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.create_at != null ? data.create_at : "" }}
+                </div>
+              </template>
+            </Column>
+            <Column
+              field=""
+              header="Tanggal Validasi"
+              class="text-center"
+              style="min-width: 200px !important"
+            >
+              <template #body="{ data }">
+                <div style="font-weight: 600">
+                  {{ data.update_at != "01-01-1970" ? data.update_at : "" }}
+                </div>
+              </template>
+            </Column>
 
             <Column field="" header="Task" style="width: 5%">
               <template #body="{ data }">
@@ -256,6 +280,26 @@
                 </p>
                 <p class="text-base">
                   {{ Detail.nama_sub_mata_anggaran_final }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Tanggal Switch</p>
+                <p class="text-base">
+                  {{
+                    Detail.create_at != null
+                      ? Detail.create_at
+                      : ""
+                  }}
+                </p>
+              </div>
+              <div class="mb-1">
+                <p class="text-lg font-semibold mb-0">Tanggal Validasi</p>
+                <p class="text-base">
+                  {{
+                    Detail.update_at != "01-01-1970"
+                      ? Detail.update_at
+                      : ""
+                  }}
                 </p>
               </div>
             </div>
