@@ -144,11 +144,11 @@
               <template #body="{ data }">
                 <div>
                   {{
-                    data.tanggal_pengajuan.split("T")[0].split("-")[2] +
+                    data.tanggal_pengajuan.split("T")[0].split("-")[0] +
                     "-" +
                     data.tanggal_pengajuan.split("T")[0].split("-")[1] +
                     "-" +
-                    data.tanggal_pengajuan.split("T")[0].split("-")[0]
+                    data.tanggal_pengajuan.split("T")[0].split("-")[2]
                   }}
                 </div>
               </template>
@@ -175,7 +175,7 @@
               </template>
             </Column>
 
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -267,7 +267,7 @@
             <div class="">
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Entitas</p>
-                <p class="text-base">{{ detail.nama_entitas }}</p>
+                <p class="text-base">{{ detail.nama_entitas + " - " + detail.kode_entitas }}</p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
@@ -385,11 +385,11 @@
                   <!-- {{ detail.tanggal_realisasi }} -->
                   {{
                     detail.tanggal_realisasi != undefined
-                      ? detail.tanggal_realisasi.split("T")[0].split("-")[2] +
+                      ? detail.tanggal_realisasi.split("T")[0].split("-")[0] +
                         "-" +
                         detail.tanggal_realisasi.split("T")[0].split("-")[1] +
                         "-" +
-                        detail.tanggal_realisasi.split("T")[0].split("-")[0]
+                        detail.tanggal_realisasi.split("T")[0].split("-")[2]
                       : ""
                   }}
                 </p>
@@ -411,7 +411,7 @@
               >
                 <option value="">-- Pilih Jenis Dokumen --</option>
                 <option value="5" v-show="jenisPengajuan.Pajak == ''">
-                  Bukti Potong Pajak
+                  Voucher Pembukuan
                 </option>
               </select>
             </div>
@@ -566,7 +566,7 @@ export default {
       },
       buttonActive: true,
       detail: {},
-      loading: true,
+      loading: false,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -706,11 +706,11 @@ export default {
           id_realisasi: this.detail.id_realisasi,
           status: 2,
           tanggal_pengajuan:
-            this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
+            this.detail.tanggal_pengajuan.split("T")[0].split("-")[2] +
             "-" +
             this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
             "-" +
-            this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
+            this.detail.tanggal_pengajuan.split("T")[0].split("-")[0],
           kode_buku: this.Form.kode_buku,
           userid: this.userSession.username,
           tanggal_realisasi: this.Form.tanggal_realisasi,
@@ -905,7 +905,7 @@ export default {
   },
   mounted() {
     initFlowbite();
-    this.getData();
+    // this.getData();
   },
 };
 </script>

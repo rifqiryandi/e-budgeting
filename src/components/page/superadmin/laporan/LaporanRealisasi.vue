@@ -73,40 +73,137 @@
             :value="getAllData"
             tableStyle="min-width: 50rem"
             :rowClass="getClassdata"
+            :headerClass="getClassHead"
           >
             <ColumnGroup type="header">
               <Row>
-                <Column header="Divisi Corporate Secretary" :rowspan="2" />
-                <Column :header="'Tahun ' + tahun" :colspan="18" />
+                <Column header="Divisi Corporate Secretary" :rowspan="2" style="font-size: 23px !important;"/>
+                <Column :header="'Tahun ' + tahun" :colspan="24" />
               </Row>
               <Row>
-                <Column header="753 - CSE" :colspan="6" />
-                <Column header="711 - DIR dan SEVP" :colspan="6" />
-                <Column header="712 - COMM" :colspan="6" />
+                <Column
+                  header="Total - CSE"
+                  :colspan="6"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
+                <Column
+                  header="753 - CSE"
+                  :colspan="6"
+                  style="background-color: rgb(17, 155, 153) !important"
+                />
+                <Column
+                  header="711 - DIR dan SEVP"
+                  :colspan="6"
+                  style="background-color: rgb(34, 137, 233) !important"
+                />
+                <Column
+                  header="712 - COMM"
+                  :colspan="6"
+                  style="background-color: rgb(233, 124, 34) !important"
+                />
               </Row>
               <Row>
                 <Column :header="tanggalLengkap" />
+                <!-- Total -->
+                <Column
+                  header="Realisasi"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
+                <Column
+                  header="Anggaran FY"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
+                <Column
+                  header="Anggaran YTD"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
+                <Column
+                  header="% FY"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
+                <Column
+                  header="% YTD"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
+                <Column
+                  header="Sisa Anggaran"
+                  style="background-color: rgb(140, 24, 198) !important"
+                />
                 <!-- CSE -->
-                <Column header="Realisasi" />
-                <Column header="Anggaran FY" />
-                <Column header="Anggaran YTD" />
-                <Column header="% FY" />
-                <Column header="% YTD" />
-                <Column header="Sisa Anggaran" />
+                <Column
+                  header="Realisasi"
+                  style="background-color: rgb(17, 155, 153) !important"
+                />
+                <Column
+                  header="Anggaran FY"
+                  style="background-color: rgb(17, 155, 153) !important"
+                />
+                <Column
+                  header="Anggaran YTD"
+                  style="background-color: rgb(17, 155, 153) !important"
+                />
+                <Column
+                  header="% FY"
+                  style="background-color: rgb(17, 155, 153) !important"
+                />
+                <Column
+                  header="% YTD"
+                  style="background-color: rgb(17, 155, 153) !important"
+                />
+                <Column
+                  header="Sisa Anggaran"
+                  style="background-color: rgb(17, 155, 153) !important"
+                />
                 <!-- DIR dan SEV -->
-                <Column header="Realisasi" />
-                <Column header="Anggaran FY" />
-                <Column header="Anggaran YTD" />
-                <Column header="% FY" />
-                <Column header="% YTD" />
-                <Column header="Sisa Anggaran" />
+                <Column
+                  header="Realisasi"
+                  style="background-color: rgb(34, 137, 233) !important"
+                />
+                <Column
+                  header="Anggaran FY"
+                  style="background-color: rgb(34, 137, 233) !important"
+                />
+                <Column
+                  header="Anggaran YTD"
+                  style="background-color: rgb(34, 137, 233) !important"
+                />
+                <Column
+                  header="% FY"
+                  style="background-color: rgb(34, 137, 233) !important"
+                />
+                <Column
+                  header="% YTD"
+                  style="background-color: rgb(34, 137, 233) !important"
+                />
+                <Column
+                  header="Sisa Anggaran"
+                  style="background-color: rgb(34, 137, 233) !important"
+                />
                 <!-- COMM -->
-                <Column header="Realisasi" />
-                <Column header="Anggaran FY" />
-                <Column header="Anggaran YTD" />
-                <Column header="% FY" />
-                <Column header="% YTD" />
-                <Column header="Sisa Anggaran" />
+                <Column
+                  header="Realisasi"
+                  style="background-color: rgb(233, 124, 34) !important"
+                />
+                <Column
+                  header="Anggaran FY"
+                  style="background-color: rgb(233, 124, 34) !important"
+                />
+                <Column
+                  header="Anggaran YTD"
+                  style="background-color: rgb(233, 124, 34) !important"
+                />
+                <Column
+                  header="% FY"
+                  style="background-color: rgb(233, 124, 34) !important"
+                />
+                <Column
+                  header="% YTD"
+                  style="background-color: rgb(233, 124, 34) !important"
+                />
+                <Column
+                  header="Sisa Anggaran"
+                  style="background-color: rgb(233, 124, 34) !important"
+                />
               </Row>
             </ColumnGroup>
 
@@ -124,6 +221,179 @@
                     : data.kode_kelompok_mata_anggaran +
                       " - " +
                       data.nama_kelompok_mata_anggaran
+                }}
+              </template>
+            </Column>
+            <!-- Total -->
+            <Column style="min-width: 160px !important; text-align: right">
+              <template #body="{ data }">
+                {{
+                  data.totalrealisasikelmata != undefined
+                    ? data.totalrealisasikelmata != 0
+                      ? data.totalrealisasikelmata.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalrealisasimata != undefined
+                    ? data.totalrealisasimata != 0
+                      ? data.totalrealisasimata.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalsubrealisasi != 0
+                    ? data.totalsubrealisasi.toLocaleString("de-DE")
+                    : "-"
+                }}
+              </template>
+            </Column>
+            <Column style="min-width: 160px !important ; text-align: right">
+              <template #body="{ data }">
+                {{
+                  data.totalanggarankelmata != undefined
+                    ? data.totalanggarankelmata != 0
+                      ? data.totalanggarankelmata.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalanggaranmata != undefined
+                    ? data.totalanggaranmata != 0
+                      ? data.totalanggaranmata.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalsubanggaran != 0
+                    ? data.totalsubanggaran.toLocaleString("de-DE")
+                    : "-"
+                }}
+              </template>
+            </Column>
+            <Column style="min-width: 160px !important ; text-align: right">
+              <template #body="{ data }">
+                {{
+                  data.totalkelmtytd != undefined
+                    ? data.totalkelmtytd != 0
+                      ? data.totalkelmtytd.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalmataytd != undefined
+                    ? data.totalmataytd != 0
+                      ? data.totalmataytd.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalsubanggaranytd != 0
+                    ? data.totalsubanggaranytd.toLocaleString("de-DE")
+                    : "-"
+                }}
+              </template>
+            </Column>
+            <Column style="min-width: 90px !important; text-align: right">
+              <template #body="{ data }">
+                <div class="flex float-right">
+                  {{
+                    data.kelpresenteasefy != undefined
+                      ? data.kelpresenteasefy
+                      : data.presentasematafy != undefined
+                      ? data.presentasematafy
+                      : data.subpresentasefy
+                  }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.kelpresenteasefy != undefined
+                        ? data.kelpresenteasefy >= 0 && data.kelpresenteasefy <= 70
+                          ? 'label-ijo'
+                          : data.kelpresenteasefy >= 71 &&
+                            data.kelpresenteasefy <= 90
+                          ? 'label-yellow'
+                          : data.kelpresenteasefy >= 91 &&
+                            data.kelpresenteasefy <= 100
+                          ? 'label-orange'
+                          : 'label-red'
+                        : data.presentasematafy != undefined
+                        ? data.presentasematafy >= 0 && data.presentasematafy <= 70
+                          ? 'label-ijo'
+                          : data.presentasematafy >= 71 &&
+                            data.presentasematafy <= 90
+                          ? 'label-yellow'
+                          : data.presentasematafy >= 91 &&
+                            data.presentasematafy <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.subpresentasefy >= 0 && data.subpresentasefy <= 70
+                        ? 'label-ijo'
+                        : data.subpresentasefy >= 71 && data.subpresentasefy <= 90
+                        ? 'label-yellow'
+                        : data.subpresentasefy >= 91 && data.subpresentasefy <= 100
+                        ? 'label-red'
+                        : 'label-red'
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
+                </div>
+              </template>
+            </Column>
+            <Column style="min-width: 90px !important; text-align: right">
+              <template #body="{ data }">
+                <div class="flex float-right">
+                  {{
+                    data.kelpresenteaseytd != undefined
+                      ? data.kelpresenteaseytd
+                      : data.presentasemataytd != undefined
+                      ? data.presentasemataytd
+                      : data.subpresentaseytd
+                  }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.kelpresenteaseytd != undefined
+                        ? data.kelpresenteaseytd >= 0 && data.kelpresenteaseytd <= 70
+                          ? 'label-ijo'
+                          : data.kelpresenteaseytd >= 71 &&
+                            data.kelpresenteaseytd <= 90
+                          ? 'label-yellow'
+                          : data.kelpresenteaseytd >= 91 &&
+                            data.kelpresenteaseytd <= 100
+                          ? 'label-orange'
+                          : 'label-red'
+                        : data.presentasemataytd != undefined
+                        ? data.presentasemataytd >= 0 && data.presentasemataytd <= 70
+                          ? 'label-ijo'
+                          : data.presentasemataytd >= 71 &&
+                            data.presentasemataytd <= 90
+                          ? 'label-yellow'
+                          : data.presentasemataytd >= 91 &&
+                            data.presentasemataytd <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.subpresentaseytd >= 0 && data.subpresentaseytd <= 70
+                        ? 'label-ijo'
+                        : data.subpresentaseytd >= 71 && data.subpresentaseytd <= 90
+                        ? 'label-yellow'
+                        : data.subpresentaseytd >= 91 && data.subpresentaseytd <= 100
+                        ? 'label-red'
+                        : 'label-red'
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
+                </div>
+              </template>
+            </Column>
+            <Column style="min-width: 160px !important; text-align: right">
+              <template #body="{ data }">
+                {{
+                  data.totalsisaanggarankelmata != undefined
+                    ? data.totalsisaanggarankelmata != 0
+                      ? data.totalsisaanggarankelmata.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalsisaanggaranmata != undefined
+                    ? data.totalsisaanggaranmata != 0
+                      ? data.totalsisaanggaranmata.toLocaleString("de-DE")
+                      : "-"
+                    : data.totalsubsisanggaran != 0
+                    ? data.totalsubsisanggaran.toLocaleString("de-DE")
+                    : "-"
                 }}
               </template>
             </Column>
@@ -167,53 +437,71 @@
                 }}
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div
-                  :class="
-                    data.fycse != undefined
-                      ? data.fycse >= 0 && data.fycse <= 70
-                        ? 'label-ijo'
-                        : data.fycse >= 71 && data.fycse <= 90
-                        ? 'label-yellow'
-                        : data.fycse >= 91 && data.fycse <= 100
-                        ? 'label-orange'
-                        : 'label-red'
-                      : data.mtfycse >= 0 && data.mtfycse <= 70
-                      ? 'label-ijo'
-                      : data.mtfycse >= 71 && data.mtfycse <= 90
-                      ? 'label-yellow'
-                      : data.mtfycse >= 91 && data.mtfycse <= 100
-                      ? 'label-orange'
-                      : 'label-red'
-                  "
-                >
+                <div class="flex float-right">
                   {{ data.fycse != undefined ? data.fycse : data.mtfycse }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.fycse != undefined
+                        ? data.fycse >= 0 && data.fycse <= 70
+                          ? 'label-ijo'
+                          : data.fycse >= 71 && data.fycse <= 90
+                          ? 'label-yellow'
+                          : data.fycse >= 91 && data.fycse <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.mtfycse >= 0 && data.mtfycse <= 70
+                        ? 'label-ijo'
+                        : data.mtfycse >= 71 && data.mtfycse <= 90
+                        ? 'label-yellow'
+                        : data.mtfycse >= 91 && data.mtfycse <= 100
+                        ? 'label-red'
+                        : 'label-red'
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
                 </div>
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div
-                  :class="
-                    data.ytdcse != undefined
-                      ? data.ytdcse >= 0 && data.ytdcse <= 70
-                        ? 'label-ijo'
-                        : data.ytdcse >= 71 && data.ytdcse <= 90
-                        ? 'label-yellow'
-                        : data.ytdcse >= 91 && data.ytdcse <= 100
-                        ? 'label-orange'
-                        : 'label-red'
-                      : data.mtytdcse >= 0 && data.mtytdcse <= 70
-                      ? 'label-ijo'
-                      : data.mtytdcse >= 71 && data.mtytdcse <= 90
-                      ? 'label-yellow'
-                      : data.mtytdcse >= 91 && data.mtytdcse <= 100
-                      ? 'label-orange'
-                      : 'label-red'
-                  "
-                >
+                <div class="flex float-right">
                   {{ data.ytdcse != undefined ? data.ytdcse : data.mtytdcse }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.ytdcse != undefined
+                        ? data.ytdcse >= 0 && data.ytdcse <= 70
+                          ? 'label-ijo'
+                          : data.ytdcse >= 71 && data.ytdcse <= 90
+                          ? 'label-yellow'
+                          : data.ytdcse >= 91 && data.ytdcse <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.mtytdcse >= 0 && data.mtytdcse <= 70
+                        ? 'label-ijo'
+                        : data.mtytdcse >= 71 && data.mtytdcse <= 90
+                        ? 'label-yellow'
+                        : data.mtytdcse >= 91 && data.mtytdcse <= 100
+                        ? 'label-red'
+                        : 'label-red'
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
                 </div>
               </template>
             </Column>
@@ -238,7 +526,7 @@
                     ? data.nominalrealisasidir != 0
                       ? data.nominalrealisasidir.toLocaleString("de-DE")
                       : "-"
-                    : data.realisasidir != null
+                    : data.realisasidir != 0
                     ? data.realisasidir.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -251,7 +539,7 @@
                     ? data.anggaranfydir != 0
                       ? data.anggaranfydir.toLocaleString("de-DE")
                       : "-"
-                    : data.mataanggaranfydir != null
+                    : data.mataanggaranfydir != 0
                     ? data.mataanggaranfydir.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -264,59 +552,77 @@
                     ? data.anggaranytddir != 0
                       ? data.anggaranytddir.toLocaleString("de-DE")
                       : "-"
-                    : data.mataanggaranytddir != null
+                    : data.mataanggaranytddir != 0
                     ? data.mataanggaranytddir.toLocaleString("de-DE")
                     : "-"
                 }}
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div
-                  :class="
-                    data.fydir != undefined
-                      ? data.fydir >= 0 && data.fydir <= 70
-                        ? 'label-ijo'
-                        : data.fydir >= 71 && data.fydir <= 90
-                        ? 'label-yellow'
-                        : data.fydir >= 91 && data.fydir <= 100
-                        ? 'label-orange'
-                        : 'label-red'
-                      : data.mtfydir >= 0 && data.mtfydir <= 70
-                      ? 'label-ijo'
-                      : data.mtfydir >= 71 && data.mtfydir <= 90
-                      ? 'label-yellow'
-                      : data.mtfydir >= 91 && data.mtfydir <= 100
-                      ? 'label-orange'
-                      : 'label-red'
-                  "
-                >
+                <div class="flex float-right">
                   {{ data.fydir != undefined ? data.fydir : data.mtfydir }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.fydir != undefined
+                        ? data.fydir >= 0 && data.fydir <= 70
+                          ? 'label-ijo'
+                          : data.fydir >= 71 && data.fydir <= 90
+                          ? 'label-yellow'
+                          : data.fydir >= 91 && data.fydir <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.mtfydir >= 0 && data.mtfydir <= 70
+                        ? 'label-ijo'
+                        : data.mtfydir >= 71 && data.mtfydir <= 90
+                        ? 'label-yellow'
+                        : data.mtfydir >= 91 && data.mtfydir <= 100
+                        ? 'label-red'
+                        : 'label-red'
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
                 </div>
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div
-                  :class="
-                    data.ytddir != undefined
-                      ? data.ytddir >= 0 && data.ytddir <= 70
+                <div class="flex float-right">
+                  {{ data.ytddir != undefined ? data.ytddir : data.mtytddir }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.ytddir != undefined
+                        ? data.ytddir >= 0 && data.ytddir <= 70
+                          ? 'label-ijo'
+                          : data.ytddir >= 71 && data.ytddir <= 90
+                          ? 'label-yellow'
+                          : data.ytddir >= 91 && data.ytddir <= 100
+                          ? 'label-orange'
+                          : 'label-red'
+                        : data.mtytddir >= 0 && data.mtytddir <= 70
                         ? 'label-ijo'
-                        : data.ytddir >= 71 && data.ytddir <= 90
+                        : data.mtytddir >= 71 && data.mtytddir <= 90
                         ? 'label-yellow'
-                        : data.ytddir >= 91 && data.ytddir <= 100
+                        : data.mtytddir >= 91 && data.mtytddir <= 100
                         ? 'label-orange'
                         : 'label-red'
-                      : data.mtytddir >= 0 && data.mtytddir <= 70
-                      ? 'label-ijo'
-                      : data.mtytddir >= 71 && data.mtytddir <= 90
-                      ? 'label-yellow'
-                      : data.mtytddir >= 91 && data.mtytddir <= 100
-                      ? 'label-orange'
-                      : 'label-red'
-                  "
-                >
-                  {{ data.ytddir != undefined ? data.ytddir : data.mtytddir }}%
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
                 </div>
               </template>
             </Column>
@@ -327,7 +633,7 @@
                     ? data.sisaanggarandir != 0
                       ? data.sisaanggarandir.toLocaleString("de-DE")
                       : "-"
-                    : data.sisamtanggarandir != null
+                    : data.sisamtanggarandir != 0
                     ? data.sisamtanggarandir.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -341,7 +647,7 @@
                     ? data.nominalrealisasicomm != 0
                       ? data.nominalrealisasicomm.toLocaleString("de-DE")
                       : "-"
-                    : data.realisasicomm != null
+                    : data.realisasicomm != 0
                     ? data.realisasicomm.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -354,8 +660,8 @@
                     ? data.anggaranfycomm != 0
                       ? data.anggaranfycomm.toLocaleString("de-DE")
                       : "-"
-                    : data.mataanggaranfycomm != null
-                    ? data.mataanggaranfycomm.toLocaleString("de-DE")
+                    : data.nominalmataanggarancomfy != 0
+                    ? data.nominalmataanggarancomfy.toLocaleString("de-DE")
                     : "-"
                 }}
               </template>
@@ -367,72 +673,90 @@
                     ? data.anggaranytdcomm != 0
                       ? data.anggaranytdcomm.toLocaleString("de-DE")
                       : "-"
-                    : data.mataanggaranytdcomm != null
+                    : data.mataanggaranytdcomm != 0
                     ? data.mataanggaranytdcomm.toLocaleString("de-DE")
                     : "-"
                 }}
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div
-                  :class="
-                    data.fycomm != undefined
-                      ? data.fycomm >= 0 && data.fycomm <= 70
+                <div class="flex float-right">
+                  {{ data.fycomm != undefined ? data.fycomm : data.mtfycomm }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.mtfycomm != undefined
+                        ? data.mtfycomm >= 0 && data.mtfycomm <= 70
+                          ? 'label-ijo'
+                          : data.mtfycomm >= 71 && data.mtfycomm <= 90
+                          ? 'label-yellow'
+                          : data.mtfycomm >= 91 && data.mtfycomm <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.fycomm >= 0 && data.fycomm <= 70
                         ? 'label-ijo'
                         : data.fycomm >= 71 && data.fycomm <= 90
                         ? 'label-yellow'
                         : data.fycomm >= 91 && data.fycomm <= 100
-                        ? 'label-orange'
+                        ? 'label-red'
                         : 'label-red'
-                      : data.mtfycomm >= 0 && data.mtfycomm <= 70
-                      ? 'label-ijo'
-                      : data.mtfycomm >= 71 && data.mtfycomm <= 90
-                      ? 'label-yellow'
-                      : data.mtfycomm >= 91 && data.mtfycomm <= 100
-                      ? 'label-orange'
-                      : 'label-red'
-                  "
-                >
-                  {{ data.fycomm != undefined ? data.fycomm : data.mtfycomm }}%
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
                 </div>
               </template>
             </Column>
-            <Column style="min-width: 90px !important; text-align: center">
+            <Column style="min-width: 90px !important; text-align: right">
               <template #body="{ data }">
-                <div
-                  :class="
-                    data.ytdcomm != undefined
-                      ? data.ytdcomm >= 0 && data.ytdcomm <= 70
-                        ? 'label-ijo'
-                        : data.ytdcomm >= 71 && data.ytdcomm <= 90
-                        ? 'label-yellow'
-                        : data.ytdcomm >= 91 && data.ytdcomm <= 100
-                        ? 'label-orange'
-                        : 'label-red'
-                      : data.mtytdcomm >= 0 && data.mtytdcomm <= 70
-                      ? 'label-ijo'
-                      : data.mtytdcomm >= 71 && data.mtytdcomm <= 90
-                      ? 'label-yellow'
-                      : data.mtytdcomm >= 91 && data.mtytdcomm <= 100
-                      ? 'label-orange'
-                      : 'label-red'
-                  "
-                >
+                <div class="flex float-right">
                   {{
-                    data.ytdcomm != undefined ? data.ytdcomm : data.mtytdcomm
+                    data.mtytdcomm != undefined ? data.mtytdcomm : data.ytdcomm
                   }}%
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                    :class="
+                      data.ytdcomm != undefined
+                        ? data.ytdcomm >= 0 && data.ytdcomm <= 70
+                          ? 'label-ijo'
+                          : data.ytdcomm >= 71 && data.ytdcomm <= 90
+                          ? 'label-yellow'
+                          : data.ytdcomm >= 91 && data.ytdcomm <= 100
+                          ? 'label-red'
+                          : 'label-red'
+                        : data.mtytdcomm >= 0 && data.mtytdcomm <= 70
+                        ? 'label-ijo'
+                        : data.mtytdcomm >= 71 && data.mtytdcomm <= 90
+                        ? 'label-yellow'
+                        : data.mtytdcomm >= 91 && data.mtytdcomm <= 100
+                        ? 'label-red'
+                        : 'label-red'
+                    "
+                  >
+                    <path
+                      d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"
+                    />
+                  </svg>
                 </div>
               </template>
             </Column>
             <Column style="min-width: 160px !important; text-align: right">
               <template #body="{ data }">
                 {{
-                  data.sisaanggarancomm != null
+                  data.sisaanggarancomm != undefined
                     ? data.sisaanggarancomm != 0
                       ? data.sisaanggarancomm.toLocaleString("de-DE")
                       : "-"
-                    : data.sisamtanggarancomm != null
+                    : data.sisamtanggarancomm != 0
                     ? data.sisamtanggarancomm.toLocaleString("de-DE")
                     : "-"
                 }}
@@ -495,6 +819,7 @@ export default {
       }
     },
     async getMataAnggaran() {
+      this.Filters.kdmatanggaran = "";
       let payload = {
         kdkelmatanggaran: this.Filters.kdkelmatanggaran,
       };
@@ -540,19 +865,36 @@ export default {
       let hari = days[d.getDay()];
 
       this.tanggalLengkap =
-        hari + ", " + namaBulan + " " + d.getDay() + ", " + this.tahun;
+        hari + ", " + namaBulan + " " + d.getDate() + ", " + this.tahun;
     },
     async getData() {
-      let payload = {
-        kdmatanggaran: this.Filters.kdmatanggaran,
-        kdkelmatanggaran: this.Filters.kdkelmatanggaran,
-      };
-      try {
-        let res = await serviceReport.laporanRealisasi(payload, this.token);
+      if (this.Filters.kdkelmatanggaran == "") {
+        this.listLaporan = null;
+        return this.$swal({
+          icon: "info",
+          title: "Pemberitahuan",
+          text: "Pilih Kelompok Mata Anggaran Terlebih Dahulu",
+          confirmButtonColor: "#e77817",
+        });
+      }
+      if (this.Filters.kdmatanggaran == "") {
+        this.listLaporan = null;
+        return this.$swal({
+          icon: "info",
+          title: "Pemberitahuan",
+          text: "Pilih Mata Anggaran Terlebih Dahulu",
+          confirmButtonColor: "#e77817",
+        });
+      }
 
+      try {
+        let res = await serviceReport.laporanRealisasi(
+          this.Filters,
+          this.token
+        );
         this.listLaporan = res.data.data;
-        console.log(this.listLaporan);
       } catch (error) {
+        this.listLaporan = null;
         console.log(error);
       }
     },
@@ -563,6 +905,9 @@ export default {
         ? "color-mataanggaran"
         : "";
     },
+    getClassHead(data) {
+      console.log(data);
+    },
   },
   mounted() {
     this.getTahun();
@@ -572,21 +917,27 @@ export default {
 </script>
 <style>
 .label-ijo {
-  color: rgb(6, 165, 6);
+  fill: rgb(45, 220, 45);
+  margin-left: 3px;
 }
 .label-yellow {
-  color: rgb(245, 195, 17);
+  fill: rgb(245, 195, 17);
+  margin-left: 3px;
 }
 .label-orange {
-  color: rgb(255, 94, 0);
+  fill: rgb(255, 94, 0);
+  margin-left: 3px;
 }
 .label-red {
-  color: rgb(241, 0, 0);
+  fill: rgb(241, 0, 0);
+  margin-left: 3px;
 }
 .color-mataanggaran {
-  background-color: rgb(94, 198, 240) !important;
+  background-color: rgb(93, 113, 121) !important;
+  color: #fff !important;
 }
 .color-kmataanggaran {
-  background-color: rgb(15, 185, 252) !important;
+  background-color: rgb(160, 166, 169) !important;
+  color: #fff !important;
 }
 </style>

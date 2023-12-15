@@ -159,11 +159,11 @@
               <template #body="{ data }">
                 <div>
                   {{
-                    data.tanggal_pengajuan.split("T")[0].split("-")[2] +
+                    data.tanggal_pengajuan.split("T")[0].split("-")[0] +
                     "-" +
                     data.tanggal_pengajuan.split("T")[0].split("-")[1] +
                     "-" +
-                    data.tanggal_pengajuan.split("T")[0].split("-")[0]
+                    data.tanggal_pengajuan.split("T")[0].split("-")[2]
                   }}
                 </div>
               </template>
@@ -189,12 +189,12 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
                     class="bg-transparent border-0"
-                    title="Detail Realisasi"
+                    title="Upload Lampiran Pengajuan Realisasi"
                     @click="detailView(data)"
                   >
                     <svg
@@ -277,7 +277,7 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Pengajuan Biaya <span class="text-red-600">*</span>
+              Pengajuan Pembayaran <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.id_pengajuan"
@@ -285,18 +285,24 @@
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               :disabled="preview.jenisPengajuan == ''"
             >
-              <option value="">-- Pilih Pengajuan Biaya --</option>
+              <option value="">-- Pilih Pengajuan Pembayaran --</option>
               <option
                 v-for="(item, index) in getRowPengajuan"
                 :key="index"
                 :value="item"
               >
                 {{
-                  item.kode_sub_mata_anggaran +
-                  " - " +
-                  item.prefix_kegiatan +
-                  " - " +
-                  item.uraian_kegiatan
+                  preview.jenisPengajuan == "PBI"
+                    ? item.kode_sub_mata_anggaran +
+                      " - " +
+                      item.prefix_kegiatan +
+                      " - " +
+                      item.uraian_kegiatan
+                    : item.kode_sub_mata_anggaran +
+                      " - " +
+                      item.prefix_kegiatan +
+                      " - " +
+                      item.uraian
                 }}
               </option>
             </select>
@@ -398,10 +404,10 @@
               @input="validationNominal"
               placeholder=""
               class="w-full"
-              :disabled="preview.nominal <= 0"
+              disabled
             />
           </div>
-          <div class="">
+          <div class="" v-show="false">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
@@ -521,11 +527,19 @@
             <div class="">
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Entitas</p>
-                <p class="text-base">{{ detail.nama_entitas }}</p>
+                <p class="text-base">
+                  {{ detail.nama_entitas + " - " + detail.kode_entitas }}
+                </p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
-                <p class="text-base">{{ detail.nama_sub_mata_anggaran }}</p>
+                <p class="text-base">
+                  {{
+                    detail.kode_sub_mata_anggaran +
+                    " - " +
+                    detail.nama_sub_mata_anggaran
+                  }}
+                </p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Jenis Pengajuan</p>
@@ -647,7 +661,7 @@
                   v-if="detail.pkp == 0"
                   v-show="jenisPengajuan.FileLampiran == ''"
                 >
-                  Lampiran
+                  Lampiran Non PKP
                 </option>
               </select>
             </div>
@@ -768,6 +782,7 @@ export default {
         pkp: "",
         nomor_faktur: "",
         tanggal_faktur: "",
+        jenis_pengajuan: "",
       },
       jenisPengajuan: {
         SPK: "",
@@ -783,7 +798,7 @@ export default {
       },
       buttonActive: true,
       detail: { pkp: "" },
-      loading: true,
+      loading: false,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -892,7 +907,11 @@ export default {
         nominal: this.Form.id_pengajuan.nominal_pengajuan,
         jenisPengajuan: this.preview.jenisPengajuan,
       };
-
+      if (this.preview.jenisPengajuan == "PK") {
+        this.Form.keterangan = this.Form.id_pengajuan.uraian;
+      } else {
+        this.Form.keterangan = this.Form.id_pengajuan.uraian_kegiatan;
+      }
       this.Form.nominal = this.preview.nominal;
     },
     async getPengajuan() {
@@ -1004,11 +1023,11 @@ export default {
       Forminput.kode_pengajuan = this.preview.kode_pengajuan;
       Forminput.user_id = this.userSession.username;
       Forminput.id_pengajuan = Forminput.id_pengajuan.id;
-
+      Forminput.jenis_pengajuan = this.preview.jenisPengajuan;
       this.v$.$validate(); // checks all inputs
       if (!this.v$.Form.$error) {
         let tanggal = new Date(Forminput.tanggal_pengajuan);
-        if (Forminput.tanggal_faktur != "") {
+        if (Forminput.tanggal_faktur != undefined) {
           let tanggalFaktur = new Date(Forminput.tanggal_faktur);
           let yearF = tanggalFaktur.getFullYear();
           let dayF = tanggalFaktur.getDate();
@@ -1168,7 +1187,7 @@ export default {
   },
   mounted() {
     initFlowbite();
-    this.getData();
+    // this.getData();
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <ToggleButton
     v-model="getCheck"
     :disabled="getCheck != false"
-    onLabel="Tervalidasi"
+    :onLabel="getLabelTrue"
     offLabel="Belum di validasi"
     @click="getValToggle()"
   />
@@ -36,6 +36,11 @@ export default {
       } else {
         return true;
       }
+    },
+    getLabelTrue() {
+      return this.nilaiStatus == 2
+        ? "Digunakan"
+        : "Tervalidasi"
     },
   },
   methods: {

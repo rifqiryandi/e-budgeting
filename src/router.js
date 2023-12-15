@@ -125,7 +125,7 @@ switch (namaAkses) {
       {
         path: "/pengajuanKomitmen",
         alias: "/pengajuanKomitmen",
-        name: "Pengajuan Komitmen",
+        name: "Pengajuan Termin",
         component: () => import("./components/page/officer/transaksi/PengajuanKomitmen.vue"),
       },
       {
@@ -157,7 +157,13 @@ switch (namaAkses) {
         alias: "/realisasianggaran",
         name: "Realisasi Anggaran",
         component: () => import("./components/page/officer/transaksi/PengajuanRealisasi.vue"),
-      }
+      },
+      {
+        path: "/laporanRealisasi",
+        alias: "/laporanRealisasi",
+        name: "Laporan Realisasi",
+        component: () => import("./components/page/officer/laporan/LaporanRealisasi.vue"),
+      },
 
 
     ];
@@ -216,7 +222,13 @@ switch (namaAkses) {
         alias: "/realisasianggaran",
         name: "Realisasi Anggaran",
         component: () => import("./components/page/departemenHead/transaksi/PengajuanRealisasi.vue"),
-      }
+      },
+      {
+        path: "/laporanRealisasi",
+        alias: "/laporanRealisasi",
+        name: "Laporan Realisasi",
+        component: () => import("./components/page/departemenHead/laporan/LaporanRealisasi.vue"),
+      },
 
     ];
     break;

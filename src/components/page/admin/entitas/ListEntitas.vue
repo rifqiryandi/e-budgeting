@@ -79,7 +79,7 @@
                 />
               </template>
             </Column>
-            <Column field="" header="Aksi" style="width: 10%">
+            <Column field="" header="Task" style="width: 10%">
               <template #body="{ data }">
                 <button
                   class="bg-transparent mr-2"

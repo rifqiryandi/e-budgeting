@@ -145,11 +145,11 @@
               <template #body="{ data }">
                 <div>
                   {{
-                    data.tanggal_pengajuan.split("T")[0].split("-")[2] +
+                    data.tanggal_pengajuan.split("T")[0].split("-")[0] +
                     "-" +
                     data.tanggal_pengajuan.split("T")[0].split("-")[1] +
                     "-" +
-                    data.tanggal_pengajuan.split("T")[0].split("-")[0]
+                    data.tanggal_pengajuan.split("T")[0].split("-")[2]
                   }}
                 </div>
               </template>
@@ -175,7 +175,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -266,7 +266,7 @@
             <div class="">
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Entitas</p>
-                <p class="text-base">{{ detail.nama_entitas }}</p>
+                <p class="text-base">{{ detail.nama_entitas + " - " + detail.kode_entitas }}</p>
               </div>
               <div class="mb-1">
                 <p class="text-lg font-semibold mb-0">Sub Mata Anggaran</p>
@@ -518,7 +518,7 @@ export default {
       },
       buttonActive: true,
       detail: {},
-      loading: true,
+      loading: false,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -575,16 +575,18 @@ export default {
         id_realisasi: this.detail.id_realisasi,
         status: 2,
         tanggal_pengajuan:
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[0] +
+          this.detail.tanggal_pengajuan.split("T")[0].split("-")[2] +
           "-" +
           this.detail.tanggal_pengajuan.split("T")[0].split("-")[1] +
           "-" +
-          this.detail.tanggal_pengajuan.split("T")[0].split("-")[2],
+          this.detail.tanggal_pengajuan.split("T")[0].split("-")[0],
         kode_buku: this.detail.kode_buku,
         userid: this.userSession.username,
         tanggal_realisasi: "1900-01-01",
         status_validasi: 1,
       };
+      console.log(this.detail.tanggal_pengajuan);
+      console.log(payload);
 
       this.$swal({
         icon: "question",
@@ -774,7 +776,7 @@ export default {
   },
   mounted() {
     initFlowbite();
-    this.getData();
+    // this.getData();
     this.getPengajuan();
   },
 };

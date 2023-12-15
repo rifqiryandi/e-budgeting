@@ -1,48 +1,16 @@
 <template>
-  <!-- <div class="row">
+  <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          <div class="grid grid-cols-1">
             <div class="">
               <label
                 class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
               >
-                Sub Mata Anggaran
+                Tahun
               </label>
-              <select
-                v-model="filters.kdsubmatanggaran"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="">-- Pilih Sub Mata Anggaran --</option>
-                <option
-                  v-for="(item, index) in getSMataAnggaran"
-                  :key="index"
-                  :value="item.kode_sub_mata_anggaran"
-                >
-                  {{ item.nama_sub_mata_anggaran }}
-                </option>
-              </select>
-            </div>
-            <div class="">
-              <label
-                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
-              >
-                Departemen
-              </label>
-              <select
-                v-model="filters.kddepartemen"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="">-- Pilih departemen --</option>
-                <option
-                  v-for="(item, index) in getDepartemen"
-                  :key="index"
-                  :value="item.kode_departement"
-                >
-                  {{ item.nama_departement }}
-                </option>
-              </select>
+              <VueDatePicker v-model="filters.tahun" auto-apply year-picker />
             </div>
           </div>
           <button
@@ -62,7 +30,7 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
   <div class="row">
     <div class="col-12 d-flex justify-content-end">
       <button class="btn d-flex btn-add" @click="showInput">
@@ -87,10 +55,8 @@
           <DataTable
             :value="getAllData"
             lazy
-            paginator
             :rows="pagination.perPage"
             :totalRecords="pagination.totaldata"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
             paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
             currentPageReportTemplate="{first} to {last} of {totalRecords}"
             tableStyle="min-width: 50rem"
@@ -238,16 +204,15 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Persentasi <span class="text-red-600">*</span>
+              Persentasi (%)<span class="text-red-600">*</span>
             </label>
             <InputNumber
               v-model="Form.presentasi"
               placeholder="Masukkan Persentasi"
               class="w-full"
               :useGrouping="false"
-              prefix="%"
               :min="0"
-              :max="100"
+              :max="batasPersen"
               @input="calculationNominal"
             />
             <p
@@ -349,9 +314,10 @@ export default {
         kdsubmatanggaran: "",
         kddepartemen: "",
         cari: "",
+        tahun: "",
       },
       pagination: {
-        perPage: 5,
+        perPage: 12,
         currentPage: 1,
         totaldata: 0,
       },
@@ -366,6 +332,7 @@ export default {
         nominal: "",
       },
       loading: true,
+      batasPersen: 100,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
     };
   },
@@ -420,12 +387,12 @@ export default {
     },
     calculationNominal(evt) {
       // let kaliValue;
-      if (evt.value > 100) {
-        this.Form.presentasi = 100;
+      if (evt.value > this.batasPersen) {
+        this.Form.presentasi = this.batasPersen;
         return this.$swal({
           icon: "info",
           title: "Pemberitahuan",
-          text: "Tidak boleh lebih dari 100%",
+          text: "Tidak boleh lebih dari sisa persen :" + this.batasPersen + "%",
           confirmButtonColor: "#e77817",
         });
       } else {
@@ -448,7 +415,10 @@ export default {
       }
     },
     async getAllDepartemen() {
-      let payload = {};
+      let payload = {
+        entitas: "",
+        status: "",
+      };
       try {
         let respon = await serviceDepartemen.getDataDepartemen(
           payload,
@@ -465,7 +435,10 @@ export default {
       }
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,
@@ -500,7 +473,9 @@ export default {
         perPage: this.pagination.perPage,
         currentPage: this.pagination.currentPage,
         cari: this.filters.cari,
+        tahun: this.filters.tahun,
       };
+
       try {
         let res = await serviceAnggaran.getListPresentasiAnggaran(
           payload,
@@ -508,6 +483,15 @@ export default {
         );
         this.pagination.totaldata = res.data.data.total_data;
         this.ListPersentasi = res.data.data.data;
+        let persen = 0;
+        for (let i = 0; i < res.data.data.data.length; i++) {
+          persen = Number(persen) + Number(res.data.data.data[i].presentasi);
+        }
+        console.log(Number(persen));
+        this.batasPersen = 100;
+        this.batasPersen = Number(this.batasPersen) - Number(persen);
+        console.log(this.batasPersen);
+
         this.loading = false;
       } catch (error) {
         this.ListPersentasi = null;

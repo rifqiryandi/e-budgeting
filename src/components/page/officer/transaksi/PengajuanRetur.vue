@@ -22,7 +22,11 @@
                   :key="index"
                   :value="item.kode_sub_mata_anggaran"
                 >
-                  {{ item.nama_sub_mata_anggaran }}
+                  {{
+                    item.kode_sub_mata_anggaran +
+                    " - " +
+                    item.nama_sub_mata_anggaran
+                  }}
                 </option>
               </select>
             </div>
@@ -107,7 +111,11 @@
             >
               <template #body="{ data }">
                 <div style="font-weight: 600">
-                  {{ data.nama_sub_mata_anggaran }}
+                  {{
+                    data.kode_sub_mata_anggaran +
+                    " - " +
+                    data.nama_sub_mata_anggaran
+                  }}
                 </div>
               </template>
             </Column>
@@ -148,7 +156,7 @@
                 {{ data.nominal.toLocaleString("de-DE") }}
               </template>
             </Column>
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -175,7 +183,7 @@
       </div>
     </div>
   </div>
-  <!-- Modal Insert pengajuan biaya -->
+  <!-- Modal retur pengajuan biaya -->
   <div
     id="detail-modal"
     tabindex="-1"
@@ -189,7 +197,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Pengajuan Biaya
+            Pengajuan Retur
           </h3>
           <button
             type="button"
@@ -235,9 +243,8 @@
               class="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">-- Pilih Jenis Pengajuan --</option>
-              <option value="PBI">Pengajuan Biasa</option>
-              <option value="PK">Pengajuan Komitmen</option>
-              <option value="PB">Pengajuan Baru</option>
+              <option value="PBI">Beban Reguler</option>
+              <option value="PK">Beban Komitmen</option>
             </select>
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -385,6 +392,9 @@ export default {
         kdsubmatanggaran: "",
         cari: "",
         status: "",
+        bulan: new Date().getMonth() + 1,
+        
+        kddepartemen: "",
       },
       pagination: {
         perPage: 5,
@@ -403,6 +413,10 @@ export default {
       },
       Detail: {
         alasan: "",
+      },
+      filterForm: {
+        kdkelmatanggaran: "",
+        kdmatanggaran: "",
       },
       loading: true,
       userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
@@ -457,6 +471,8 @@ export default {
         idkegiatan: "",
         status: 1,
         kddepartemen: this.userSession.departemen,
+        bulan: this.filters.bulan,
+        kdsubmatanggaran: this.filters.kdsubmatanggaran,
       };
       try {
         let res = await serviceAnggaran.getKegiatan(payload, this.token);
@@ -499,7 +515,10 @@ export default {
       this.refreshListTable();
     },
     async getSubMataAnggaran() {
-      let payload = {};
+      let payload = {
+        kdkelmatanggaran: this.filterForm.kdkelmatanggaran,
+        kdmatanggaran: this.filterForm.kdmatanggaran,
+      };
       try {
         let res = await serviceSMataAnggaran.getDataSubMataAnggaran(
           payload,
@@ -565,11 +584,22 @@ export default {
       if (!this.v$.Form.$error) {
         Forminput.sisa_nominal =
           Number(this.Form.sisa_nominal) - Number(this.Form.nominal);
+          console.log(Forminput);
         Forminput.id_anggaran =
           this.Form.id_kegiatan.id_anggaran.toLocaleString();
-        Forminput.id_kegiatan = this.Form.id_kegiatan.id.toLocaleString();
+        let payload = {
+          id : Forminput.id,
+          id_anggaran : Forminput.id_anggaran,
+          id_kegiatan : Forminput.id_kegiatan.id,
+          jnspengajuan : Forminput.jnspengajuan,
+          nominal : Forminput.nominal,
+          sisa_nominal : Forminput.sisa_nominal,
+          uraian_kegiatan : Forminput.uraian_kegiatan,
+          userid : Forminput.userid
+        }
+        // console.log(payload);
         try {
-          let respon = await serviceAnggaran.inputRetur(Forminput, this.token);
+          let respon = await serviceAnggaran.inputRetur(payload, this.token);
           this.modal.hide();
           this.$swal({
             icon: "success",

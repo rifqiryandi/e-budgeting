@@ -106,7 +106,7 @@
                   </div>
                   <div
                     class="label-Aktif"
-                    v-else-if="data.status_pengajuan == 1"
+                    v-else-if="data.status_pengajuan == 1 || data.status_pengajuan == 3"
                   >
                     Tervalidasi
                   </div>
@@ -153,7 +153,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <div style="font-weight: 600">
                   <button
@@ -195,7 +195,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Pengajuan Komitmen
+            Pengajuan Termin
           </h3>
           <button
             type="button"
@@ -342,7 +342,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Pengajuan Komitmen Kembali
+            Pengajuan Termin Kembali
           </h3>
           <button
             type="button"
@@ -619,6 +619,7 @@ export default {
         }
         FormData.sisa_nominal =
           Number(this.FormRetur.sisa_nominal) - Number(this.FormRetur.nominal);
+          console.log(FormData);
         if (FormData.sisa_nominal == 0) {
           FormData.cek = "habis";
         }
@@ -854,4 +855,8 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.dp__month_picker_header{
+  display: none !important;
+}
+</style>

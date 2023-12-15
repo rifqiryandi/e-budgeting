@@ -1,5 +1,66 @@
 <template>
   <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="space-y-2">
+            <div class="w-full">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Entitas
+              </label>
+              <select
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                v-model="filters.entitas"
+              >
+                <option value="">--Pilih Entitas--</option>
+                <option
+                v-for="(item, index) in getEntitas"
+                :key="index"
+                :value="item.kode_entitas"
+              >
+                {{ item.nama_entitas }}
+              </option>
+              </select>
+            </div>
+            <div class="w-full mb-2">
+              <label
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
+              >
+                Status
+              </label>
+              <select
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                v-model="filters.status"
+              >
+                <option value="">--Pilih Status--</option>
+                <option value="1">Aktif</option>
+                <option value="0">Non-Aktif</option>
+              </select>
+            </div>
+            <div>
+              <button
+                class="w-full"
+                style="
+                  border-radius: 6px;
+                  background: #006699;
+                  color: #ffff;
+                  height: 48px;
+                  padding-top: 11px;
+                  padding-bottom: 11px;
+                "
+                @click="getData"
+              >
+                Tampilkan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-12 d-flex justify-content-end">
       <button class="btn d-flex btn-add" @click="showInput">
         <svg
@@ -46,7 +107,7 @@
             <template #loading> Loading data. Please wait. </template>
             <Column
               field="kode_departement"
-              header="Kode Departemen"
+              header="Sub Rubrik"
               style="width: 20%"
             >
               <template #body="{ data }">
@@ -82,7 +143,7 @@
                 />
               </template>
             </Column>
-            <Column field="" header="Aksi" style="width: 10%">
+            <Column field="" header="Task" style="width: 10%">
               <template #body="{ data }">
                 <button
                   class="bg-transparent mr-2"
@@ -100,7 +161,7 @@
                     />
                   </svg>
                 </button>
-                <button
+                <!-- <button
                   class="bg-transparent"
                   title="HAPUS"
                   @click="deleteDepartemen(data)"
@@ -115,7 +176,7 @@
                       d="M292.309-140.001q-29.923 0-51.115-21.193-21.193-21.192-21.193-51.115V-720h-40v-59.999H360v-35.384h240v35.384h179.999V-720h-40v507.691q0 30.308-21 51.308t-51.308 21H292.309ZM680-720H280v507.691q0 5.385 3.462 8.847 3.462 3.462 8.847 3.462h375.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463V-720ZM376.155-280h59.999v-360h-59.999v360Zm147.691 0h59.999v-360h-59.999v360ZM280-720v520-520Z"
                     />
                   </svg>
-                </button>
+                </button> -->
               </template>
             </Column>
           </DataTable>
@@ -492,6 +553,8 @@ export default {
       rowEntitas: null,
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        status: "",
+        entitas:""
       },
       Form: {
         entitas: "",
@@ -499,7 +562,7 @@ export default {
         rubrik: "",
         userid: "",
         status: "",
-        kode_depart : ""
+        kode_depart: "",
       },
       idKey: "",
       loading: true,
@@ -561,9 +624,10 @@ export default {
     },
     async getData() {
       this.loading = true;
-
+      this.ListDepartemen = null
       let payload = {
-        entitas: "",
+        entitas: this.filters.entitas,
+        status : this.filters.status,
       };
       try {
         let respon = await serviceDepartemen.getDataDepartemen(
@@ -604,7 +668,7 @@ export default {
       let Forminput = this.Form;
       Forminput.userid = this.userSession.username;
       Forminput.status = 1;
-      Forminput.kode_depart = Forminput.rubrik + Forminput.entitas
+      Forminput.kode_depart = Forminput.rubrik + Forminput.entitas;
       this.v$.$validate(); // checks all inputs
 
       if (!this.v$.$error) {
@@ -614,7 +678,6 @@ export default {
             this.token
           );
 
-          console.log(respon);
           this.modal.hide();
           this.$swal({
             icon: "success",
@@ -657,12 +720,15 @@ export default {
           text: respon.data.Msg,
           confirmButtonColor: "#e77817",
         });
-        this.refreshListTable();
+        // this.refreshListTable();
+        this.getData();
       } catch (error) {
+        console.log(error);
+        this.modal.hide();
         this.$swal({
           icon: "error",
           title: "Gagal",
-          text: error.response.data.Msg,
+          text: "Sudah Terdapat Aktivitas Transaksi",
           confirmButtonColor: "#e77817",
         });
       }
@@ -673,7 +739,7 @@ export default {
       if (!this.v$.$error) {
         Forminput.id = this.idKey;
         Forminput.userid = this.userSession.username;
-        Forminput.kddepart = Forminput.rubrik + Forminput.entitas
+        Forminput.kddepart = Forminput.rubrik + Forminput.entitas;
         try {
           let respon = await serviceDepartemen.updateDepartemen(
             Forminput,

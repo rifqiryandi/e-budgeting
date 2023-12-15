@@ -37,78 +37,105 @@ export default {
   },
   methods: {
     async getValToggle() {
-      let payload;
-      if (this.checked) {
-        payload = {
-          id: this.keyId,
-          status: 1,
-        };
-      } else {
-        payload = {
-          id: this.keyId,
-          status: 0,
-        };
-      }
-      switch (this.urlApi) {
-        case "User":
-          try {
-            await serviceUser.ubahStatus(payload, this.token);
-          } catch (error) {
-            console.log(error);
+      console.log(this.checked);
+      this.$swal({
+        icon: "question",
+        title: "Ubah Status",
+        text : "Yakin ingin Ubah Status?",
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonColor: "#008073",
+        cancelButtonColor: "grey",
+        confirmButtonText: "Ubah",
+        cancelButtonText: "Batal",
+        customClass: {
+          actions: "my-actions",
+          cancelButton: "order-2 right-gap",
+          confirmButton: "order-1",
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let payload;
+          if (this.checked) {
+            payload = {
+              id: this.keyId,
+              status: 1,
+            };
+          } else {
+            payload = {
+              id: this.keyId,
+              status: 0,
+            };
           }
-          break;
-        case "Entitas":
-          try {
-            await serviceEntitas.ubahStatus(payload, this.token);
-          } catch (error) {
+          switch (this.urlApi) {
+            case "User":
+              try {
+                await serviceUser.ubahStatus(payload, this.token);
+              } catch (error) {
+                console.log(error);
+              }
+              break;
+            case "Entitas":
+              try {
+                await serviceEntitas.ubahStatus(payload, this.token);
+              } catch (error) {
+                this.checked = true;
+                await this.responError(error);
+                console.log(error);
+              }
+              break;
+            case "Departemen":
+              try {
+                await serviceDepartemen.ubahStatus(payload, this.token);
+              } catch (error) {
+                this.checked = true;
+                await this.responError(error);
+                console.log(error);
+              }
+              break;
+            case "KMataAnggaran":
+              try {
+                await serviceKMataAnggaran.ubahStatus(payload, this.token);
+              } catch (error) {
+                this.checked = true;
+                await this.responError(error);
+                console.log(error);
+              }
+              break;
+            case "MataAnggaran":
+              try {
+                await serviceMataAnggaran.ubahStatus(payload, this.token);
+              } catch (error) {
+                this.checked = true;
+                await this.responError(error);
+                console.log(error);
+              }
+              break;
+            case "SMataAnggaran":
+              try {
+                await serviceSMataAnggaran.ubahStatus(payload, this.token);
+              } catch (error) {
+                this.checked = true;
+                await this.responError(error);
+                console.log(error);
+              }
+              break;
+          }
+        } else {
+          if (this.checked == false) {
             this.checked = true;
-            await this.responError(error);
-            console.log(error);
+          } else {
+            this.checked = false;
           }
-          break;
-        case "Departemen":
-          try {
-            await serviceDepartemen.ubahStatus(payload, this.token);
-          } catch (error) {
-            this.checked = true;
-            await this.responError(error);
-            console.log(error);
-          }
-          break;
-        case "KMataAnggaran":
-          try {
-            await serviceKMataAnggaran.ubahStatus(payload, this.token);
-          } catch (error) {
-            this.checked = true;
-            await this.responError(error);
-            console.log(error);
-          }
-          break;
-        case "MataAnggaran":
-          try {
-            await serviceMataAnggaran.ubahStatus(payload, this.token);
-          } catch (error) {
-            this.checked = true;
-            await this.responError(error);
-            console.log(error);
-          }
-          break;
-        case "SMataAnggaran":
-          try {
-            await serviceSMataAnggaran.ubahStatus(payload, this.token);
-          } catch (error) {
-            this.checked = true;
-            await this.responError(error);
-            console.log(error);
-          }
-          break;
-      }
+        }
+      });
     },
     async responError(error) {
+      console.log(error);
       await this.$swal({
         icon: "info",
         title: "GAGAL",
-        text: error.response.data.Msg,
+        text: "Sudah Terdapat Aktivitas Transaksi",
         confirmButtonColor: "#e77817",
       });
     },

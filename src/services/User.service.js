@@ -1,13 +1,13 @@
 import http from "../conf-http";
 
 class UserService {
-  getDataUser(token) {
+  getDataUser(data,token) {
     var config = {
       headers: {
         "x-access-token": token
       }
     }
-    return http.post("users/listuser", {}, config);
+    return http.post("users/listuser", data, config);
   }
 
   tambahDataUser(data, token) {
