@@ -3,6 +3,8 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          <h3 style="font-weight: 500">Pencarian</h3>
+          <hr />
           <div class="space-y-6">
             <div class="w-full">
               <label

@@ -2,25 +2,23 @@
 
 ![Example](example1.png)
 
-## Project setup
+## Project setup for development
 ```
-npm install
+- npm install
+- npm run serve
+
 ```
 
-### Compiles and hot-reloads for development
+## Project setup for production
 ```
-npm run serve
-```
+- change env file VUE_APP_URL="--your-endpoint-url"
+- npm install
+- npm run build
+- docker build -t ebudgeting/web .
+- docker run -d -p 8000:80 --name ebudgeting-web ebudgeting/web
 
-### Compiles and minifies for production
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## note for optimal
+- setelah di build pisahkan folder dist dan dockerfile dari folder source code lalu jalankan command docker
+- delete folder source code dari server
+- simpan source code hanya di repository github/gitlab
