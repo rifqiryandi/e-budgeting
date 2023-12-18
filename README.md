@@ -19,6 +19,6 @@
 
 ```
 ## note for optimal
-- setelah di build pisahkan folder dist dan dockerfile dari folder source code lalu jalankan command docker
+- setelah di build pisahkan folder dist, file dockerfile dan file nginx.conf dari folder source code lalu jalankan command docker
 - delete folder source code dari server
 - simpan source code hanya di repository github/gitlab
