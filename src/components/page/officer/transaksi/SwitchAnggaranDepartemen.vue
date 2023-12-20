@@ -211,7 +211,7 @@
                 </div>
               </template>
             </Column>
-            <Column field="" header="">
+            <Column field="" header="Task">
               <template #body="{ data }">
                 <button
                   class="bg-transparent border-0"

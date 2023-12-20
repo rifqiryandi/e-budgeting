@@ -585,8 +585,7 @@ export default {
         tanggal_realisasi: "1900-01-01",
         status_validasi: 1,
       };
-      console.log(this.detail.tanggal_pengajuan);
-      console.log(payload);
+      
 
       this.$swal({
         icon: "question",

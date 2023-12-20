@@ -235,7 +235,7 @@
           class="flex items-center justify-between p-3 border-b rounded-t dark:border-gray-600 bg-bni-orange"
         >
           <h3 class="text-xl font-medium" style="color: #fff">
-            Detail Pengajuan Biaya
+            Detail Switch Sub Mata Anggaran
           </h3>
           <button
             type="button"
