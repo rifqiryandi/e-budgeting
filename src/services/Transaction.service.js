@@ -312,6 +312,25 @@ class TransactionService {
         return http.post("upload/listfilerealisasi", data, config);
     }
 
+    downloadFile(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token,
+            },
+            responseType: "blob",
+        }
+        return http.post("download", data, config);
+    }
+    downloadFileRealisasi(data, token) {
+        var config = {
+            headers: {
+                "x-access-token": token,
+            },
+            responseType: "blob",
+        }
+        return http.post("downloadrealisasi", data, config);
+    }
+
 
 }
 

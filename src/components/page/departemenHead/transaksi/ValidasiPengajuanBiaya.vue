@@ -322,7 +322,7 @@
             </div>
             <button
               class="download-style w-full lg:w-1/4 lg:mt-1"
-              @click="downloadLinkFile(listFile[0].link)"
+              @click="downloadLinkFile(listFile[0].kode_unik, listFile[0].lampiran)"
             >
               Download
             </button>
@@ -422,8 +422,21 @@ export default {
     },
   },
   methods: {
-    downloadLinkFile(link) {
-      window.open(link, "_blank", "noreferrer");
+    async downloadLinkFile(kode, lampiran) {
+      let payload = {
+        kode_unik : kode,
+        lampiran : lampiran
+      }
+      try {
+        let res = await serviceTransaksi.downloadFile(payload, this.token)
+        const blob = new Blob([res.data], { type: res.headers['content-type'] });        
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = lampiran;
+        link.click();
+      } catch (error) {
+        console.log(error);
+      }
     },
     async prosesRetur() {
       let payload = {

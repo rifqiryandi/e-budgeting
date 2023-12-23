@@ -27,6 +27,8 @@ class FileService {
         }
         return http.post("upload/getfile", data, config);
     }
+
+    
 }
 
 export default new FileService();
