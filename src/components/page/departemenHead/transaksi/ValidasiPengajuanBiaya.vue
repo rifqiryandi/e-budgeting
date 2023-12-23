@@ -428,7 +428,7 @@ export default {
         lampiran : lampiran
       }
       try {
-        let res = await serviceTransaksi.downloadFile(payload, this.token)
+        let res = await serviceAnggaran.downloadFile(payload, this.token)
         const blob = new Blob([res.data], { type: res.headers['content-type'] });        
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
