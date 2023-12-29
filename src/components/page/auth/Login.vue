@@ -20,7 +20,6 @@
           </div>
           <div
             class="form-login col-lg-6 col-md-12 col-12 d-flex justify-content-center flex items-center"
-            style="height: 60vh"
           >
             <div class="blockCstm">
               <label class="form-label">Username</label>
@@ -38,7 +37,7 @@
                 "
               />
               <p
-                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0 text-center"
+                class="mt-1 text-xs text-red-600 dark:text-red-500 m-0 text-center"
                 v-if="this.v$.user.username.$error"
               >
                 Username tidak boleh kosong!
@@ -52,12 +51,12 @@
                 placeholder="Masukkan Password ..."
               />
               <p
-                class="mt-2 text-sm text-red-600 dark:text-red-500 m-0 text-center"
+                class="mt-1 text-xs text-red-600 dark:text-red-500 m-0 text-center"
                 v-if="this.v$.user.password.$error"
               >
                 Password tidak boleh kosong!
               </p>
-              <div class="d-flex justify-content-center m-10">
+              <div class="d-flex justify-content-center cstm-btn-style">
                 <button type="submit" class="button-style" @click="login">
                   LOGIN
                 </button>
@@ -196,6 +195,9 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&family=Roboto:ital,wght@0,100;0,300;0,400;1,400&display=swap");
+.cstm-btn-style {
+  margin: 2.5rem;
+}
 .col-custom-style {
   border-radius: 0 16px 16px 0 !important;
   height: 60vh !important;
@@ -212,7 +214,7 @@ export default {
 .text-info-style {
   color: #006699;
   font-family: Roboto;
-  font-size: 24px;
+  font-size: 22px;
   font-style: normal;
   font-weight: 900;
   line-height: normal;
@@ -288,7 +290,25 @@ export default {
   width: 70%;
   border-radius: 16px !important;
 }
-@media only screen and (max-width: 720px) {
+@media only screen and (max-height: 720px) {
+  .cstm-btn-style {
+    margin: 1rem;
+  }
+  .button-style {
+    height: 42px;
+  }
+  .text-info-style {
+    color: #006699;
+    font-family: Roboto;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  .img-style {
+    width: 100%;
+    height: 40px;
+  }
+}
+@media only screen and (max-width: 920px) {
   .col-custom-style {
     height: 0 !important;
   }
