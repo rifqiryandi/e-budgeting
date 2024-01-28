@@ -109,3 +109,8 @@
     font-style: normal;
     font-weight: 700;
 }
+
+/* Style for form search table */
+.p-datatable-header .p-inputtext{
+    height: 42px !important;
+}

@@ -80,13 +80,17 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-
-            <Column field="bulan" header="Bulan" style="width: 20%">
+            <Column field="" header="No" style="width: 10px;">
+              <template #body="{ index }">
+                {{ index + 1 }}
+              </template>
+            </Column>
+            <Column field="bulan" header="Bulan">
               <template #body="{ data }">
                 {{ data.bulan }}
               </template>
             </Column>
-            <Column field="" header="Persentasi" style="width: 20%">
+            <Column field="" header="Persentasi">
               <template #body="{ data }">
                 {{ data.presentasi + "%" }}
               </template>
