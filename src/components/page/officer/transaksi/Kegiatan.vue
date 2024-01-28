@@ -392,13 +392,13 @@
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Status In Direct Opex <span class="text-red-600">*</span>
+              Status Indirect Opex <span class="text-red-600">*</span>
             </label>
             <select
               v-model="Form.opex"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option value="">-- Pilih Status In Direct Opex --</option>
+              <option value="">-- Pilih Status Indirect Opex --</option>
               <option value="1">Ya</option>
               <option value="0">Tidak</option>
             </select>
@@ -406,14 +406,14 @@
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.opex.$error"
             >
-              Status In Direct Opex tidak boleh kosong!
+              Status Indirect Opex tidak boleh kosong!
             </p>
           </div>
           <div class="" v-if="Form.opex == 1">
             <label
               class="block mb-2 text-base font-medium text-gray-900 dark:text-white"
             >
-              Keterangan In Direct Opex <span class="text-red-600">*</span>
+              Keterangan Indirect Opex <span class="text-red-600">*</span>
             </label>
             <input
               type="text"
@@ -817,7 +817,7 @@ export default {
           return this.$swal({
             icon: "info",
             title: "INFO",
-            text: "Keterangan In Direct Opex tidak boleh kosong",
+            text: "Keterangan Indirect Opex tidak boleh kosong",
             confirmButtonColor: "#e77817",
           });
         }

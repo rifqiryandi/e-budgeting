@@ -145,7 +145,7 @@
             </template>
             <template #empty> No Data found. </template>
             <template #loading> Loading data. Please wait. </template>
-            <Column field="" header="" style="min-width: 140px !important">
+            <Column field="" header="Status" style="min-width: 140px !important">
               <template #body="{ data }">
                 <ValidationBtn
                   :nilaiStatus="data.status_anggaran.toString()"

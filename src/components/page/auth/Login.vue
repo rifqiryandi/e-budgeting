@@ -62,7 +62,11 @@
                 </button>
               </div>
               <div class="grid justify-center gap-3 mt-15">
-                <img src="../../../assets/bnilogo.png" class="img-style" />
+                <img
+                  src="../../../assets/bnilogo.png"
+                  id="imgLogo"
+                  class="img-style"
+                />
                 <h4 class="text-info-style">e-Budgeting</h4>
               </div>
               <h4 class="text-info-style text-center">
@@ -189,6 +193,12 @@ export default {
     this.showAlert();
     document.querySelector(".p-password-input").classList.add("form-control");
     document.querySelector(".p-password-input").classList.add("cstm-Input");
+    if (
+      navigator.userAgent.search("Safari") >= 0 &&
+      navigator.userAgent.search("Chrome") < 0
+    ) {
+      document.getElementById("imgLogo").className = "safariImg";
+    }
   },
 };
 </script>
@@ -225,6 +235,12 @@ export default {
   width: 100%;
   height: 50px;
 }
+.safariImg {
+  max-width: 100%;
+  width: 150px;
+  height: 50px;
+}
+
 .blockCstm {
   width: 100%;
   padding-top: 5%;
