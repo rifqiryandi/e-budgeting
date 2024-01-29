@@ -125,7 +125,7 @@ export default {
   },
   methods: {
     processLogout() {
-      localStorage.clear();
+      sessionStorage.clear();
       location.reload();
     },
     async login() {
