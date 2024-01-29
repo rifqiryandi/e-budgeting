@@ -32,7 +32,7 @@ import Navbar from "./layouts/Navbar.vue";
 import Sidebar from "./layouts/Sidebar.vue";
 import Footer from "./layouts/Footer.vue";
 import ControlSidebar from "./layouts/ControlSidebar.vue";
-import loginPage from './components/page/auth/Login.vue'
+import loginPage from "./components/page/auth/Login.vue";
 
 export default {
   name: "App",
@@ -48,7 +48,7 @@ export default {
     Sidebar,
     Footer,
     ControlSidebar,
-    loginPage
+    loginPage,
   },
   watch: {
     $route(to, from) {
@@ -61,15 +61,16 @@ export default {
     cekLogin(isLogin) {
       if (isLogin == null || isLogin == false) {
         console.log("Login Terlebih dahulu");
-        this.isLogin = false
+        this.isLogin = false;
       } else {
         this.isLogin = isLogin;
       }
     },
   },
   mounted() {
-    this.cekLogin(sessionStorage.getItem("isLogin"));    
+    this.cekLogin(sessionStorage.getItem("isLogin"));
   },
+  
 };
 </script>
 
