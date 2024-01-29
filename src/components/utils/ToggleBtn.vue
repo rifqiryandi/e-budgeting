@@ -157,7 +157,9 @@ export default {
   font-size: 14px !important;
 }
 .p-button {
-  width: 136px;
+  max-width: 136px;
+  min-width: 90px;
+  width: 100%;
   padding: 5px 10px 5px 10px;
   border-radius: 5px;
   color: #f66512 !important;

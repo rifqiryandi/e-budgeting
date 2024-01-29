@@ -400,6 +400,7 @@ export default {
         total: 0,
         ListData: null,
       },
+      confirmClose: false,
     };
   },
   validations() {
@@ -646,6 +647,26 @@ export default {
         }
       }
     },
+    handleBeforeUnload(event) {
+      console.log(event.currentTarget.performance.navigation);
+      console.log(!event.currentTarget.performance.navigation.type === 1);
+      const confirmationMessage = "Are you sure you want to leave?";
+      event.returnValue = confirmationMessage;
+      return confirmationMessage;
+      // if (this.confirmClose) {
+      //   // Your logic for handling beforeunload only when closing the tab
+      // }
+    },
+    handleVisibilityChange() {
+      // Check if the page is becoming hidden (user is navigating away or closing the tab)
+      if (document.visibilityState === "hidden") {
+        console.log("User is navigating away or closing the tab");
+        // Set a flag or perform additional actions if needed
+        this.confirmClose = true;
+      } else {
+        this.confirmClose = false;
+      }
+    },
   },
   mounted() {
     initFlowbite();
@@ -654,7 +675,16 @@ export default {
     if (this.namaAkses == "Departemen Head") {
       this.listNotif();
     }
+    // window.addEventListener("beforeunload", this.handleBeforeUnload);
+    // document.addEventListener("visibilitychange", this.handleVisibilityChange);
   },
+  // beforeDestroy() {
+  //   window.removeEventListener("beforeunload", this.handleBeforeUnload);
+  //   document.removeEventListener(
+  //     "visibilitychange",
+  //     this.handleVisibilityChange
+  //   );
+  // },
 };
 </script>
 
