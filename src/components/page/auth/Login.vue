@@ -124,10 +124,10 @@ export default {
     InputText,
   },
   methods: {
-    processLogout() {
-      sessionStorage.clear();
-      location.reload();
-    },
+    // processLogout() {
+    //   sessionStorage.clear();
+    //   location.reload();
+    // },
     async login() {
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
