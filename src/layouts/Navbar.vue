@@ -401,6 +401,7 @@ export default {
         ListData: null,
       },
       confirmClose: false,
+      resetPage: false,
     };
   },
   validations() {
@@ -654,15 +655,35 @@ export default {
       await serviceAuth.clearLogin(payload);
       sessionStorage.clear();
     },
+    resetFlagOnWindowClose() {
+      this.isResetting = false; // Reset the flag when closing the window
+    },
+    handleKeyDown(event) {
+      if (event.ctrlKey || (event.metaKey && event.keyCode === 82)) {
+        this.resetPage = true; // Call resetPage when Ctrl+R is pressed
+        console.log(this.resetPage);
+      }
+    },
   },
   mounted() {
+    console.log(this.resetPage);
     initFlowbite();
     this.countDownTimer();
     this.toastNotifikasi();
     if (this.namaAkses == "Departemen Head") {
       this.listNotif();
     }
-    window.addEventListener("unload", this.logoutOnClose);
+    window.addEventListener("beforeunload", async (event) => {
+      if (!this.resetPage) {
+        event.preventDefault();
+
+        console.log("API call triggered before page unload");
+        await this.logoutOnClose();
+        
+      }
+    });
+
+    window.addEventListener("keydown", this.handleKeyDown);
   },
 };
 </script>
