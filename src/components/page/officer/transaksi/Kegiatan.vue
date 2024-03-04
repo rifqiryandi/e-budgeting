@@ -544,7 +544,9 @@ export default {
         status: "",
         kdkelmatanggaran: "",
         kdmatanggaran: "",
-        bulan: new Date().getMonth() + 1,
+        // bulan: new Date().getMonth() + 1,
+        bulan: "",
+
       },
       pagination: {
         perPage: 5,
@@ -794,6 +796,7 @@ export default {
         cari: this.filters.cari,
         bulan: this.filters.bulan,
       };
+      console.log(payload);
       try {
         let res = await serviceAnggaran.listKegiatan(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
