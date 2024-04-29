@@ -109,6 +109,7 @@ export default {
       loginIs: false,
       msg: "",
       DataUser: "",
+      resetPage: false,
     };
   },
   validations() {
@@ -141,6 +142,7 @@ export default {
           let respon = await serviceAuth.getToken(data);
           if (respon.data.responCode == 200) {
             let token = respon.data.accessToken;
+            sessionStorage.setItem("firstTimeLogin", true);
             sessionStorage.setItem("isLogin", true);
             sessionStorage.setItem("token", token);
             sessionStorage.setItem("keypass", btoa(data.password));
@@ -188,6 +190,18 @@ export default {
         });
       }
     },
+    handleKeyDown(event) {
+      if (event.ctrlKey || (event.metaKey && event.keyCode === 82)) {
+        this.resetPage = true; // Call resetPage when Ctrl+R is pressed
+      }
+    },
+    async logoutOnClose() {
+      let payload = {
+        username: this.userSession.username,
+      };
+      await serviceAuth.clearLogin(payload);
+      sessionStorage.clear();
+    },
   },
   mounted() {
     this.showAlert();
@@ -199,6 +213,12 @@ export default {
     ) {
       document.getElementById("imgLogo").className = "safariImg";
     }
+    window.addEventListener("beforeunload", async () => {
+      if (this.resetPage == false) {
+        // event.preventDefault();
+        await this.logoutOnClose();
+      }
+    });
   },
 };
 </script>

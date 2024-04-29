@@ -1513,7 +1513,7 @@ export default {
     // Utils Method
     onlyNumber($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46 || this.Form.nohp.length >= 13) {
         $event.preventDefault();
       }
     },

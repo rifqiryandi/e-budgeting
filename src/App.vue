@@ -66,11 +66,11 @@ export default {
         this.isLogin = isLogin;
       }
     },
+    
   },
   mounted() {
     this.cekLogin(sessionStorage.getItem("isLogin"));
   },
-  
 };
 </script>
 

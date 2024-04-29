@@ -653,7 +653,7 @@ export default {
         username: this.userSession.username,
       };
       await serviceAuth.clearLogin(payload);
-      sessionStorage.clear();
+      // sessionStorage.clear();
     },
     resetFlagOnWindowClose() {
       this.isResetting = false; // Reset the flag when closing the window
@@ -661,7 +661,7 @@ export default {
     handleKeyDown(event) {
       if (event.ctrlKey || (event.metaKey && event.keyCode === 82)) {
         this.resetPage = true; // Call resetPage when Ctrl+R is pressed
-        console.log(this.resetPage);
+        return false;
       }
     },
   },
@@ -673,17 +673,22 @@ export default {
     if (this.namaAkses == "Departemen Head") {
       this.listNotif();
     }
+    console.log(
+      window.performance.navigation.type ==
+        window.performance.navigation.TYPE_RELOAD
+    );
+    // if (performance.navigation.type == 1) {
+    //   console.log("performance.navigation.type " + performance.navigation.type);
+    // } else {
+    //   console.log("here");
+    // }
+    window.addEventListener("keydown", this.handleKeyDown);
     window.addEventListener("beforeunload", async (event) => {
-      if (!this.resetPage) {
-        event.preventDefault();
-
-        console.log("API call triggered before page unload");
+      if (this.resetPage == false) {
+        // event.preventDefault();
         await this.logoutOnClose();
-        
       }
     });
-
-    window.addEventListener("keydown", this.handleKeyDown);
   },
 };
 </script>
