@@ -21,9 +21,9 @@ export default {
   data() {
     return {
       checked: this.num,
-      namaAkses: sessionStorage.getItem("namaAkes"),
+      namaAkses: localStorage.getItem("namaAkes"),
       // keyId: this.keyid,
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
     };
   },
   components: {

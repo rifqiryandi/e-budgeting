@@ -1326,7 +1326,7 @@ export default {
   data() {
     return {
       v$: useValidate(),
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
       ListUser: null,
       rowDepartemen: null,
       rowJabatan: null,
@@ -1360,7 +1360,7 @@ export default {
         },
       },
       idKey: "",
-      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
+      userSession: JSON.parse(atob(localStorage.getItem("dataUser"))),
       apiHit: "User",
       passwordUser: "",
       idUser: "",
@@ -1518,7 +1518,7 @@ export default {
       }
     },
     async getAllDepartemen() {
-      let token = sessionStorage.getItem("token");
+      let token = localStorage.getItem("token");
       let payload = {
         entitas: "",
         status: "",
@@ -1555,7 +1555,7 @@ export default {
     },
     async getData() {
       this.loading = true;
-      let token = sessionStorage.getItem("token");
+      let token = localStorage.getItem("token");
       let payload = {
         status: this.filters.status,
       };
@@ -1601,7 +1601,7 @@ export default {
       this.usernameForChange = data.username;
     },
     async prosesInput() {
-      let token = sessionStorage.getItem("token");
+      let token = localStorage.getItem("token");
       let Forminput = this.Form;
       this.v$.$validate(); // checks all inputs
       if (!this.v$.Form.$error && !this.v$.password.$error) {
@@ -1639,7 +1639,7 @@ export default {
       }
     },
     async prosesEdit() {
-      let token = sessionStorage.getItem("token");
+      let token = localStorage.getItem("token");
       let Forminput = this.Form;
       this.v$.$validate(); // checks all inputs
       if (!this.v$.Form.$error) {
@@ -1668,7 +1668,7 @@ export default {
       }
     },
     async prosesDelete() {
-      let token = sessionStorage.getItem("token");
+      let token = localStorage.getItem("token");
       let payload = {
         id: this.idKey,
       };

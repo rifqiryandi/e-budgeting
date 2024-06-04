@@ -791,7 +791,7 @@ export default {
       tahun: "",
       tanggalLengkap: "",
       listLaporan: null,
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
     };
   },
   components: {

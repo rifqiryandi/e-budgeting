@@ -917,8 +917,8 @@ export default {
     return {
       Active: "nav-link d-flex active",
       notActive: "nav-link d-flex ",
-      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-      namaAkses: sessionStorage.getItem("namaAkes"),
+      userSession: JSON.parse(atob(localStorage.getItem("dataUser"))),
+      namaAkses: localStorage.getItem("namaAkes"),
       currentDate: new Date()
         .toLocaleDateString("de-DE")
         .replace(".", "/")

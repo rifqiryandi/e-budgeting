@@ -360,7 +360,7 @@ ChartJS.register(
 export default {
   data() {
     return {
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
       listTableSponsor: null,
       totalAnggaran: 0,
       sisaAnggaran: 0,

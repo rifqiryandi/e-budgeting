@@ -376,15 +376,15 @@ export default {
   data() {
     return {
       v$: useValidate(),
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
       passwordUser: "",
       passwordUserLama: "",
       rePassword: "",
       countDown: 10,
       textTime: "",
-      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
-      keypass: atob(sessionStorage.getItem("keypass")),
-      namaAkses: sessionStorage.getItem("namaAkes"),
+      userSession: JSON.parse(atob(localStorage.getItem("dataUser"))),
+      keypass: atob(localStorage.getItem("keypass")),
+      namaAkses: localStorage.getItem("namaAkes"),
       modalPassword: null,
       Style: {
         labelAktif: "label-aktif",
@@ -546,13 +546,13 @@ export default {
         username: this.userSession.username,
       };
       await serviceAuth.clearLogin(payload);
-      sessionStorage.clear();
+      localStorage.clear();
       // this.$router.push("/");
       window.location.href = "/";
     },
     countDownTimer() {
-      if (sessionStorage.getItem("expTime") != undefined) {
-        let dateExp = new Date(sessionStorage.getItem("expTime")).getTime();
+      if (localStorage.getItem("expTime") != undefined) {
+        let dateExp = new Date(localStorage.getItem("expTime")).getTime();
 
         let x = setTimeout(() => {
           let dateNow = new Date().getTime();
@@ -580,7 +580,7 @@ export default {
                 username: this.userSession.username,
               };
               await serviceAuth.clearLogin(payload);
-              sessionStorage.clear();
+              localStorage.clear();
               // this.$router.push("/login");
               window.location.href = "/";
             });
@@ -653,7 +653,7 @@ export default {
         username: this.userSession.username,
       };
       await serviceAuth.clearLogin(payload);
-      // sessionStorage.clear();
+      // localStorage.clear();
     },
     resetFlagOnWindowClose() {
       this.isResetting = false; // Reset the flag when closing the window

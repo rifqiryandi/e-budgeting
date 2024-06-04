@@ -29,7 +29,7 @@ export default {
       checked: false,
       urlApi: this.apihit,
       keyId: this.keyid,
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
     };
   },
   components: {

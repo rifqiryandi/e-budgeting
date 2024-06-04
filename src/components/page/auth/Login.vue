@@ -126,7 +126,7 @@ export default {
   },
   methods: {
     // processLogout() {
-    //   sessionStorage.clear();
+    //   localStorage.clear();
     //   location.reload();
     // },
     async login() {
@@ -142,25 +142,25 @@ export default {
           let respon = await serviceAuth.getToken(data);
           if (respon.data.responCode == 200) {
             let token = respon.data.accessToken;
-            sessionStorage.setItem("firstTimeLogin", true);
-            sessionStorage.setItem("isLogin", true);
-            sessionStorage.setItem("token", token);
-            sessionStorage.setItem("keypass", btoa(data.password));
+            localStorage.setItem("firstTimeLogin", true);
+            localStorage.setItem("isLogin", true);
+            localStorage.setItem("token", token);
+            localStorage.setItem("keypass", btoa(data.password));
             if (respon.data.data.leveluser == 1) {
-              sessionStorage.setItem("namaAkes", "Superadmin");
+              localStorage.setItem("namaAkes", "Superadmin");
             } else if (respon.data.data.leveluser == 2) {
-              sessionStorage.setItem("namaAkes", "Officer");
+              localStorage.setItem("namaAkes", "Officer");
             } else if (respon.data.data.leveluser == 3) {
-              sessionStorage.setItem("namaAkes", "Departemen Head");
+              localStorage.setItem("namaAkes", "Departemen Head");
             } else if (respon.data.data.leveluser == 4) {
-              sessionStorage.setItem("namaAkes", "BUM");
+              localStorage.setItem("namaAkes", "BUM");
             } else if (respon.data.data.leveluser == 5) {
-              sessionStorage.setItem("namaAkes", "General Manager");
+              localStorage.setItem("namaAkes", "General Manager");
             } else if (respon.data.data.leveluser == 6) {
-              sessionStorage.setItem("namaAkes", "Admin Sistem");
+              localStorage.setItem("namaAkes", "Admin Sistem");
             }
-            sessionStorage.setItem("expTime", respon.data.expiresIn);
-            sessionStorage.setItem(
+            localStorage.setItem("expTime", respon.data.expiresIn);
+            localStorage.setItem(
               "dataUser",
               btoa(JSON.stringify(respon.data.data))
             );
@@ -181,7 +181,7 @@ export default {
       }
     },
     showAlert() {
-      if (sessionStorage.length == 0) {
+      if (localStorage.length == 0) {
         this.$swal({
           icon: "warning",
           title: "Waspada",
@@ -200,7 +200,7 @@ export default {
         username: this.userSession.username,
       };
       await serviceAuth.clearLogin(payload);
-      sessionStorage.clear();
+      localStorage.clear();
     },
   },
   mounted() {

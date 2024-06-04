@@ -312,7 +312,7 @@ export default {
   name: "Validasi Pengajuan Komitmen",
   data() {
     return {
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
       modal: null,
       listPengajuanKomitmen: null,
       rowDepartemen: null,
@@ -330,7 +330,7 @@ export default {
       },
       Detail: {},
       loading: true,
-      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
+      userSession: JSON.parse(atob(localStorage.getItem("dataUser"))),
     };
   },
   components: {
