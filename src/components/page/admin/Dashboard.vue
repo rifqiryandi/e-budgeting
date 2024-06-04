@@ -78,7 +78,7 @@ import serviceReport from "../../../services/Report.service";
 export default {
   data() {
     return {
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
       totalAnggaran: 0,
       sisaAnggaran: 0,
       totalRealisasi: 0,

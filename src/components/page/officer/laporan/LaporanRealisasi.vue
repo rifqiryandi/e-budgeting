@@ -308,8 +308,8 @@ export default {
       tahun: "",
       tanggalLengkap: "",
       listLaporan: null,
-      token: sessionStorage.getItem("token"),
-      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
+      token: localStorage.getItem("token"),
+      userSession: JSON.parse(atob(localStorage.getItem("dataUser"))),
     };
   },
   components: {

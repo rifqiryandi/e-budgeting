@@ -432,8 +432,11 @@
               v-model="Form.kegiatan"
               cols="30"
               rows="10"
+              @input="countChar"
+              maxlength="255"
               class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bni-blue focus:border-bni-blue block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             ></textarea>
+            <!-- <span class="text-black bg-yellow-300 font-medium rounded-sm px-2" >Jumlah karakter : /255</span> -->
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
               v-if="this.v$.Form.kegiatan.$error"
@@ -454,7 +457,6 @@
               auto-apply
               disable-year-select
               month-picker
-
             />
             <p
               class="mt-2 text-sm text-red-600 dark:text-red-500 m-0"
@@ -527,7 +529,7 @@ export default {
   data() {
     return {
       v$: useValidate(),
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
       modal: null,
       ListKegiatan: null,
       rowSMataAnggaran: null,
@@ -546,7 +548,6 @@ export default {
         kdmatanggaran: "",
         // bulan: new Date().getMonth() + 1,
         bulan: "",
-
       },
       pagination: {
         perPage: 5,
@@ -562,6 +563,7 @@ export default {
         opex: "",
         keterangan: "",
       },
+      longText: 0,
       preview: {
         nominal_sisa: "",
       },
@@ -570,7 +572,7 @@ export default {
         kdmataanggaran: "",
       },
       loading: true,
-      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
+      userSession: JSON.parse(atob(localStorage.getItem("dataUser"))),
     };
   },
   validations() {
@@ -620,6 +622,13 @@ export default {
     },
   },
   methods: {
+    countChar(event) {
+      if (event.target.value.length > 255) {
+        event.preventDefault();
+        return;
+      }
+      this.longText = event.target.value.length;
+    },
     async getMataAnggaranFilter() {
       let payload = {
         kdkelmatanggaran: this.filters.kdkelmatanggaran,
@@ -796,7 +805,7 @@ export default {
         cari: this.filters.cari,
         bulan: this.filters.bulan,
       };
-      console.log(payload);
+      // console.log(payload);
       try {
         let res = await serviceAnggaran.listKegiatan(payload, this.token);
         this.pagination.totaldata = res.data.data.total_data;
@@ -896,7 +905,7 @@ export default {
   border-color: #006699 !important;
   box-shadow: none !important;
 }
-.dp__month_picker_header{
+.dp__month_picker_header {
   display: none !important;
 }
 </style>

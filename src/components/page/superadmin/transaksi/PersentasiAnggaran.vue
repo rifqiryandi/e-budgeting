@@ -310,7 +310,7 @@ export default {
   data() {
     return {
       v$: useValidate(),
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
       modal: null,
       ListPersentasi: null,
       rowSMataAnggaran: null,
@@ -339,7 +339,7 @@ export default {
       },
       loading: true,
       batasPersen: 100,
-      userSession: JSON.parse(atob(sessionStorage.getItem("dataUser"))),
+      userSession: JSON.parse(atob(localStorage.getItem("dataUser"))),
     };
   },
   validations() {

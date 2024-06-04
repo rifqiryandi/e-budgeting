@@ -53,7 +53,7 @@ export default {
   watch: {
     $route(to, from) {
       if (from.path == "/" || to.path == "/") {
-        this.cekLogin(sessionStorage.getItem("isLogin"));
+        this.cekLogin(localStorage.getItem("isLogin"));
       }
     },
   },
@@ -69,7 +69,7 @@ export default {
     
   },
   mounted() {
-    this.cekLogin(sessionStorage.getItem("isLogin"));
+    this.cekLogin(localStorage.getItem("isLogin"));
   },
 };
 </script>

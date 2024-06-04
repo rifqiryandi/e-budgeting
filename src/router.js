@@ -3,7 +3,7 @@ import {
   createRouter
 } from "vue-router";
 
-let namaAkses = sessionStorage.getItem('namaAkes')
+let namaAkses = localStorage.getItem('namaAkes')
 let routes
 switch (namaAkses) {
   case 'Superadmin':
@@ -300,7 +300,7 @@ const router = createRouter({
 
 // Route Guard
 router.beforeEach((to) => {
-  let isLogin = sessionStorage.getItem('isLogin')
+  let isLogin = localStorage.getItem('isLogin')
   if (isLogin != null) {
     if (to.path == '/') {
       return false

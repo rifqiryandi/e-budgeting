@@ -165,7 +165,7 @@ export default {
       tahun: "",
       tanggalLengkap: "",
       listLaporanEntitas: null,
-      token: sessionStorage.getItem("token"),
+      token: localStorage.getItem("token"),
       rowEntitas: null,
       filters: {
         entitas: "",
